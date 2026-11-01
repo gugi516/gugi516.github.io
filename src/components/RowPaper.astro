@@ -1,0 +1,120 @@
+---
+// 게재 논문 "목록 보기" 한 줄 (스캔·통독용). 카드(CardPaper)와 같은 데이터·버튼을 공유.
+import type { Publication } from "../data";
+import { citationFor } from "../data";
+
+interface Props { paper: Publication; }
+const { paper } = Astro.props as Props;
+
+const citation = citationFor(paper.doi);
+// 본인 저자명 판별 — 데이터에 쓰이는 두 표기만 명시적으로 매치한다.
+//   publications: 풀네임("Gukhwa Jang") / underReview: APA("Jang, G.") / KCI 국문("장국화")
+const isSelfAuthor = (a: string) => {
+  const t = a.trim();
+  return t === "Gukhwa Jang" || t === "Jang, G." || t === "장국화";
+};
+
+// role 은 "first", "corresponding", "first & corresponding" 등 복합값이 올 수 있다.
+// 판별 우선순위: first → corresponding → co. "first & corresponding" 은 First author.
+const roleStr = typeof paper.role === "string" ? paper.role : "";
+const isFirst = roleStr.includes("first");
+const isCorr = !isFirst && roleStr.includes("corresponding");
+const rolePillClass = isFirst ? "pill-first" : isCorr ? "pill-corr" : "pill-co";
+const yearText = paper.year ? String(paper.year) : "—";
+const hasPdf = !!paper.pdf;
+const hasWeb = !!paper.doi;
+// 등재구분(index, xlsx 정본)이 있으면 그것으로 판정하고(KCI 가 아니면 국제),
+// 없을 때만 quartile/IF 유무로 추정한다.
+const isIntl = paper.index ? paper.index !== 'KCI' : !!(paper.quartile || paper.if);
+const indexLabel = paper.index || (isIntl ? 'SCIE' : 'KCI');
+// 등재구분·지표가 모두 비어 있으면(게재 확정 직후 등 미확인) 배지를 생략한다.
+const hasTier = !!(paper.index || paper.quartile || paper.if);
+
+const figures = paper.figures ?? [];
+const hasFigs = figures.length > 0;
+const figuresJson = JSON.stringify(figures);
+---
+
+<div class="paper-row group flex gap-3 sm:gap-4 py-3 border-b border-base-300/40 hover:bg-base-200/40 -mx-2 px-2 rounded-md transition-colors">
+  <!-- Year -->
+  <div class="shrink-0 sm:w-12 sm:pt-1">
+    <span class="type-body-sm font-semibold text-base-content/55">{yearText}</span>
+  </div>
+
+  <!-- Content: (badges ↔ buttons in one row) → title → journal · authors -->
+  <div class="flex-1 min-w-0">
+    <!-- Top row: badges (left) + action buttons (right) -->
+    <div class="flex flex-wrap items-center justify-between gap-x-3 gap-y-1.5 mb-1">
+      <div class="flex flex-wrap items-center gap-1.5">
+        <span class={`pill ${rolePillClass}`}>{isCorr ? (<><span data-only="ko">교신저자</span><span data-only="en">Corresponding author</span></>) : isFirst ? (<><span data-only="ko">제1저자</span><span data-only="en">First author</span></>) : (<><span data-only="ko">공저자</span><span data-only="en">Co-author</span></>)}</span>
+        {!hasTier ? null : isIntl ? (
+          <>
+            <span class="pill pill-idx">{indexLabel}</span>
+            {paper.quartile && <span class="pill pill-q1">{paper.quartile.split(' ')[0]}</span>}
+            {paper.if && <span class="pill pill-co">IF {paper.if.split(' ')[0]}</span>}
+          </>
+        ) : (
+          <span class="pill pill-idx">{indexLabel}</span>
+        )}
+      </div>
+
+      <!-- Buttons: PDF · Web · Figs · Cite -->
+      <div class="shrink-0 flex items-center gap-1.5">
+        {hasPdf && (
+      <a href={paper.pdf} download class="btn-mini active" aria-label="Download PDF" title="Download PDF">
+        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+        PDF
+      </a>
+    )}
+    {hasWeb && (
+      <a href={`https://doi.org/${paper.doi}`} target="_blank" rel="noopener noreferrer" class="btn-mini active" aria-label="Open DOI / web page" title={`https://doi.org/${paper.doi}`}>
+        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+        Web
+      </a>
+    )}
+    {hasFigs && (
+      <button type="button" class="btn-mini active fig-open" data-figs={figuresJson} data-title={paper.title.en} aria-label={`View figures: ${paper.title.en}`} title="Figures">
+        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.6-3.6a2 2 0 0 0-2.8 0L6 21"/></svg>
+        {figures.length}
+      </button>
+    )}
+    {citation && (
+      <button type="button" class="btn-mini active cite-toggle" aria-label="Cite this paper (APA)" title="Cite (APA)" data-apa={citation.apa}>
+        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h10M4 18h13"></path></svg>
+        Cite
+      </button>
+    )}
+      </div>
+    </div>
+
+    <!-- Title (full width) -->
+    <h3 class="type-body leading-snug text-base-content group-hover:text-primary transition-colors mb-0.5" style="font-weight:560;">
+      <span data-only="ko">{paper.title.ko}</span>
+      <span data-only="en">{paper.title.en}</span>
+    </h3>
+
+    <!-- Journal · authors (full width) -->
+    <p class="type-body-sm text-base-content/65 leading-snug">
+      <span class="italic">
+        {paper.journalKo
+          ? (<><span data-only="ko">{paper.journalKo}</span><span data-only="en">{paper.journal}</span></>)
+          : paper.journal}
+      </span>
+      <span class="mx-1.5 text-base-content/30">·</span>
+      {paper.authorsKo ? (
+        <>
+          <span data-only="ko">{paper.authorsKo.map((a, i) => (
+            <>{i > 0 ? ", " : ""}{isSelfAuthor(a) ? <strong class="font-bold text-primary">{a}</strong> : a}</>
+          ))}</span>
+          <span data-only="en">{paper.authors.map((a, i) => (
+            <>{i > 0 ? ", " : ""}{isSelfAuthor(a) ? <strong class="font-bold text-primary">{a}</strong> : a}</>
+          ))}</span>
+        </>
+      ) : (
+        paper.authors.map((a, i) => (
+          <>{i > 0 ? ", " : ""}{isSelfAuthor(a) ? <strong class="font-bold text-primary">{a}</strong> : a}</>
+        ))
+      )}
+    </p>
+  </div>
+</div>

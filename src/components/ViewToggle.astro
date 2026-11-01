@@ -1,0 +1,16 @@
+---
+// 카드 ⇄ 목록 보기 전환 토글 (범용). 부모 .js-viewgroup 의 data-view 를 토글 → .view-grid/.view-list 전환.
+// 접기 헤더 밖(본문 상단)에 두어 모바일 접기와 충돌하지 않도록 배치.
+---
+<div class="flex justify-end mb-4">
+  <div class="view-toggle" role="group" aria-label="보기 전환 / View mode">
+    <button type="button" data-view="grid" class="active" aria-pressed="true">
+      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      <span data-only="ko">카드</span><span data-only="en">Grid</span>
+    </button>
+    <button type="button" data-view="list" aria-pressed="false">
+      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+      <span data-only="ko">목록</span><span data-only="en">List</span>
+    </button>
+  </div>
+</div>

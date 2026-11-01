@@ -1,0 +1,41 @@
+---
+import SideBarFooter from "./SideBarFooter.astro";
+import SideBarMenu from "./SideBarMenu.astro";
+import LangToggle from "./LangToggle.astro";
+import L from "./L.astro";
+const { lang = "ko", sideBarActiveItemID } = Astro.props;
+const homeHref = lang === "en" ? "/en/" : "/";
+---
+
+<div class="drawer-side z-40">
+  <label for="my-drawer" class="drawer-overlay" aria-hidden="true"></label>
+  <aside class="px-4 pt-6 h-auto min-h-full w-[19rem] bg-base-200 text-base-content flex flex-col border-r border-base-300">
+    <!-- Brand block + language toggle (top-right) -->
+    <div class="flex items-start justify-between gap-2 mb-4">
+      <a href={homeHref} class="group block">
+        <div class="flex flex-col items-start gap-1 transition-transform duration-300 group-hover:translate-x-1">
+          <div class="flex items-baseline gap-2">
+            <span class="text-2xl" aria-hidden="true">🌿</span>
+            <L tag="p" class="type-headline" ko="장국화" en="Gukhwa Jang" />
+          </div>
+          <span class="text-sm text-base-content/70" data-only="ko">Gukhwa Jang</span>
+          <span class="text-[10px] text-base-content/70 tracking-widest uppercase mt-2">Research Portfolio</span>
+        </div>
+      </a>
+      <LangToggle lang={lang} />
+    </div>
+
+    <!-- Tagline -->
+    <L
+      tag="p"
+      class="text-sm text-base-content/70 leading-relaxed px-1 mb-6 mt-3"
+      ko="도시와 조경을 연구하는 연구자입니다."
+      en="A researcher studying cities and landscape architecture."
+    />
+
+    <div class="divider my-0 opacity-30"></div>
+
+    <SideBarMenu lang={lang} sideBarActiveItemID={sideBarActiveItemID} />
+    <SideBarFooter lang={lang} />
+  </aside>
+</div>

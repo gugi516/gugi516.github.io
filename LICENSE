@@ -1,0 +1,21 @@
+Copyright (c) 2026 Seunghyeon Lee. All rights reserved.
+
+This repository contains the source code, design, data and content of
+https://drseunghyeonlee.com (research portfolio of Seunghyeon Lee).
+
+No license is granted. Except as permitted by applicable law, you may not
+copy, modify, publish, distribute, host, or otherwise reuse any part of this
+repository (code, design, text, images, data files, CV or other documents)
+without prior written permission from the author.
+
+Viewing the repository on GitHub and forking it for the purpose of submitting
+a correction to the author are permitted under the GitHub Terms of Service;
+no further rights are implied.
+
+Publications and figures hosted here remain subject to the terms of their
+respective publishers and licenses. Third-party components (Astro, Tailwind
+CSS, daisyUI, fonts and other dependencies) retain their own licenses.
+
+Note: versions of this repository published before 2026-10-01 carried an MIT
+license inherited from a template; that grant applies only to those earlier
+versions.

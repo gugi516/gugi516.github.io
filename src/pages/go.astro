@@ -1,0 +1,34 @@
+---
+import site from "../data/site.json";
+// QR redirect page (Korean). QR codes point here; destination managed in
+// site.json → qrTargets.kr so the printed QR stays valid even if the target changes.
+const destination = site.qrTargets.kr;
+---
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <title>이동 중… — 장국화 (Gukhwa Jang)</title>
+  <meta name="robots" content="noindex,nofollow" />
+  <meta http-equiv="refresh" content={`0; url=${destination}`} />
+  <link rel="canonical" href={destination} />
+  <script is:inline define:vars={{ destination }}>
+    window.location.replace(destination);
+  </script>
+  <style>
+    body {
+      font-family: "Pretendard Variable", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      background: #0c1420; color: #e2e6ec;
+      display: flex; align-items: center; justify-content: center;
+      min-height: 100vh; margin: 0; text-align: center;
+    }
+    a { color: #41a0e0; }
+  </style>
+</head>
+<body>
+  <div>
+    <p>연구 포트폴리오로 이동 중…</p>
+    <p><a href={destination}>{destination}</a></p>
+  </div>
+</body>
+</html>

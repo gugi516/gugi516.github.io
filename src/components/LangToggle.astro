@@ -1,0 +1,17 @@
+---
+// KO ⇄ EN 언어 전환 토글 (URL 기반 i18n: "/" → ko, "/en" → en).
+const { lang = "ko" } = Astro.props as { lang?: "ko" | "en" };
+---
+
+<div class="lang-toggle inline-flex items-center rounded-lg border border-base-300 overflow-hidden text-xs shrink-0">
+  <a
+    href="/"
+    class={`px-2.5 py-1 transition-colors ${lang === "ko" ? "bg-primary text-white font-semibold" : "text-base-content/70 hover:text-primary"}`}
+    aria-current={lang === "ko" ? "page" : undefined}
+  >KO</a>
+  <a
+    href="/en/"
+    class={`px-2.5 py-1 transition-colors ${lang === "en" ? "bg-primary text-white font-semibold" : "text-base-content/70 hover:text-primary"}`}
+    aria-current={lang === "en" ? "page" : undefined}
+  >EN</a>
+</div>

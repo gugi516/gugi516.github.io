@@ -1,0 +1,890 @@
+/* === gugi516 global styles — Boreal Carbon + Azure Blue palette === */
+
+:root {
+  --font-sans: 'Pretendard Variable', Pretendard, 'Inter', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', Menlo, monospace;
+
+  /* Font sizes — mobile / tablet / desktop */
+  --size-display-xl-mobile:  36px;
+  --size-display-xl-tablet:  48px;
+  --size-display-xl-desktop: 56px;
+
+  --size-display-lg-mobile:  26px;
+  --size-display-lg-tablet:  32px;
+  --size-display-lg-desktop: 38px;
+
+  --size-headline-mobile:  19px;
+  --size-headline-desktop: 22px;
+
+  --size-card-title-mobile:  16px;
+  --size-card-title-desktop: 18px;
+
+  --size-body-lg-mobile:  16px;
+  --size-body-lg-desktop: 17px;
+
+  --size-body-mobile:  15px;
+  --size-body-desktop: 16px;
+
+  --size-body-sm-mobile:  13px;
+  --size-body-sm-desktop: 14px;
+
+  --size-eyebrow-mobile:  11px;
+  --size-eyebrow-desktop: 12px;
+
+  --size-caption-mobile:  10px;
+  --size-caption-desktop: 11px;
+
+  /* Brand color tokens (kept in sync with tailwind.config.cjs) */
+  --shlee-primary:       #1e3a5f;
+  --shlee-primary-deep:  #0f1b2a;
+  --shlee-secondary:     #3d68a0;
+  --shlee-mint:          #6fb0e0;
+  --shlee-honey:         #41a0e0;
+  --shlee-honey-deep:    #2074b8;
+  --shlee-paper:         #eef2f8;
+
+  /* Urban-landscape accent — SECONDARY to the blue (target ~8:2 blue:green).
+     Used for: sidebar hover bar, body-link hover, copy-success, interest /
+     certification chip hovers, the view toggle's active state, and the
+     divider tick. */
+  --shlee-leaf-deep:     #2e7d4f;
+  --shlee-leaf:          #4aa96c;
+  --shlee-leaf-soft:     #a8dcc0;
+  --shlee-leaf-bright:   #6fcf97;
+
+}
+
+/* Base */
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-sans);
+  font-feature-settings: "kern" 1, "ss02", "ss03";
+  font-variation-settings: "wght" 380;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  position: relative;
+  background-color: hsl(var(--b1));
+  overflow-x: clip;
+}
+
+::selection { background: #1e3a5f; color: #ffffff; }
+[data-theme="shlee-dark"] ::selection { background: #6fb0e0; color: #0c1420; }
+
+/* ─────────────────────────────────────────────────────────
+   LANGUAGE TOGGLE — hide the inactive language
+   ───────────────────────────────────────────────────────── */
+html[lang="ko"] [data-only="en"] { display: none !important; }
+html[lang="en"] [data-only="ko"] { display: none !important; }
+
+/* ─────────────────────────────────────────────────────────
+   TYPOGRAPHY SYSTEM
+   ───────────────────────────────────────────────────────── */
+.type-display-xl {
+  font-family: var(--font-sans);
+  font-size: var(--size-display-xl-mobile);
+  font-weight: 380;
+  line-height: 1.02;
+  letter-spacing: -0.76px;
+}
+@media (min-width: 768px) { .type-display-xl { font-size: var(--size-display-xl-tablet); letter-spacing: -1.04px; } }
+@media (min-width: 1024px) { .type-display-xl { font-size: var(--size-display-xl-desktop); letter-spacing: -1.20px; } }
+
+.type-display-lg {
+  font-family: var(--font-sans);
+  font-size: var(--size-display-lg-mobile);
+  font-weight: 380;
+  line-height: 1.15;
+  letter-spacing: -0.42px;
+}
+@media (min-width: 768px) { .type-display-lg { font-size: var(--size-display-lg-tablet); letter-spacing: -0.54px; } }
+@media (min-width: 1024px) { .type-display-lg { font-size: var(--size-display-lg-desktop); letter-spacing: -0.63px; } }
+
+.type-headline {
+  font-family: var(--font-sans);
+  font-size: var(--size-headline-mobile);
+  font-weight: 540;
+  line-height: 1.35;
+  letter-spacing: -0.19px;
+}
+@media (min-width: 768px) { .type-headline { font-size: var(--size-headline-desktop); letter-spacing: -0.22px; } }
+
+.type-card-title {
+  font-family: var(--font-sans);
+  font-size: var(--size-card-title-mobile);
+  font-weight: 600;
+  line-height: 1.40;
+  letter-spacing: -0.17px;
+}
+@media (min-width: 768px) { .type-card-title { font-size: var(--size-card-title-desktop); } }
+
+.type-body-lg {
+  font-family: var(--font-sans);
+  font-size: var(--size-body-lg-mobile);
+  font-weight: 380;
+  line-height: 1.55;
+  letter-spacing: -0.13px;
+}
+@media (min-width: 768px) { .type-body-lg { font-size: var(--size-body-lg-desktop); } }
+
+.type-body {
+  font-family: var(--font-sans);
+  font-size: var(--size-body-mobile);
+  font-weight: 380;
+  line-height: 1.60;
+  letter-spacing: -0.15px;
+}
+@media (min-width: 768px) { .type-body { font-size: var(--size-body-desktop); line-height: 1.62; } }
+
+.type-body-sm {
+  font-family: var(--font-sans);
+  font-size: var(--size-body-sm-mobile);
+  font-weight: 380;
+  line-height: 1.55;
+  letter-spacing: -0.10px;
+}
+@media (min-width: 768px) { .type-body-sm { font-size: var(--size-body-sm-desktop); } }
+
+.type-link {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.40;
+  letter-spacing: -0.08px;
+}
+@media (min-width: 768px) { .type-link { font-size: 16px; } }
+
+.type-eyebrow {
+  font-family: var(--font-sans);
+  font-size: var(--size-eyebrow-mobile);
+  font-weight: 500;
+  line-height: 1.30;
+  letter-spacing: 0.36px;
+  text-transform: uppercase;
+}
+@media (min-width: 768px) { .type-eyebrow { font-size: var(--size-eyebrow-desktop); letter-spacing: 0.48px; } }
+
+.type-caption {
+  font-family: var(--font-sans);
+  font-size: var(--size-caption-mobile);
+  font-weight: 500;
+  line-height: 1.10;
+  letter-spacing: 0.40px;
+  text-transform: uppercase;
+}
+@media (min-width: 768px) { .type-caption { font-size: var(--size-caption-desktop); letter-spacing: 0.50px; } }
+
+/* ─────────────────────────────────────────────────────────
+   BACKGROUND ATMOSPHERE
+   ───────────────────────────────────────────────────────── */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 0%, rgba(30, 58, 95, 0.05), transparent 50%),
+    radial-gradient(circle at 80% 100%, rgba(65, 160, 224, 0.04), transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+[data-theme="shlee-light"] body::before {
+  background:
+    radial-gradient(circle at 20% 0%, rgba(61, 104, 160, 0.07), transparent 50%),
+    radial-gradient(circle at 80% 100%, rgba(65, 160, 224, 0.05), transparent 50%);
+}
+
+@media (min-width: 1024px) and (pointer: fine) {
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(
+      600px circle at var(--cursor-x, 50%) var(--cursor-y, 50%),
+      rgba(65, 160, 224, 0.05),
+      transparent 40%
+    );
+    pointer-events: none;
+    z-index: 1;
+    transition: opacity 0.3s;
+  }
+  [data-theme="shlee-dark"] body::after {
+    background: radial-gradient(
+      600px circle at var(--cursor-x, 50%) var(--cursor-y, 50%),
+      rgba(65, 160, 224, 0.049),
+      transparent 40%
+    );
+  }
+}
+
+.drawer, .drawer-content { position: relative; z-index: 2; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+[data-theme="shlee-light"] ::-webkit-scrollbar-track { background: #eef2f8; }
+[data-theme="shlee-light"] ::-webkit-scrollbar-thumb { background: #b3bcc9; border-radius: 4px; }
+[data-theme="shlee-light"] ::-webkit-scrollbar-thumb:hover { background: #75808a; }
+[data-theme="shlee-dark"] ::-webkit-scrollbar-track { background: #0c1420; }
+[data-theme="shlee-dark"] ::-webkit-scrollbar-thumb { background: #24364e; border-radius: 4px; }
+[data-theme="shlee-dark"] ::-webkit-scrollbar-thumb:hover { background: #3d68a0; }
+
+body, .drawer-content, .drawer-side, aside, .navbar, .btn, .badge {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.card, .horizontal-card-img {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Pill hover — subtle color lift */
+.pill {
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+/* Stat box — used in About section (6 metric tiles) */
+.stat-box {
+  transition: transform 0.25s ease, border-color 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease;
+}
+.stat-box:hover {
+  transform: translateY(-2px);
+  border-color: rgba(65, 160, 224, 0.55);
+  background-color: hsl(var(--b2) / 0.85);
+  box-shadow: 0 6px 18px rgba(65, 160, 224, 0.10);
+}
+[data-theme="shlee-dark"] .stat-box:hover {
+  box-shadow: 0 6px 18px rgba(65, 160, 224, 0.16);
+}
+
+/* About stat 숫자 색상 강조 (박스 없이 색으로만) */
+.stat-num { color: #1b578a; }                          /* 라이트: 선명한 포레스트 그린 */
+[data-theme="shlee-dark"] .stat-num { color: #86b5e6; } /* 다크: 밝은 하늘색 — primary보다 밝아 은은히 강조 */
+
+/* Certification chip — small inline chip */
+.cert-chip {
+  transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+}
+/* Hover picks up the leaf accent — the chip's rest state stays blue. */
+.cert-chip:hover {
+  border-color: rgba(74, 169, 108, 0.55);
+  background-color: rgba(74, 169, 108, 0.08);
+  transform: translateY(-1px);
+}
+[data-theme="shlee-dark"] .cert-chip:hover {
+  border-color: rgba(111, 207, 151, 0.5);
+  background-color: rgba(111, 207, 151, 0.10);
+}
+
+/* Interest pill (research interests chips) — leaf-green highlight on hover */
+.pill.pill-co.interest:hover {
+  background-color: rgba(74, 169, 108, 0.12);
+  color: #2e7d4f;
+  border-color: rgba(74, 169, 108, 0.45);
+}
+[data-theme="shlee-dark"] .pill.pill-co.interest:hover {
+  background-color: rgba(111, 207, 151, 0.14);
+  color: #8fdcb0;
+  border-color: rgba(111, 207, 151, 0.45);
+}
+
+/* Contact card icon wrapper — bg color reverses on group hover.
+   The default state shows a subtle white tint; on hover, the icon
+   wrapper fills with azure blue and the icon turns dark for contrast. */
+.contact-icon-wrap {
+  transition: background-color 0.25s ease, color 0.25s ease, transform 0.25s ease;
+}
+.group:hover .contact-icon-wrap {
+  background-color: #41a0e0;
+  color: #0c1420;
+}
+.group:hover .contact-text-primary {
+  color: #41a0e0;
+}
+
+/* Links */
+.prose a, article a {
+  color: #1e3a5f;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(30, 58, 95, 0.3);
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+/* Hover lifts the link into the leaf-green accent (rest state stays blue). */
+.prose a:hover, article a:hover {
+  color: #2e7d4f;
+  border-bottom-color: #2e7d4f;
+}
+[data-theme="shlee-dark"] .prose a, [data-theme="shlee-dark"] article a {
+  color: #6fb0e0;
+  border-bottom-color: rgba(111, 176, 224, 0.3);
+}
+[data-theme="shlee-dark"] .prose a:hover, [data-theme="shlee-dark"] article a:hover {
+  color: #8fdcb0;
+  border-bottom-color: #8fdcb0;
+}
+
+/* Buttons — pill shape */
+.btn {
+  border-radius: 9999px !important;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.08px;
+  text-transform: none;
+  padding: 9px 20px;
+  min-height: 40px;
+  height: auto;
+}
+@media (min-width: 768px) {
+  .btn { font-size: 15px; padding: 10px 22px; min-height: 42px; }
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #1e3a5f, #3d68a0);
+  border: none;
+  color: #ffffff;
+}
+.btn-primary:hover {
+  background: linear-gradient(135deg, #3d68a0, #1e3a5f);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(30, 58, 95, 0.25);
+}
+.btn-outline.btn-primary {
+  background: transparent;
+  color: #1e3a5f;
+  border: 1px solid rgba(30, 58, 95, 0.5);
+}
+.btn-outline.btn-primary:hover {
+  background: rgba(30, 58, 95, 0.08);
+  color: #1e3a5f;
+  transform: translateY(-1px);
+}
+[data-theme="shlee-dark"] .btn-primary {
+  background: linear-gradient(135deg, #3d68a0, #6fb0e0);
+  color: #0c1420;
+}
+[data-theme="shlee-dark"] .btn-primary:hover {
+  background: linear-gradient(135deg, #6fb0e0, #3d68a0);
+  box-shadow: 0 8px 24px rgba(111, 176, 224, 0.25);
+}
+[data-theme="shlee-dark"] .btn-outline.btn-primary {
+  color: #8fadd4;
+  border-color: rgba(111, 176, 224, 0.75);
+  background: rgba(111, 176, 224, 0.07);
+}
+[data-theme="shlee-dark"] .btn-outline.btn-primary:hover { color: #aec6e3; background: rgba(111, 176, 224, 0.16); border-color: rgba(111, 176, 224, 0.9); }
+
+/* Dividers — neutral rule with a short leaf-green tick fading in from the left */
+.divider:before, .divider:after {
+  background-color: hsl(var(--b3) / 0.6) !important;
+  background-image: linear-gradient(90deg, rgba(74, 169, 108, 0.40), rgba(74, 169, 108, 0) 38%);
+}
+[data-theme="shlee-dark"] .divider:before, [data-theme="shlee-dark"] .divider:after {
+  background-image: linear-gradient(90deg, rgba(111, 207, 151, 0.32), rgba(111, 207, 151, 0) 38%);
+}
+
+/* Color block sections */
+.color-block { border-radius: 24px; padding: 28px; }
+@media (min-width: 768px) { .color-block { padding: 44px; } }
+
+.color-block-sage {
+  background-color: rgba(61, 104, 160, 0.06);
+  border: 1px solid rgba(61, 104, 160, 0.18);
+}
+[data-theme="shlee-dark"] .color-block-sage {
+  background-color: rgba(111, 176, 224, 0.07);
+  border-color: rgba(111, 176, 224, 0.2);
+}
+
+.color-block-deep {
+  border: none;
+}
+[data-theme="shlee-dark"] .color-block-deep {
+  background: linear-gradient(135deg, #0c1420 0%, #1e3a5f 100%);
+  color: #e2e6ec;
+}
+/* Light mode: a LIGHT pale-blue block (matches the rest of the light page) rather
+   than a dark closing block. Inner cards restyled to light tones below. */
+[data-theme="shlee-light"] .color-block-deep {
+  background: linear-gradient(135deg, #eeeff3 0%, #e2e6ec 100%);
+  color: #1e3a5f;
+  border: 1px solid rgba(30, 58, 95, 0.12);
+}
+
+.color-block-deep h1, .color-block-deep h2, .color-block-deep h3, .color-block-deep h4 { color: inherit; }
+.color-block-deep .type-eyebrow, .color-block-deep .type-caption { color: #41a0e0; }
+/* Eyebrow/caption need a darker blue on the light block for contrast */
+[data-theme="shlee-light"] .color-block-deep .type-eyebrow,
+[data-theme="shlee-light"] .color-block-deep .type-caption { color: #187a9a; }
+
+/* ── Light-mode contact cards: override the dark-mode white-tint utilities ── */
+[data-theme="shlee-light"] .color-block-deep .group {
+  background-color: rgba(255, 255, 255, 0.75) !important;
+  border-color: rgba(30, 58, 95, 0.12) !important;
+}
+[data-theme="shlee-light"] .color-block-deep .group:hover {
+  background-color: #ffffff !important;
+  border-color: rgba(30, 58, 95, 0.32) !important;
+}
+[data-theme="shlee-light"] .color-block-deep .contact-icon-wrap {
+  background-color: rgba(30, 58, 95, 0.10) !important;
+  color: #1e3a5f;
+}
+[data-theme="shlee-light"] .color-block-deep .group:hover .contact-text-primary { color: #2e7d4f; }
+[data-theme="shlee-light"] .color-block-deep .cv-placeholder {
+  background-color: rgba(30, 58, 95, 0.04) !important;
+  border-color: rgba(30, 58, 95, 0.12) !important;
+}
+
+/* CV download buttons (two variants inside one contact card) */
+.cv-dl-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 11px;
+  border-radius: 9px;
+  font-size: 12px;
+  font-weight: 550;
+  white-space: nowrap;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.20);
+  color: inherit;
+  transition: background-color .2s ease, border-color .2s ease, transform .2s ease, color .2s ease;
+}
+.cv-dl-btn:hover {
+  background: rgba(255, 255, 255, 0.24);
+  border-color: rgba(255, 255, 255, 0.42);
+  transform: translateY(-1px);
+}
+[data-theme="shlee-light"] .color-block-deep .cv-dl-btn {
+  background: rgba(30, 58, 95, 0.06);
+  border-color: rgba(30, 58, 95, 0.16);
+  color: #1e3a5f;
+}
+[data-theme="shlee-light"] .color-block-deep .cv-dl-btn:hover {
+  background: rgba(30, 58, 95, 0.12);
+  border-color: rgba(30, 58, 95, 0.32);
+  /* matches the contact-link hover above — same block, same leaf accent */
+  color: #2e7d4f;
+}
+/* CV card surface — give it a visible area in light mode (the bg-white/8 utility
+   is near-invisible on the light contact block, like the other .group cards). */
+[data-theme="shlee-light"] .color-block-deep .cv-card {
+  background-color: rgba(255, 255, 255, 0.75) !important;
+  border-color: rgba(30, 58, 95, 0.12) !important;
+}
+
+/* Research card (used on patents, education, etc.) */
+.research-card {
+  padding: 16px 18px;
+  border-radius: 14px;
+  background: hsl(var(--b2) / 0.5);
+  border: 1px solid hsl(var(--b3) / 0.6);
+  transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+}
+.research-card:hover {
+  border-color: rgba(65, 160, 224, 0.5);
+  background: hsl(var(--b2) / 0.75);
+  transform: translateY(-1px);
+}
+
+/* Pill badges */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 8px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 1.6;
+  white-space: nowrap;
+}
+
+/* Q1 / Quartile — AZURE BLUE (signature highlight) */
+.pill-q1     { background: rgba(65, 160, 224, 0.18); color: #1a6f8a; border: 1px solid rgba(65, 160, 224, 0.45); }
+
+/* First author — primary carbon blue */
+.pill-first  { background: rgba(65, 160, 224, 0.20); color: #1a6f8a;  border: 1px solid rgba(65, 160, 224, 0.45); }
+
+/* Co-author / generic chip — secondary carbon */
+.pill-co     { background: rgba(61, 104, 160, 0.10); color: #3d68a0; border: 1px solid rgba(61, 104, 160, 0.30); }
+
+/* Corresponding author — secondary carbon, 중간톤 (first 와 co 사이) */
+.pill-corr   { background: rgba(61, 104, 160, 0.22); color: #2f5586; border: 1px solid rgba(61, 104, 160, 0.50); }
+
+/* Scope (intl / domestic) — kept distinct but harmonized */
+.pill-intl   { background: rgba(45, 74, 110, 0.10);  color: #2d4a6e; border: 1px solid rgba(45, 74, 110, 0.30); }
+.pill-domestic{background: rgba(61, 104, 160, 0.10); color: #3d68a0; border: 1px solid rgba(61, 104, 160, 0.30); }
+
+/* Indexing tier (SCIE / ESCI / KCI) — 중립 네이비 슬레이트 (cover-badge-sci 계열의 pill 판) */
+.pill-idx    { background: rgba(30, 58, 95, 0.10);  color: #1e3a5f; border: 1px solid rgba(30, 58, 95, 0.30); }
+
+/* Patent status */
+.pill-reg    { background: rgba(61, 104, 160, 0.14); color: #1e3a5f; border: 1px solid rgba(61, 104, 160, 0.35); }
+.pill-app    { background: rgba(65, 160, 224, 0.12);color: #1a6f8a; border: 1px solid rgba(65, 160, 224, 0.35); }
+
+[data-theme="shlee-dark"] .pill-q1     { background: rgba(65, 160, 224, 0.20); color: #8ecdf2; border-color: rgba(65, 160, 224, 0.5); }
+[data-theme="shlee-dark"] .pill-first  { background: rgba(65, 160, 224, 0.18); color: #8ecdf2; border-color: rgba(65, 160, 224, 0.45); }
+[data-theme="shlee-dark"] .pill-co     { background: rgba(111, 176, 224, 0.08); color: #a0cfec; border-color: rgba(111, 176, 224, 0.25); }
+[data-theme="shlee-dark"] .pill-corr   { background: rgba(111, 176, 224, 0.16); color: #8fb8e6; border-color: rgba(111, 176, 224, 0.42); }
+[data-theme="shlee-dark"] .pill-intl   { background: rgba(160, 186, 220, 0.08); color: #a0cfec; border-color: rgba(160, 186, 220, 0.25); }
+[data-theme="shlee-dark"] .pill-domestic{background: rgba(111, 176, 224, 0.10); color: #a0cfec; border-color: rgba(111, 176, 224, 0.3); }
+[data-theme="shlee-dark"] .pill-idx    { background: rgba(160, 190, 225, 0.10); color: #b3c9e3; border-color: rgba(160, 190, 225, 0.28); }
+[data-theme="shlee-dark"] .pill-reg    { background: rgba(111, 176, 224, 0.12); color: #6fb0e0; border-color: rgba(111, 176, 224, 0.35); }
+[data-theme="shlee-dark"] .pill-app    { background: rgba(65, 160, 224, 0.12); color: #8ecdf2; border-color: rgba(65, 160, 224, 0.4); }
+
+/* Cover images — keep browser's high-quality default downscaling.
+   NOTE: image-rendering:-webkit-optimize-contrast was REMOVED. On downscaled
+   images it doesn't help (often worse), and combined with the hover
+   transform:scale() it caused images to re-sample blurrier after each hover.
+   backface-visibility:hidden stabilizes the GPU compositing layer so the image
+   stays crisp before/after the hover scale. */
+.paper-card img,
+.book-card img {
+  image-rendering: auto;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Mini action buttons (PDF / Web in paper cards) ─────────────────────── */
+.btn-mini {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border: 1px solid;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  text-decoration: none;
+  line-height: 1.4;
+}
+.btn-mini.active {
+  border-color: rgba(65, 160, 224, 0.55);
+  background-color: rgba(65, 160, 224, 0.10);
+  color: #1a6f8a;
+}
+.btn-mini.active:hover {
+  border-color: #41a0e0;
+  background-color: rgba(65, 160, 224, 0.22);
+  color: #10556b;
+}
+.btn-mini.inactive {
+  border-color: rgba(15, 27, 42, 0.12);
+  background-color: transparent;
+  color: rgba(15, 27, 42, 0.35);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+[data-theme="shlee-dark"] .btn-mini.active {
+  border-color: rgba(65, 160, 224, 0.5);
+  background-color: rgba(65, 160, 224, 0.10);
+  color: #8ecdf2;
+}
+[data-theme="shlee-dark"] .btn-mini.active:hover {
+  border-color: #41a0e0;
+  background-color: rgba(65, 160, 224, 0.20);
+  color: #94e2ff;
+}
+[data-theme="shlee-dark"] .btn-mini.inactive {
+  border-color: rgba(226, 230, 236, 0.12);
+  color: rgba(226, 230, 236, 0.25);
+}
+
+/* ─────────────────────────────────────────────────────────
+   COVER BADGES (overlaid on card cover images / dark gradients)
+   본문용 .pill 과 분리. 표지 위에서도 잘 보이도록 solid bg + 강한 그림자.
+   ───────────────────────────────────────────────────────── */
+.cover-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 9px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.30);
+  border: 1px solid;
+}
+
+/* Indexing tier — SCIE / ESCI: solid navy (국제 등재, 권위) */
+.cover-badge-sci {
+  background: #1e3a5f;
+  color: #ffffff;
+  border-color: #14283f;
+}
+/* Indexing tier — KCI: solid slate (국내 등재) */
+.cover-badge-kci {
+  background: #5a6b7a;
+  color: #ffffff;
+  border-color: #45525e;
+}
+
+/* Q1 / Quartile — solid Azure Blue (signature) */
+.cover-badge-q1 {
+  background: #41a0e0;
+  color: #0f1b2a;
+  border-color: #2074b8;
+}
+
+/* Impact Factor — solid carbon blue (secondary metric, paired with Q1) */
+.cover-badge-if {
+  background: #1e3a5f;
+  color: #ffffff;
+  border-color: #0f1b2a;
+}
+[data-theme="shlee-dark"] .cover-badge-if {
+  background: #6fb0e0;
+  color: #0c1420;
+  border-color: #3d68a0;
+}
+
+/* Registered patent — solid sky blue (means: 등록 완료, 긍정적) */
+.cover-badge-reg {
+  background: #6fb0e0;
+  color: #0c1420;
+  border-color: #3d68a0;
+}
+
+/* Application patent — solid pale-blue tint (means: 출원 중, 검토 단계) */
+.cover-badge-app {
+  background: #8ecdf2;
+  color: #0c3a4a;
+  border-color: #2074b8;
+}
+
+/* Book — neutral light (📖 책의 종이 느낌) */
+.cover-badge-book {
+  background: rgba(255, 255, 255, 0.94);
+  color: #1e3a5f;
+  border-color: rgba(15, 27, 42, 0.15);
+}
+
+/* Year header in timeline — AZURE BLUE highlight */
+.year-head {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: #2074b8;
+}
+[data-theme="shlee-dark"] .year-head { color: #41a0e0; }
+
+/* Section rhythm */
+.section-gap { margin-top: 64px; }
+@media (min-width: 768px) { .section-gap { margin-top: 96px; } }
+
+/* ─────────────────────────────────────────────────────────
+   COLLAPSIBLE SECTIONS (mobile only)
+   Built at runtime: section header → <button.section-toggle>, body → .section-body.
+   Desktop: button behaves like a plain block, chevron hidden, body always shown.
+   ───────────────────────────────────────────────────────── */
+.section-toggle {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  color: inherit;
+  font: inherit;
+  cursor: default;
+}
+.section-chevron { display: none; }
+
+@media (max-width: 1023px) {
+  .section-toggle {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem;
+    cursor: pointer;
+  }
+  .section-head-inner { flex: 1; min-width: 0; }
+
+  /* Chevron (▾) — rotates when collapsed. 1.5× size. */
+  .section-chevron {
+    display: block;
+    flex-shrink: 0;
+    width: 33px;
+    height: 33px;
+    margin-top: 2px;
+    border-radius: 8px;
+    position: relative;
+    transition: transform 0.25s ease, background-color 0.2s ease;
+  }
+  .section-chevron::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 14px;
+    height: 14px;
+    border-right: 3px solid currentColor;
+    border-bottom: 3px solid currentColor;
+    color: hsl(var(--bc) / 0.55);
+    transform: translate(-50%, -65%) rotate(45deg);
+    transition: transform 0.25s ease;
+  }
+  .section-toggle:hover .section-chevron { background-color: hsl(var(--b3)); }
+
+  /* Collapsed state: hide body, point chevron right (▸) */
+  .section-collapsed .section-body { display: none; }
+  .section-collapsed .section-chevron::before {
+    transform: translate(-50%, -50%) rotate(-45deg);
+  }
+  /* When collapsed, tighten spacing: zero the big title margin AND shrink the
+     section's bottom padding so the title sits close to the next divider. */
+  .section-collapsed .section-head-inner :where(h2) { margin-bottom: 0 !important; }
+  .section-collapsed { padding-bottom: 1.25rem !important; }
+}
+
+/* ─────────────────────────────────────────────────────────
+   CITE MODAL (APA / BibTeX copy) — shared modal at page level
+   ───────────────────────────────────────────────────────── */
+.cite-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.cite-modal[hidden] { display: none; }
+.cite-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(8, 14, 18, 0.72);
+  backdrop-filter: blur(2px);
+}
+.cite-modal-panel {
+  position: relative;
+  width: 100%;
+  max-width: 620px;
+  max-height: 85vh;
+  overflow-y: auto;
+  /* Explicit opaque background so the card cover never shows through */
+  background: #ffffff;
+  color: #1e3a5f;
+  border: 1px solid #c9d7e6;
+  border-radius: 18px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+  /* Extra top padding so the first row clears the close (×) button */
+  padding: 22px;
+  animation: cite-pop 0.18s ease-out;
+}
+[data-theme="shlee-dark"] .cite-modal-panel {
+  background: #101a20;
+  color: #e2e6ec;
+  border-color: #24364e;
+}
+@keyframes cite-pop {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.cite-modal-x {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  color: hsl(var(--bc) / 0.55);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.cite-modal-x:hover { background: hsl(var(--b3)); color: hsl(var(--bc)); }
+
+.cite-block { margin-bottom: 18px; }
+.cite-block:last-child { margin-bottom: 0; }
+.cite-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* Both headers share the same right padding so the APA / BibTeX "Copy"
+     buttons line up vertically — and the top (APA) one clears the × button. */
+  padding-right: 46px;
+  margin-bottom: 8px;
+}
+.cite-label {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #2d5380;
+}
+[data-theme="shlee-dark"] .cite-label { color: #6fb0e0; }
+
+.cite-copy {
+  position: relative;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 7px;
+  border: 1px solid rgba(74, 110, 138, 0.4);
+  background: rgba(74, 110, 138, 0.08);
+  color: #2d5380;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+.cite-copy:hover { background: rgba(74, 110, 138, 0.16); border-color: rgba(74, 110, 138, 0.6); }
+[data-theme="shlee-dark"] .cite-copy { color: #8fadd4; border-color: rgba(111, 176, 224, 0.4); background: rgba(111, 176, 224, 0.08); }
+.cite-copy .cite-copy-done { display: none; }
+/* Copy-succeeded: leaf green — the one place green carries meaning (done). */
+.cite-copy.copied { color: #2e7d4f; border-color: #4aa96c; background: rgba(74, 169, 108, 0.18); }
+.cite-copy.copied .cite-copy-default { display: none; }
+.cite-copy.copied .cite-copy-done { display: inline; }
+[data-theme="shlee-dark"] .cite-copy.copied { color: #8fdcb0; border-color: rgba(111, 207, 151, 0.6); background: rgba(111, 207, 151, 0.16); }
+
+.cite-text {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: #2c333a;
+  background: #f4f5f7;
+  border: 1px solid #c9d7e6;
+  border-radius: 10px;
+  padding: 12px 14px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+[data-theme="shlee-dark"] .cite-text {
+  color: #cfd6e0;
+  background: #0b1217;
+  border-color: #24364e;
+}
+.cite-text-mono {
+  font-size: 12.5px;
+  line-height: 1.5;
+  overflow-x: auto;
+}
+
+/* ── Publications 카드 ⇄ 목록 보기 전환 ── */
+.js-viewgroup[data-view="grid"] .view-list { display: none; }
+.js-viewgroup[data-view="list"] .view-grid { display: none; }
+
+.view-toggle { display: inline-flex; border: 1px solid rgba(15,27,42,0.15); border-radius: 8px; overflow: hidden; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
+.view-toggle button { display: inline-flex; align-items: center; gap: 5px; padding: 5px 12px; font-size: 12.5px; font-weight: 600; color: rgba(15,27,42,0.55); background: transparent; border: 0; cursor: pointer; transition: background .18s, color .18s; }
+.view-toggle button + button { border-left: 1px solid rgba(15,27,42,0.15); }
+.view-toggle button:hover { color: #1f4e7d; }
+/* Active view — leaf green (the selected state reads as the "live" one) */
+.view-toggle button.active { background: #2e7d4f; color: #fff; }
+
+[data-theme="shlee-dark"] .view-toggle { border-color: rgba(255,255,255,0.18); background: rgba(255,255,255,0.05); box-shadow: none; }
+[data-theme="shlee-dark"] .view-toggle button { color: rgba(255,255,255,0.62); }
+[data-theme="shlee-dark"] .view-toggle button + button { border-left-color: rgba(255,255,255,0.18); }
+[data-theme="shlee-dark"] .view-toggle button:hover { color: #fff; }
+[data-theme="shlee-dark"] .view-toggle button.active { background: #4aa96c; color: #0c1420; }
+
+/* ── 특허권자 '본인' 하이라이트 (blue) ── */
+.pill-self { background: rgba(65,160,224,0.18); color: #1a6f8a; border: 1px solid rgba(65,160,224,0.5); }
+[data-theme="shlee-dark"] .pill-self { color: #65c7e6; background: rgba(65,160,224,0.15); border-color: rgba(65,160,224,0.42); }

@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /preview
+Disallow: /go
+Disallow: /go-en
+
+Sitemap: https://gugi516.github.io/sitemap.xml

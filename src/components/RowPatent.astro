@@ -1,0 +1,76 @@
+---
+// 특허 한 줄 (리스트 전용 — 카드·특허증 표기는 2026-10-21 제거).
+import type { Patent } from "../data";
+import { fmtDate } from "../data";
+
+interface Props { patent: Patent; }
+const { patent } = Astro.props as Props;
+
+const yearText = (patent.registrationDate || patent.applicationDate || "").slice(0, 4) || "—";
+const isRegistered = patent.status === "registered";
+const isOwnerSelf = patent.owner.en === "Gukhwa Jang";  // 특허권자 본인 → 하이라이트
+
+// 등록특허공보(B1) 원문 PDF — 있는 항목에만 다운로드 버튼을 낸다.
+const hasPdf = !!patent.pdf;
+---
+
+<div class={`patent-row group flex gap-3 sm:gap-4 py-3 border-b border-base-300/40 hover:bg-base-200/40 -mx-2 px-2 rounded-md transition-colors ${isOwnerSelf ? "patent-self" : ""}`}>
+  <!-- Year -->
+  <div class="shrink-0 sm:w-12 sm:pt-1">
+    <span class="type-body-sm font-semibold text-base-content/55">{yearText}</span>
+  </div>
+
+  <!-- Content: (badge ↔ cert) → title → inventors · owner -->
+  <div class="flex-1 min-w-0">
+    <div class="flex flex-wrap items-center justify-between gap-x-3 gap-y-1.5 mb-1">
+      <div class="flex flex-wrap items-center gap-1.5">
+        {isRegistered ? (
+          <span class="pill pill-reg">Registered</span>
+        ) : (
+          <span class="pill pill-app">Application</span>
+        )}
+        {patent.registrationDate ? (
+          <span class="pill pill-co">Reg {fmtDate(patent.registrationDate)}</span>
+        ) : (
+          <span class="pill pill-co">App {fmtDate(patent.applicationDate)}</span>
+        )}
+        {isOwnerSelf && (
+          <span class="pill pill-self">
+            <span data-only="ko">특허권자 본인</span><span data-only="en">Self-owned</span>
+          </span>
+        )}
+      </div>
+      <div class="flex items-center gap-1.5">
+        {hasPdf && (
+          <a href={patent.pdf} download class="btn-mini active" aria-label="Download patent gazette PDF" title="Download patent gazette (B1) PDF">
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span data-only="ko">공보</span><span data-only="en">Gazette</span>
+          </a>
+        )}
+      </div>
+    </div>
+
+    <h3 class="type-body leading-snug text-base-content group-hover:text-primary transition-colors mb-0.5" style="font-weight:560;">
+      <span data-only="ko">{patent.title.ko}</span>
+      <span data-only="en">{patent.title.en}</span>
+    </h3>
+
+    <p class="type-body-sm text-base-content/65 leading-snug">
+      <span class="font-medium text-base-content/55">
+        <span data-only="ko">발명자: </span><span data-only="en">Inventors: </span>
+      </span>
+      <span data-only="ko">{patent.inventors.ko.join(", ")}</span>
+      <span data-only="en">{patent.inventors.en.join(", ")}</span>
+      <span class="mx-1.5 text-base-content/30">·</span>
+      <span class="font-medium text-base-content/55">
+        <span data-only="ko">특허권자: </span><span data-only="en">Owner: </span>
+      </span>
+      <span data-only="ko">{patent.owner.ko}</span>
+      <span data-only="en">{patent.owner.en}</span>
+    </p>
+  </div>
+</div>

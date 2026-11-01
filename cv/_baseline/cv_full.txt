@@ -1,0 +1,1 @@
+baseline reset 2026-10-13. 본인 데이터 입력 후 python _cv_baseline.py --save 로 재생성할 것.

@@ -1,0 +1,61 @@
+---
+import { nav } from "../data";
+const { lang = "ko", sideBarActiveItemID } = Astro.props;
+const activeClass = "active-nav-item";
+const base = lang === "en" ? "/en/" : "/";
+---
+
+<ul class="menu grow shrink menu-md overflow-y-auto gap-0.5 px-0">
+  {nav.map((item) => (
+    <li>
+      <a class="py-2 text-sm nav-item" id={item.id} href={`${base}#${item.id}`}>
+        <span class="nav-bar"></span>
+        <span data-only="ko">{item.ko}</span>
+        <span data-only="en">{item.en}</span>
+      </a>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .nav-item {
+    position: relative;
+    padding-left: 1.5rem !important;
+    transition: all 0.2s ease;
+    color: hsl(var(--bc) / 0.65);
+  }
+  .nav-item:hover {
+    color: #2074b8;
+    background: transparent !important;
+  }
+  .nav-bar {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 0.25rem;
+    height: 0;
+    /* Urban-landscape accent: the hover bar runs azure → leaf green */
+    background: linear-gradient(180deg, #41a0e0, #4aa96c);
+    border-radius: 2px;
+    transform: translateY(-50%);
+    transition: height 0.25s ease;
+  }
+  .nav-item:hover .nav-bar { height: 1.5rem; }
+  :global(.active-nav-item) {
+    color: #2074b8 !important;
+    background: transparent !important;
+    font-weight: 600;
+  }
+  :global(html[data-theme="shlee-dark"] .nav-item:hover) {
+    color: #41a0e0 !important;
+  }
+  :global(html[data-theme="shlee-dark"] .active-nav-item) {
+    color: #41a0e0 !important;
+  }
+  :global(.active-nav-item .nav-bar) { height: 1.5rem !important; }
+</style>
+
+<script define:vars={{ sideBarActiveItemID, activeClass }}>
+  const el = document.getElementById(sideBarActiveItemID);
+  if (el) el.classList.add(activeClass);
+</script>

@@ -1,0 +1,146 @@
+---
+// Import the global.css file here so that it is included on
+// all pages through the use of the <BaseHead /> component.
+import '../styles/global.css';
+import { SITE_TITLE_KO, SITE_TITLE_EN, SITE_DESCRIPTION_KO, SITE_DESCRIPTION_EN } from '../config';
+import site from '../data/site.json';
+
+export interface Props {
+  lang?: 'ko' | 'en';
+  ogType?: string;
+}
+const { lang = 'ko', ogType = 'website' } = Astro.props;
+
+const title = lang === 'en' ? SITE_TITLE_EN : SITE_TITLE_KO;
+const description = lang === 'en' ? SITE_DESCRIPTION_EN : SITE_DESCRIPTION_KO;
+
+// Canonical site root + per-language alternates (hreflang)
+const SITE = 'https://gugi516.github.io';
+const koUrl = `${SITE}/`;
+const enUrl = `${SITE}/en/`;
+const canonical = lang === 'en' ? enUrl : koUrl;
+const ogLocale = lang === 'en' ? 'en_US' : 'ko_KR';
+// Dedicated OG image — a text-only share banner from scripts/make-og.mjs (no photo).
+// A distinct URL forces social scrapers past their per-URL image cache on refresh.
+const ogImage = `${SITE}/og-image.jpg`;
+
+// ─── JSON-LD: Person (structured data for Google → richer search presence) ───
+const c = site.contact as any;
+const sameAs = [c.scholarUrl, c.orcidUrl, c.researchGateUrl, c.githubUrl].filter(Boolean);
+const personLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: lang === 'en' ? "Gukhwa Jang" : "장국화",
+  alternateName: lang === 'en'
+    ? ["장국화", "Jang Gukhwa", "Jang, G.", "G. Jang"]
+    : ["Gukhwa Jang", "Jang Gukhwa", "Jang, G."],
+  url: SITE,
+  image: ogImage,
+  jobTitle: lang === 'en' ? "Ph.D. Researcher (Urban Microclimate & Shrinking Cities)" : "박사 연구자 (도시 미기후·쇠퇴도시)",
+  description: lang === 'en'
+    ? site.site.en.description
+    : site.site.ko.description,
+  affiliation: {
+    "@type": "CollegeOrUniversity",
+    name: lang === 'en' ? "Seoul National University" : "서울대학교",
+    url: "https://www.snu.ac.kr",
+  },
+  alumniOf: [
+    { "@type": "CollegeOrUniversity", name: lang === 'en' ? "Seoul National University" : "서울대학교", url: "https://www.snu.ac.kr" },
+    { "@type": "CollegeOrUniversity", name: lang === 'en' ? "Kyungpook National University" : "경북대학교", url: "https://www.knu.ac.kr" },
+  ],
+  knowsAbout: [
+    "Urban microclimate", "Urban design", "Shrinking cities",
+    "Climate gentrification", "Climate mobility", "Climate-trapped populations",
+    "Landscape architecture", "Urban planning", "GIS",
+  ],
+  ...(sameAs.length ? { sameAs } : {}),
+};
+
+// 검색용 키워드(특히 네이버) — 이름 변형 + 핵심 조합
+const seoKeywords = "장국화, Gukhwa Jang, Jang Gukhwa, 공학박사, PhD, doctor, 도시미기후, urban microclimate, 도시설계, urban design, 쇠퇴도시, shrinking cities, 기후젠트리피케이션, climate gentrification, 기후이동, climate mobility, 기후고립, climate-trapped populations, 조경, landscape architecture, 서울대학교, Seoul National University, SNU, 경북대학교, Kyungpook National University, KNU, GIS";
+---
+
+<!-- Global Metadata -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🌳%3C/text%3E%3C/svg%3E" />
+<meta name="generator" content={Astro.generator} />
+
+<!-- Search engine ownership verification -->
+<meta name="google-site-verification" content="-xA8fxV1SiADabECs-TeuCIGXaIGmUUyAkh9zabPwI0" />
+<meta name="naver-site-verification" content="ff4deaf3ac2b576c9b21dad48f5eb2023521c2b1" />
+
+<!-- Google Analytics 4 — site.json analytics.gtagId 가 비어 있으면 렌더하지 않는다 -->
+{site.analytics?.gtagId && (
+  <>
+    <script async src={`https://www.googletagmanager.com/gtag/js?id=${site.analytics.gtagId}`}></script>
+    <script is:inline define:vars={{ gtagId: site.analytics.gtagId }}>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){ dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', gtagId);
+    </script>
+  </>
+)}
+
+<!-- Theme detection (runs before paint to avoid flash). Language is fixed per route. -->
+<script is:inline>
+  (function () {
+    const savedTheme = localStorage.getItem('gugi516-theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const theme = savedTheme || (prefersDark ? 'shlee-dark' : 'shlee-light');
+    document.documentElement.setAttribute('data-theme', theme);
+  })();
+</script>
+
+<!-- Font: Pretendard Variable 동적 서브셋 — 비차단(async) 로딩으로 렌더 차단 제거 -->
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link
+  rel="preload"
+  as="style"
+  href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
+  onload="this.onload=null;this.rel='stylesheet'"
+/>
+<noscript>
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
+  />
+</noscript>
+
+<!-- Primary Meta Tags -->
+<title>{title}</title>
+<meta name="title" content={title} />
+<meta name="description" content={description} />
+<meta name="keywords" content={seoKeywords} />
+<meta name="author" content="Gukhwa Jang (장국화)" />
+
+<!-- Canonical + hreflang language alternates (per-route, SEO) -->
+<link rel="canonical" href={canonical} />
+<link rel="alternate" hreflang="ko" href={koUrl} />
+<link rel="alternate" hreflang="en" href={enUrl} />
+<link rel="alternate" hreflang="x-default" href={koUrl} />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content={ogType} />
+<meta property="og:url" content={canonical} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:locale" content={ogLocale} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="Gukhwa Jang — Ph.D. Researcher, Seoul National University" />
+<meta property="og:site_name" content="Gukhwa Jang" />
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:url" content={canonical} />
+<meta property="twitter:title" content={title} />
+<meta property="twitter:description" content={description} />
+<meta property="twitter:image" content={ogImage} />
+<meta property="twitter:image:alt" content="Gukhwa Jang — Ph.D. Researcher, Seoul National University" />
+
+<!-- Structured data: Person (Google rich results / knowledge graph) -->
+<script type="application/ld+json" set:html={JSON.stringify(personLd)} />

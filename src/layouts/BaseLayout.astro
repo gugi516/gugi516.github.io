@@ -1,0 +1,45 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import SideBar from "../components/SideBar.astro";
+
+const {
+  lang = "ko",
+  includeSidebar = true,
+  sideBarActiveItemID,
+  ogType,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <BaseHead lang={lang} ogType={ogType} />
+  </head>
+  <body>
+    <div class="drawer lg:drawer-open">
+      <input id="my-drawer" type="checkbox" class="drawer-toggle" />
+      <div class="drawer-content">
+        <Header lang={lang} />
+        <div class="md:flex md:justify-center">
+          <main class="p-5 sm:p-6 pt-10 lg:max-w-[900px] w-full max-w-full">
+            <slot />
+          </main>
+        </div>
+        <Footer />
+      </div>
+      {includeSidebar && <SideBar lang={lang} sideBarActiveItemID={sideBarActiveItemID} />}
+    </div>
+
+    <!-- Cursor spotlight tracker (desktop only, fine pointer) -->
+    <script>
+      if (window.matchMedia('(min-width: 1024px) and (pointer: fine)').matches) {
+        document.addEventListener('mousemove', (e) => {
+          document.body.style.setProperty('--cursor-x', e.clientX + 'px');
+          document.body.style.setProperty('--cursor-y', e.clientY + 'px');
+        });
+      }
+    </script>
+  </body>
+</html>

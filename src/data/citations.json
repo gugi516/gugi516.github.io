@@ -1,0 +1,30 @@
+{
+  "10.3846/jau.2019.3786": {
+    "apa": "Jang, G., & Kim, S. (2019). INVESTIGATING THE EFFECT OF A RAISED CYCLE TRACK, PHYSICAL SEPARATION, LAND USE AND NUMBER OF PEDESTRIAN ON CYCLISTS’ GAZE BEHAVIOR. JOURNAL OF ARCHITECTURE AND URBANISM, 43(1), 112–122. https://doi.org/10.3846/jau.2019.3786",
+    "bibtex": "@article{jang2019_jau,\n  author  = {Jang, Gukhwa and Kim, Saehoon},\n  title   = {INVESTIGATING THE EFFECT OF A RAISED CYCLE TRACK, PHYSICAL SEPARATION, LAND USE AND NUMBER OF PEDESTRIAN ON CYCLISTS’ GAZE BEHAVIOR},\n  journal = {JOURNAL OF ARCHITECTURE AND URBANISM},\n  volume  = {43},\n  number  = {1},\n  pages   = {112–122},\n  year    = {2019},\n  month   = {jul},\n  doi     = {10.3846/jau.2019.3786}\n}"
+  },
+  "10.1016/j.uclim.2021.100924": {
+    "apa": "Jang, G., & Kim, S. (2021). Are decline-oriented strategies thermally sustainable in shrinking cities?. Urban Climate, 39, 100924. https://doi.org/10.1016/j.uclim.2021.100924",
+    "bibtex": "@article{jang2021_uclim,\n  author  = {Jang, Gukhwa and Kim, Saehoon},\n  title   = {Are decline-oriented strategies thermally sustainable in shrinking cities?},\n  journal = {Urban Climate},\n  volume  = {39},\n  pages   = {100924},\n  year    = {2021},\n  month   = {sep},\n  doi     = {10.1016/j.uclim.2021.100924}\n}"
+  },
+  "10.1016/j.buildenv.2022.109517": {
+    "apa": "Jang, G., Kim, S., & Lee, J. S. (2022). Planning scenarios and microclimatic effects: The case of high-density riverside residential districts in Seoul, South Korea. Building and Environment, 223, 109517. https://doi.org/10.1016/j.buildenv.2022.109517",
+    "bibtex": "@article{jang2022_buildenv,\n  author  = {Jang, Gukhwa and Kim, Saehoon and Lee, Jae Seung},\n  title   = {Planning scenarios and microclimatic effects: The case of high-density riverside residential districts in Seoul, South Korea},\n  journal = {Building and Environment},\n  volume  = {223},\n  pages   = {109517},\n  year    = {2022},\n  month   = {sep},\n  doi     = {10.1016/j.buildenv.2022.109517}\n}"
+  },
+  "10.1038/s44284-025-00278-y": {
+    "apa": "Jang, G., Kim, S., & Lee, J. S. (2025). Association between urban shrinkage and excess mortality during the COVID-19 pandemic. Nature Cities, 2(8), 708–719. https://doi.org/10.1038/s44284-025-00278-y",
+    "bibtex": "@article{jang2025_natcities,\n  author  = {Jang, Gukhwa and Kim, Saehoon and Lee, Jae Seung},\n  title   = {Association between urban shrinkage and excess mortality during the COVID-19 pandemic},\n  journal = {Nature Cities},\n  volume  = {2},\n  number  = {8},\n  pages   = {708–719},\n  year    = {2025},\n  month   = {jul},\n  doi     = {10.1038/s44284-025-00278-y}\n}"
+  },
+  "10.17208/jkpa.2025.12.60.7.80": {
+    "apa": "Jang, G., & Kim, D. (2025). Climate Gentrification: A Systematic Review of Theory, Measurement, and Drivers. Journal of Korea Planning Association, 60(7), 80–91. https://doi.org/10.17208/jkpa.2025.12.60.7.80",
+    "bibtex": "@article{jang2025_jkpa,\n  author  = {Jang, Gukhwa and Kim, DaHyun},\n  title   = {Climate Gentrification: A Systematic Review of Theory, Measurement, and Drivers},\n  journal = {Journal of Korea Planning Association},\n  volume  = {60},\n  number  = {7},\n  pages   = {80–91},\n  year    = {2025},\n  month   = {dec},\n  doi     = {10.17208/jkpa.2025.12.60.7.80}\n}"
+  },
+  "10.13087/kosert.2026.29.2.41": {
+    "apa": "Lee, S., Jang, G., Song, Y., & Kil, S. (2026). Comparing LST Estimation Methods under Matched Spatiotemporal Conditions in Low- and High-Rise Residential Areas: Satellite, Simulation, and UAV Approaches. Journal of the Korean Society of Environmental Restoration Technology, 29(2), 41–59. https://doi.org/10.13087/kosert.2026.29.2.41",
+    "bibtex": "@article{lee2026_kosert_lst,\n  author  = {Lee, Seunghyeon and Jang, Gukhwa and Song, Youngkeun and Kil, Sung-Ho},\n  title   = {Comparing LST Estimation Methods under Matched Spatiotemporal Conditions in Low- and High-Rise Residential Areas - Satellite, Simulation, and UAV Approaches -},\n  journal = {Journal of the Korean Society of Environmental Restoration Technology},\n  volume  = {29},\n  number  = {2},\n  pages   = {41-59},\n  year    = {2026},\n  month   = {apr},\n  doi     = {10.13087/kosert.2026.29.2.41}\n}"
+  },
+  "10.1016/j.scs.2026.107502": {
+    "apa": "Jang, G., Jeon, Y., You, Y., & Cho, H. R. (2026). What health risks arise in shrinking cities? A systematic review. Sustainable Cities and Society, 146, 107502. https://doi.org/10.1016/j.scs.2026.107502",
+    "bibtex": "@article{jang2026_scs,\n  author  = {Jang, Gukhwa and Jeon, Youngmee and You, Youngsoo and Cho, Hyung Rae},\n  title   = {What health risks arise in shrinking cities? A systematic review},\n  journal = {Sustainable Cities and Society},\n  volume  = {146},\n  pages   = {107502},\n  year    = {2026},\n  month   = {aug},\n  doi     = {10.1016/j.scs.2026.107502}\n}"
+  }
+}

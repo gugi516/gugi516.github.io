@@ -1,0 +1,119 @@
+---
+import type { Book } from "../data";
+
+interface Props { book: Book; }
+const { book } = Astro.props as Props;
+
+const yearText = (book.date || "").slice(0, 4) || "—";
+// Deterministic hue from ISBN (or title length fallback)
+const seed = book.isbn ? book.isbn.split("").reduce((s, c) => s + c.charCodeAt(0), 0) : (book.title.en || "").length;
+const hue = (seed * 31) % 360;
+
+// Cover served from generated web/ subfolder (800px webp); original kept.
+const coverSrc = book.cover
+  ? book.cover.replace(/\/([^/]+)\.(jpe?g|png|webp)$/i, "/web/$1.webp")
+  : "";
+---
+
+<article class="book-card group relative flex flex-col rounded-xl overflow-hidden bg-base-200/50 border border-base-300/60 hover:border-primary/60 hover:shadow-2xl hover:shadow-primary/10 hover:-translate-y-1 transition-all duration-300">
+
+  <!-- Cover -->
+  <div class="relative aspect-[210/297] overflow-hidden bg-base-300">
+    {coverSrc ? (
+      <img
+        src={coverSrc}
+        alt={book.title.en}
+        class="w-full h-full object-cover"
+        loading="lazy"
+      />
+    ) : (
+      <div
+        class="w-full h-full relative flex items-center justify-center text-white"
+        style={`background: linear-gradient(135deg, hsl(${hue}, 35%, 32%) 0%, hsl(${(hue + 30) % 360}, 30%, 20%) 100%);`}
+      >
+        <div class="absolute inset-0 opacity-12" style="background-image: linear-gradient(rgba(255,255,255,.3) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.3) 1px, transparent 1px); background-size: 22px 22px;"></div>
+        <div class="relative text-center px-5">
+          <p class="text-xs tracking-widest uppercase opacity-70 mb-2">Book</p>
+          <p class="text-2xl font-light leading-tight">
+            <span data-only="ko">{book.title.ko}</span>
+            <span data-only="en">{book.title.en}</span>
+          </p>
+          <p class="text-xs mt-3 opacity-80">{yearText}</p>
+        </div>
+      </div>
+    )}
+
+    <!-- Top-left: Book badge (cover-badge: 표지 위 가독성 보장) -->
+    <div class="absolute top-3 left-3">
+      <span class="cover-badge cover-badge-book">📖 Book</span>
+    </div>
+
+    <!-- Top-right: external link on hover -->
+    {book.url && (
+      <div class="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
+        <a
+          href={book.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Open book page"
+          title="Open book page"
+          class="w-7 h-7 rounded-full bg-black/45 backdrop-blur-sm text-white flex items-center justify-center hover:bg-primary"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <line x1="10" y1="14" x2="21" y2="3"></line>
+          </svg>
+        </a>
+      </div>
+    )}
+  </div>
+
+  <!-- Content -->
+  <div class="flex flex-col flex-1 p-4">
+    <div class="flex flex-wrap items-center gap-1.5 mb-3">
+      <span class="pill pill-co">{yearText}</span>
+    </div>
+
+    <h3 class="type-card-title leading-snug mb-2 line-clamp-3 text-base-content group-hover:text-primary transition-colors">
+      <span data-only="ko">{book.title.ko}</span>
+      <span data-only="en">{book.title.en}</span>
+    </h3>
+
+    <p class="type-body-sm text-base-content/65 mb-1 line-clamp-1">
+      <span data-only="ko">{book.authors.ko}</span>
+      <span data-only="en">{book.authors.en}</span>
+      <span class="mx-1.5 text-base-content/30">·</span>
+      <span data-only="ko">{book.publisher.ko}</span>
+      <span data-only="en">{book.publisher.en}</span>
+    </p>
+
+    {book.isbn && <p class="type-body-sm text-base-content/70 font-medium tracking-tight mb-3 flex-1">ISBN {book.isbn}</p>}
+
+    <div class="flex items-center gap-2 pt-3 border-t border-base-300/40 mt-auto">
+      {book.url ? (
+        <a
+          href={book.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-1.5 text-xs text-primary hover:underline"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <line x1="10" y1="14" x2="21" y2="3"></line>
+          </svg>
+          <span data-only="ko">도서 페이지</span>
+          <span data-only="en">Book page</span>
+        </a>
+      ) : (
+        <span class="text-xs text-base-content/70">{book.date}</span>
+      )}
+    </div>
+  </div>
+</article>
+
+<style>
+  .line-clamp-1 { display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+  .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+</style>

@@ -1,0 +1,1058 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import L from "./L.astro";
+import CardPaper from "./CardPaper.astro";
+import RowPaper from "./RowPaper.astro";
+import ViewToggle from "./ViewToggle.astro";
+import FigureCarousel from "./FigureCarousel.astro";
+import RowPatent from "./RowPatent.astro";
+import CardBook from "./CardBook.astro";
+import site, {
+  publications, underReview, conferences, invitedTalks, projects, patents,
+  teaching, career, education,
+  scholarships, certifications, books,
+  groupByYear, fmtRange, fmtDate, fillTokens, counts,
+} from "../data";
+
+// Page language is fixed per route: "/" → ko, "/en" → en
+const { lang = "ko" } = Astro.props as { lang?: "ko" | "en" };
+
+const hero    = site.hero;
+const about   = site.about;
+const contact = site.contact;
+// ORCID 표시 문자열은 site.json 의 orcidUrl 에서 ID 만 떼어 쓴다(하드코딩 금지).
+const orcidId = (contact.orcidUrl || "").replace(/^https?:\/\/(www\.)?orcid\.org\//, "").replace(/\/$/, "");
+
+// Publications order: 국제(SCIE/ESCI, newest first) → KCI (newest first).
+// 등재구분(index)이 있으면 그것으로 판정하고(KCI 가 아니면 국제),
+// 없을 때만 quartile/IF 유무로 추정한다(국제 저널 지표; KCI(KOSERT 등)은 없음).
+const isIntl = (p: typeof publications[number]) =>
+  p.index ? p.index !== 'KCI' : !!(p.quartile || p.if);
+const pubDateKey = (p: typeof publications[number]) => p.date || `${p.year}/00/00`;
+const sortedPublications = [...publications].sort((a, b) => {
+  const sa = isIntl(a), sb = isIntl(b);
+  if (sa !== sb) return sa ? -1 : 1;                 // 국제 그룹 먼저
+  return pubDateKey(b).localeCompare(pubDateKey(a)); // newest first within group
+});
+// 게재 확정(accepted, in press) — 등재구분(index)·IF·quartile 이 아직 없어 국제/KCI 어느
+// 쪽으로도 분류할 수 없는 논문. 추정 라벨을 붙이지 않고, 그룹 머리글 없이 맨 앞에 둔다.
+const isAccepted = (p: typeof publications[number]) => !p.index && !p.quartile && !p.if;
+const acceptedPubs = sortedPublications.filter(isAccepted);
+const sciPubs = sortedPublications.filter((p) => isIntl(p) && !isAccepted(p));
+const kciPubs = sortedPublications.filter((p) => !isIntl(p) && !isAccepted(p));
+
+// Manuscripts under review — status 로 두 그룹 분리.
+//   status.en 에 'preparation' 이 들어가면 '작성 중', 그 밖의 status 는 전부 '심사·수정 중'.
+//   (하드코딩 나열이 아니라 포함 검사라서 새 status 가 들어와도 심사·수정 중으로 흡수된다)
+const isPrepManuscript = (m: typeof underReview[number]) =>
+  (m.status?.en || "").toLowerCase().includes("preparation");
+const urActive = underReview.filter((m) => !isPrepManuscript(m));
+const urPrep   = underReview.filter(isPrepManuscript);
+
+// Group time-based items by year (Patents render as a grid; Conferences/Teaching stay year-grouped)
+const confsByYear  = groupByYear(conferences);
+// 초청 강연 — 최신순. 연도만 아는 항목(date 없음)은 그 해 앞에 온다.
+const invitedSorted = [...invitedTalks].sort((a, b) =>
+  (b.date || `${b.year}/99/99`).localeCompare(a.date || `${a.year}/99/99`));
+const teachByYear  = groupByYear(teaching);
+
+// Type label maps
+const teachTypeLabels: Record<string, { ko: string; en: string }> = {
+  special: { ko: "특강",        en: "Special" },
+  univ:    { ko: "대학 강의",   en: "University" },
+  online:  { ko: "온라인 강의", en: "Online" },
+  TA:      { ko: "조교",        en: "TA" },
+  workshop:{ ko: "워크숍",      en: "Workshop" },
+};
+
+// 본인 저자명 판별 — 데이터에 쓰이는 표기만 명시적으로 매치한다.
+//   publications: 풀네임("Gukhwa Jang") / underReview: APA("Jang, G.") / KCI 국문("장국화")
+const isSelfAuthor = (a: string) => {
+  const t = a.trim();
+  return t === "Gukhwa Jang" || t === "Jang, G." || t === "장국화";
+};
+
+// role pill 클래스 — 판별 우선순위: first → corresponding → co.
+// "first & corresponding" 은 복합값이므로 first 가 먼저 걸려 First author 로 간다.
+const rolePillClass = (role: unknown) => {
+  const r = typeof role === "string" ? role : "";
+  if (r.includes("first")) return "pill-first";
+  if (r.includes("corresponding")) return "pill-corr";
+  return "pill-co";
+};
+
+// role pill 라벨 — RowPaper/CardPaper 의 국문 라벨과 동일한 문구. 복합값은 병기.
+const roleLabel = (role: unknown): { ko: string; en: string } => {
+  const r = typeof role === "string" ? role : "";
+  const isFirst = r.includes("first");
+  const isCorr = r.includes("corresponding");
+  if (isFirst && isCorr) return { ko: "제1저자·교신저자", en: "First & corresponding author" };
+  if (isFirst) return { ko: "제1저자", en: "First author" };
+  if (isCorr) return { ko: "교신저자", en: "Corresponding author" };
+  return { ko: "공저자", en: "Co-author" };
+};
+
+const confTypeLabels: Record<string, string> = {
+  oral:   "Oral",
+  poster: "Poster",
+  video:  "Video",
+};
+
+// 초청 강연 Type 라벨 — 정본은 site.json invitedTalks._typeLabels (xlsx Type 어휘와 1:1)
+const invitedTypeLabels =
+  site.invitedTalks._typeLabels as unknown as Record<string, { ko: string; en: string }>;
+---
+
+<BaseLayout lang={lang} sideBarActiveItemID="about">
+  <!-- ───────── HERO ───────── -->
+  <section id="top" class="pb-16 pt-8 scroll-mt-12 animate-fade-up">
+    <div>
+      <div>
+        <p class="type-eyebrow text-base-content/70 mb-4" aria-hidden="true">🌿 RESEARCH PORTFOLIO</p>
+
+        <h1 class="type-display-xl mb-5 leading-[0.98]">
+          <span data-only="ko">{hero.name.ko}</span>
+          <span data-only="en">{hero.name.en}</span>
+          <span class="text-primary"> </span>
+          <span class="type-headline text-base-content/70 align-baseline">
+            <span data-only="ko">{hero.nameSub.ko}</span>
+            <span data-only="en">{hero.nameSub.en}</span>
+          </span>
+        </h1>
+
+        <L tag="p" class="type-headline text-base-content/85 mb-5 max-w-2xl" ko={hero.tagline.ko} en={hero.tagline.en} />
+
+        <!-- Research focus — 정체성·연구를 목록(칩)으로 노출 -->
+        <p class="type-caption text-primary mb-2">
+          <span data-only="ko">{hero.focusLabel.ko}</span><span data-only="en">{hero.focusLabel.en}</span>
+        </p>
+        <ul class="flex flex-wrap gap-2 mb-6 max-w-2xl" aria-label="Research focus">
+          {hero.focus.map((f) => (
+            <li class="inline-flex items-center rounded-full bg-base-200/70 border border-base-300 px-3 py-1 type-body-sm text-base-content/75">
+              <span data-only="ko">{f.ko}</span><span data-only="en">{f.en}</span>
+            </li>
+          ))}
+        </ul>
+
+        <L
+          tag="p"
+          class="type-body-sm text-base-content/70 mb-7 pl-3 border-l-2"
+          ko={hero.affiliation.ko}
+          en={hero.affiliation.en}
+        />
+
+        <div class="flex flex-wrap gap-3">
+          <a href="#publications" class="btn btn-primary gap-2">
+            <span data-only="ko">{hero.ctaPrimary.ko}</span>
+            <span data-only="en">{hero.ctaPrimary.en}</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+          <a href="#contact" class="btn btn-outline btn-primary">
+            <span data-only="ko">{hero.ctaSecondary.ko}</span>
+            <span data-only="en">{hero.ctaSecondary.en}</span>
+          </a>
+          <a href={contact.cvFullUrl} download class="btn btn-outline btn-primary gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            <span data-only="ko">CV 다운로드</span><span data-only="en">Download CV</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────── ABOUT ───────── -->
+  <section id="about" class="pb-20 border-t border-base-300 pt-14 scroll-mt-12">
+    <p class="type-eyebrow text-primary mb-3">{about.eyebrow}</p>
+    <L tag="h2" class="type-display-lg mb-8" ko={about.title.ko} en={about.title.en} />
+
+    <div class="space-y-4 mb-10 max-w-2xl">
+      {about.paragraphs.ko.map((p, i) => (
+        <p class="type-body-lg text-base-content/85" data-only="ko">{p}</p>
+      ))}
+      {about.paragraphs.en.map((p, i) => (
+        <p class="type-body-lg text-base-content/85" data-only="en">{p}</p>
+      ))}
+    </div>
+
+    <!-- Research interests -->
+    <L tag="p" class="type-eyebrow text-base-content/65 mb-3" ko={about.interestsLabel.ko} en={about.interestsLabel.en} />
+    <div class="flex flex-wrap gap-2 mb-10">
+      {about.interests.ko.map((i) => (
+        <span class="pill pill-co interest" data-only="ko">{i}</span>
+      ))}
+      {about.interests.en.map((i) => (
+        <span class="pill pill-co interest" data-only="en">{i}</span>
+      ))}
+    </div>
+
+    <!-- Stats grid -->
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+      {about.stats.map((stat) => (
+        <div class="stat-box p-4 rounded-2xl bg-base-200/60 border border-base-300/60">
+          <p class="type-caption text-base-content/70 mb-1">
+            <span data-only="ko">{stat.label.ko}</span>
+            <span data-only="en">{stat.label.en}</span>
+          </p>
+          <p class="text-primary" style="font-size:26px;font-weight:600;line-height:1;">
+            <span class="stat-num">{fillTokens(stat.value)}</span>
+            <span class="text-xs font-normal text-base-content/70 ml-1">
+              <span data-only="ko">{fillTokens(stat.unit.ko)}</span>
+              <span data-only="en">{fillTokens(stat.unit.en)}</span>
+            </span>
+          </p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- ───────── EDUCATION ───────── -->
+  <section id="education" class="pb-20 border-t border-base-300 pt-14 scroll-mt-12">
+    <p class="type-eyebrow text-primary mb-3">{site.education.eyebrow}</p>
+    <L tag="h2" class="type-display-lg mb-8" ko={site.education.title.ko} en={site.education.title.en} />
+
+    <div class="space-y-4">
+      {education.map((e) => (
+        <div class="research-card flex gap-4 -mx-[18px]">
+          <!-- Logo slot (square) -->
+          <div class="shrink-0 w-[72px] h-[72px] rounded-lg bg-white border border-base-300/60 flex items-center justify-center overflow-hidden">
+            {e.logo ? (
+              <img src={e.logo} alt="" class="max-w-[80%] max-h-[80%] object-contain" loading="lazy" />
+            ) : (
+              <span class="text-base-content/30 text-2xl">🎓</span>
+            )}
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="type-caption text-base-content/70 mb-1">{e.period}</p>
+            <h3 class="type-card-title mb-1">
+              <span data-only="ko">{e.degree.ko}{' · '}{e.program.ko}</span>
+              <span data-only="en">{e.degree.en}{' · '}{e.program.en}</span>
+            </h3>
+            <p class="type-body-sm text-base-content/70">
+              <span data-only="ko">{e.institution.ko}</span>
+              <span data-only="en">{e.institution.en}</span>
+            </p>
+            {e.lab && (
+              <p class="type-body-sm text-base-content/70 mt-1">
+                <span data-only="ko">{e.lab.ko}{e.advisor ? ` · ${e.advisor.ko}` : ''}</span>
+                <span data-only="en">{e.lab.en}{e.advisor ? ` · ${e.advisor.en}` : ''}</span>
+              </p>
+            )}
+            {e.thesis && (
+              <p class="type-body-sm text-base-content/55 mt-1.5 leading-snug">
+                <span class="font-semibold text-primary">
+                  {e.degree.en.startsWith("Ph.D") ? (
+                    <><span data-only="ko">박사학위논문</span><span data-only="en">Dissertation</span></>
+                  ) : (
+                    <><span data-only="ko">석사학위논문</span><span data-only="en">Thesis</span></>
+                  )}: </span>
+                <span class="italic">“{e.thesis}”</span>
+              </p>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- ───────── CAREER ───────── -->
+  <section id="career" class="pb-20 border-t border-base-300 pt-14 scroll-mt-12">
+    <p class="type-eyebrow text-primary mb-3">{site.career.eyebrow}</p>
+    <L tag="h2" class="type-display-lg mb-8" ko={`${site.career.title.ko} (${career.length})`} en={`${site.career.title.en} (${career.length})`} />
+
+    <div class="space-y-2">
+      {career.map((w) => (
+        <div class="flex items-start gap-3 py-3 px-2 -mx-2 rounded-md hover:bg-base-200/60 transition-colors border-b border-base-300/30">
+          <!-- Logo slot (square) -->
+          <div class="shrink-0 w-[72px] h-[72px] rounded-lg bg-white border border-base-300/60 flex items-center justify-center overflow-hidden mt-0.5">
+            {w.logo ? (
+              <img src={w.logo} alt="" class="max-w-[80%] max-h-[80%] object-contain" loading="lazy" />
+            ) : (
+              <span class="text-base-content/30 text-lg">💼</span>
+            )}
+          </div>
+
+          <div class="flex-1 min-w-0 flex flex-col md:flex-row md:items-baseline gap-1 md:gap-4">
+            <div class="flex flex-wrap items-center gap-2 md:contents">
+              <span class="shrink-0 type-body-sm text-base-content/70 whitespace-nowrap w-fit md:w-36">
+                {w.period.endsWith('Present') ? (
+                  <>{w.period.replace('Present', '')}<span data-only="ko">현재</span><span data-only="en">Present</span></>
+                ) : w.period}
+              </span>
+              <span class="shrink-0 pill pill-co">
+                <span data-only="ko">{w.type.ko}</span>
+                <span data-only="en">{w.type.en}</span>
+              </span>
+            </div>
+            <div class="flex-1 min-w-0">
+              {w.url ? (
+                <a href={w.url} target="_blank" rel="noopener noreferrer" class="type-body text-base-content hover:text-primary" style="font-weight:480;">
+                  <span data-only="ko">{w.company.ko}</span>
+                  <span data-only="en">{w.company.en}</span>
+                </a>
+              ) : (
+                <p class="type-body text-base-content" style="font-weight:480;">
+                  <span data-only="ko">{w.company.ko}</span>
+                  <span data-only="en">{w.company.en}</span>
+                </p>
+              )}
+              {w.desc && (
+                <p class="type-body-sm text-base-content/70 mt-0.5 italic">{w.desc}</p>
+              )}
+              <p class="type-body-sm text-base-content/70 mt-0.5">
+                <span data-only="ko">{w.country.ko}</span>
+                <span data-only="en">{w.country.en}{w.fundingUsd ? ` · ${w.fundingUsd} startup grant` : ''}</span>
+              </p>
+              {w.papers && (
+                <p class="type-body-sm mt-1 leading-snug">
+                  <span class="font-semibold text-primary">{w.papers.includes(' · ') ? 'Papers' : 'Paper'}: </span>
+                  <span class="text-base-content/65">{w.papers}</span>
+                </p>
+              )}
+              {w.patents && (
+                <p class="type-body-sm mt-1 leading-snug">
+                  <span class="font-semibold text-primary">{w.patents.includes(' · ') ? 'Patents' : 'Patent'}: </span>
+                  <span class="text-base-content/65">{w.patents}</span>
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Certifications (included in Career, like Books in Publications) -->
+    <L tag="p" class="type-caption text-base-content/65 mb-4 mt-12" ko={`${site.honors.certifications.label.ko} (${certifications.length})`} en={`${site.honors.certifications.label.en} (${certifications.length})`} />
+    <div class="flex flex-wrap gap-2">
+      {certifications.map((c) => (
+        <div class="cert-chip px-3 py-2 rounded-lg bg-base-200/60 border border-base-300/60">
+          <p class="type-body-sm text-base-content" style="font-weight:500;">
+            <span data-only="ko">{c.name.ko}</span>
+            <span data-only="en">{c.name.en}</span>
+          </p>
+          {c.date && <p class="type-caption text-base-content/70 mt-0.5">{c.date}</p>}
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- ───────── PUBLICATIONS — card grid (3 cols) ───────── -->
+  <section id="publications" class="pb-20 border-t border-base-300 pt-14 scroll-mt-12">
+    <p class="type-eyebrow text-primary mb-3">{site.publications.eyebrow}</p>
+    <L tag="h2" class="type-display-lg mb-3" ko={`${site.publications.title.ko} (${publications.length})`} en={`${site.publications.title.en} (${publications.length})`} />
+    <L tag="p" class="type-body text-base-content/70 mb-6" ko={site.publications.intro.ko} en={site.publications.intro.en} />
+
+    <div class="js-viewgroup" data-view="grid" data-viewkey="pub">
+      <ViewToggle />
+      <div class="view-grid">
+        {acceptedPubs.length > 0 && (
+          <div class="grid grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-4">
+            {acceptedPubs.map((p) => <CardPaper paper={p} />)}
+          </div>
+        )}
+        <p class:list={["type-caption font-semibold text-base-content/60 tracking-wide mb-3", acceptedPubs.length > 0 && "mt-8 pt-6 border-t border-base-300"]}>
+          <span data-only="ko">{site.publications.groupSci.ko}</span>
+          <span data-only="en">{site.publications.groupSci.en}</span>
+        </p>
+        <div class="grid grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-4">
+          {sciPubs.map((p) => <CardPaper paper={p} />)}
+        </div>
+        {kciPubs.length > 0 && (
+          <>
+            <p class="type-caption font-semibold text-base-content/60 tracking-wide mb-3 mt-8 pt-6 border-t border-base-300">
+              <span data-only="ko">{site.publications.groupKci.ko}</span>
+              <span data-only="en">{site.publications.groupKci.en}</span>
+            </p>
+            <div class="grid grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-4">
+              {kciPubs.map((p) => <CardPaper paper={p} />)}
+            </div>
+          </>
+        )}
+      </div>
+      <div class="view-list">
+        {acceptedPubs.map((p) => <RowPaper paper={p} />)}
+        <p class:list={["type-caption font-semibold text-base-content/60 tracking-wide mb-2", acceptedPubs.length > 0 && "mt-6 pt-5 border-t border-base-300"]}>
+          <span data-only="ko">{site.publications.groupSci.ko}</span>
+          <span data-only="en">{site.publications.groupSci.en}</span>
+        </p>
+        {sciPubs.map((p) => <RowPaper paper={p} />)}
+        {kciPubs.length > 0 && (
+          <>
+            <p class="type-caption font-semibold text-base-content/60 tracking-wide mb-2 mt-6 pt-5 border-t border-base-300">
+              <span data-only="ko">{site.publications.groupKci.ko}</span>
+              <span data-only="en">{site.publications.groupKci.en}</span>
+            </p>
+            {kciPubs.map((p) => <RowPaper paper={p} />)}
+          </>
+        )}
+      </div>
+    </div>
+
+    <!-- Manuscripts under review — list (conference-style), not cards -->
+    {underReview.length > 0 && (
+      <div class="mt-12">
+        <div class="flex items-baseline gap-3 mb-4">
+          <span class="pill pill-app">
+            <span data-only="ko">심사 중</span>
+            <span data-only="en">Under Review</span>
+          </span>
+          <p class="type-caption text-base-content/70">
+            <span data-only="ko">{fillTokens(site.publications.underReview.note.ko)}</span>
+            <span data-only="en">{fillTokens(site.publications.underReview.note.en)}</span>
+          </p>
+        </div>
+        {[
+          { items: urActive, label: site.publications.underReview.label },
+          { items: urPrep,   label: site.publications.underReview.labelPrep },
+        ].filter((g) => g.items.length > 0).map((g, gi) => (
+          <>
+            <p class={`type-caption font-semibold text-base-content/60 tracking-wide mb-2 ${gi > 0 ? "mt-6 pt-5 border-t border-base-300" : ""}`}>
+              <span data-only="ko">{g.label.ko} ({g.items.length})</span>
+              <span data-only="en">{g.label.en} ({g.items.length})</span>
+            </p>
+            <div class="space-y-2 pl-4 border-l-2 border-base-300/40">
+              {g.items.map((m) => (
+                <div class="group flex flex-col md:flex-row md:items-baseline gap-1 md:gap-3 py-2.5 hover:bg-base-200/60 -mx-2 px-2 rounded-md transition-colors">
+                  <div class="flex flex-wrap items-center gap-2 md:contents">
+                    <span class="shrink-0 type-body-sm text-base-content/70 whitespace-nowrap w-fit md:w-20">
+                      {m.date.replace("/", ".")}
+                    </span>
+                    <span class={`shrink-0 pill ${rolePillClass(m.role)}`}>
+                      <span data-only="ko">{roleLabel(m.role).ko}</span>
+                      <span data-only="en">{roleLabel(m.role).en}</span>
+                    </span>
+                    <span class="shrink-0 pill pill-co">
+                      <span data-only="ko">{m.status.ko}</span>
+                      <span data-only="en">{m.status.en}</span>
+                    </span>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <p class="type-body text-base-content leading-snug" style="font-weight:480;">{m.title}</p>
+                    <p class="type-body-sm text-base-content/70 mt-0.5">
+                      {m.authors.map((a, i) => (
+                        <>{i > 0 ? ", " : ""}{isSelfAuthor(a) ? <strong class="font-bold text-primary">{a}</strong> : a}</>
+                      ))}
+                      <span class="mx-1.5 text-base-content/30">·</span>
+                      <span class="italic">{m.journal}</span>
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
+        ))}
+      </div>
+    )}
+
+    <!-- Books (moved from Honors) -->
+    <L tag="p" class="type-caption text-base-content/65 mb-4 mt-12" ko={`${site.honors.books.label.ko} (${books.length})`} en={`${site.honors.books.label.en} (${books.length})`} />
+    <div class="grid grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-4">
+      {books.map((b) => <CardBook book={b} />)}
+    </div>
+  </section>
+
+  <!-- ───────── CONFERENCES ───────── -->
+  <section id="conferences" class="pb-20 border-t border-base-300 pt-14 scroll-mt-12">
+    <p class="type-eyebrow text-primary mb-3">{site.conferences.eyebrow}</p>
+    <L tag="h2" class="type-display-lg mb-3" ko={`${site.conferences.title.ko} (${conferences.length + invitedTalks.length})`} en={`${site.conferences.title.en} (${conferences.length + invitedTalks.length})`} />
+    <L tag="p" class="type-body text-base-content/70 mb-8" ko={site.conferences.intro.ko} en={site.conferences.intro.en} />
+
+    <!-- 초청 강연 — 학회 밖 초청 강연·발표 + 교과목 초청강의 (xlsx 'Invited Talks' 정본) -->
+    {invitedSorted.length > 0 && (
+      <>
+        <p class="type-caption font-semibold text-base-content/60 tracking-wide mb-3">
+          <span data-only="ko">{site.invitedTalks.label.ko}</span>
+          <span data-only="en">{site.invitedTalks.label.en}</span>
+        </p>
+        <div class="space-y-2 pl-4 border-l-2 border-base-300/40 mb-8">
+          {invitedSorted.map((t) => {
+            const label = invitedTypeLabels[t.type] || { ko: t.type, en: t.type };
+            return (
+              <div class="group flex flex-col md:flex-row md:items-baseline gap-1 md:gap-3 py-2.5 hover:bg-base-200/60 -mx-2 px-2 rounded-md transition-colors">
+                <div class="flex flex-wrap items-center gap-2 md:contents">
+                  <span class="shrink-0 type-body-sm text-base-content/70 whitespace-nowrap w-fit md:w-24 md:pr-3">
+                    {t.date ? fmtDate(t.date) : t.year}
+                  </span>
+                  <span class={`shrink-0 pill ${t.scope === 'international' ? 'pill-intl' : 'pill-domestic'}`}>
+                    <span data-only="ko">{label.ko}</span>
+                    <span data-only="en">{label.en}</span>
+                    {' · '}{t.scope === 'international' ? 'Intl.' : 'Domestic'}
+                  </span>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p class="type-body text-base-content leading-snug" style="font-weight:480;">
+                    <span data-only="ko">{t.title.ko}</span>
+                    <span data-only="en">{t.title.en}</span>
+                  </p>
+                  <p class="type-body-sm text-base-content/70 mt-0.5">
+                    <span data-only="ko">{t.host.ko}</span>
+                    <span data-only="en">{t.host.en}</span>
+                    {' · '}
+                    <span data-only="ko">{t.venue.ko}</span>
+                    <span data-only="en">{t.venue.en}</span>
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        <p class="type-caption font-semibold text-base-content/60 tracking-wide mb-3 mt-8 pt-6 border-t border-base-300">
+          <span data-only="ko">{site.conferences.groupConf.ko}</span>
+          <span data-only="en">{site.conferences.groupConf.en}</span>
+        </p>
+      </>
+    )}
+
+    <div class="space-y-8 pl-4 border-l-2 border-base-300/40">
+      {confsByYear.map(({ year, items }) => (
+        <div class="relative">
+          <div class="absolute -left-[1.45rem] top-1.5">
+            <span class="block w-3 h-3 rounded-full bg-primary ring-4 ring-base-100"></span>
+          </div>
+          <h3 class="year-head mb-3">{year}</h3>
+          <div class="space-y-2">
+            {items.map((c) => (
+              <div class="group flex flex-col md:flex-row md:items-baseline gap-1 md:gap-3 py-2.5 hover:bg-base-200/60 -mx-2 px-2 rounded-md transition-colors">
+                <div class="flex flex-wrap items-center gap-2 md:contents">
+                  <span class="shrink-0 type-body-sm text-base-content/70 whitespace-nowrap w-fit md:w-24 md:pr-3">
+                    {fmtDate(c.date)}
+                  </span>
+                  <span class={`shrink-0 pill ${c.scope === 'international' ? 'pill-intl' : 'pill-domestic'}`}>
+                    {confTypeLabels[c.type] || c.type} · {c.scope === 'international' ? 'Intl.' : 'Domestic'}
+                  </span>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p class="type-body text-base-content leading-snug" style="font-weight:480;">
+                    <span data-only="ko">{c.title.ko}</span>
+                    <span data-only="en">{c.title.en}</span>
+                  </p>
+                  <p class="type-body-sm text-base-content/70 mt-0.5">
+                    <span data-only="ko">{typeof c.conference === "string" ? c.conference : c.conference.ko}</span>
+                    <span data-only="en">{typeof c.conference === "string" ? c.conference : c.conference.en}</span>
+                    {' · '}
+                    <span data-only="ko">{c.venue.ko}</span>
+                    <span data-only="en">{c.venue.en}</span>
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- ───────── TEACHING ───────── -->
+  <section id="teaching" class="pb-20 border-t border-base-300 pt-14 scroll-mt-12">
+    <p class="type-eyebrow text-primary mb-3">{site.teaching.eyebrow}</p>
+    <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+      <L tag="h2" class="type-display-lg" ko={`${site.teaching.title.ko} (${teaching.length})`} en={`${site.teaching.title.en} (${teaching.length})`} />
+    </div>
+    <L tag="p" class="type-body text-base-content/70 mb-8" ko={site.teaching.intro.ko} en={site.teaching.intro.en} />
+
+    <div class="space-y-8 pl-4 border-l-2 border-base-300/40">
+      {teachByYear.map(({ year, items }) => (
+        <div class="relative">
+          <div class="absolute -left-[1.45rem] top-1.5">
+            <span class="block w-3 h-3 rounded-full bg-primary ring-4 ring-base-100"></span>
+          </div>
+          <h3 class="year-head mb-3">{year}</h3>
+          <div class="space-y-2">
+            {items.map((t) => {
+              const label = teachTypeLabels[t.type] || { ko: t.type, en: t.type };
+              return (
+                <div class="group flex flex-col md:flex-row md:items-baseline gap-1 md:gap-3 py-2 px-2 -mx-2 rounded-md hover:bg-base-200/60 transition-colors">
+                  <div class="flex flex-wrap items-center gap-2 md:contents">
+                    <span class="shrink-0 type-body-sm text-base-content/70 whitespace-nowrap w-fit md:w-36">
+                      {fmtRange(t.date, t.dateEnd)}
+                    </span>
+                    <span class={`shrink-0 pill ${t.type === "univ" ? "pill-first" : "pill-co"}`}>
+                      <span data-only="ko">{label.ko}</span>
+                      <span data-only="en">{label.en}</span>
+                    </span>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    {t.url ? (
+                      <a href={t.url} target="_blank" rel="noopener noreferrer" class="type-body text-base-content hover:text-primary" style="font-weight:480;">
+                        <span data-only="ko">{t.title.ko}</span>
+                        <span data-only="en">{t.title.en}</span>
+                      </a>
+                    ) : (
+                      <p class="type-body text-base-content" style="font-weight:480;">
+                        <span data-only="ko">{t.title.ko}</span>
+                        <span data-only="en">{t.title.en}</span>
+                      </p>
+                    )}
+                    <p class="type-body-sm text-base-content/70 mt-0.5">
+                      <span data-only="ko">{t.host.ko}{t.dept?.ko ? ` ${t.dept.ko}` : ""}{t.credits ? ` · ${t.credits}학점` : ""}</span>
+                      <span data-only="en">{t.host.en}{t.dept?.en ? `, ${t.dept.en}` : ""}{t.credits ? ` · ${t.credits} credits` : ""}</span>
+                      {t.students > 0 && ` · ${t.students}`}
+                      <span data-only="ko">{t.students > 0 ? '명' : ''}</span>
+                      <span data-only="en">{t.students > 0 ? ` students` : ''}</span>
+                    </p>
+                    {t.desc && (t.desc.ko || t.desc.en) && (
+                      <p class="type-body-sm text-base-content/60 mt-0.5" data-only={t.desc.en ? undefined : "ko"}>
+                        <span data-only="ko">{t.desc.ko}</span>
+                        {t.desc.en && <span data-only="en">{t.desc.en}</span>}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- ───────── FUNDING (scholarships / fellowships; was Honors) ───────── -->
+  <section id="funding" class="pb-20 border-t border-base-300 pt-14 scroll-mt-12">
+    <p class="type-eyebrow text-primary mb-3">07 — FUNDING</p>
+    <L tag="h2" class="type-display-lg mb-8" ko={`펀딩 (${scholarships.length})`} en={`Funding & Fellowships (${scholarships.length})`} />
+    <div class="space-y-3">
+      {scholarships.map((s) => (
+        <div class="research-card flex gap-4 -mx-[18px]">
+          <!-- Logo slot (square) -->
+          <div class="shrink-0 w-[72px] h-[72px] rounded-lg bg-white border border-base-300/60 flex items-center justify-center overflow-hidden">
+            {s.logo ? (
+              <img src={s.logo} alt="" class="max-w-[80%] max-h-[80%] object-contain" loading="lazy" />
+            ) : (
+              <span class="text-base-content/30 text-2xl">🌞</span>
+            )}
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex flex-wrap items-center gap-2 mb-1">
+              <p class="type-caption text-base-content/70">{s.period}</p>
+              {s.kind && (
+                <span class={`pill ${s.kind === "grant" ? "pill-first" : "pill-co"}`}>
+                  <span data-only="ko">{s.kind === "grant" ? "연구비" : "장학금"}</span>
+                  <span data-only="en">{s.kind === "grant" ? "Research Grant" : "Scholarship"}</span>
+                </span>
+              )}
+            </div>
+            <p class="type-card-title mb-1">
+              <span data-only="ko">{s.name.ko}</span>
+              <span data-only="en">{s.name.en}</span>
+            </p>
+            <p class="type-body-sm text-base-content/65">
+              <span data-only="ko">{s.foundation.ko}{' · '}{s.support.ko}</span>
+              <span data-only="en">{s.foundation.en}{' · '}{s.support.en}{s.fundingUsd ? ` · ${s.fundingUsd}` : ''}</span>
+            </p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- ───────── PROJECTS ───────── -->
+  <section id="projects" class="pb-20 border-t border-base-300 pt-14 scroll-mt-12">
+    <p class="type-eyebrow text-primary mb-3">{site.projects.eyebrow}</p>
+    <L tag="h2" class="type-display-lg mb-3" ko={`${site.projects.title.ko} (${projects.length} · 책임 ${counts.projPi}건)`} en={`${site.projects.title.en} (${projects.length} · ${counts.projPi} as PI)`} />
+    <L tag="p" class="type-body text-base-content/70 mb-8" ko={site.projects.intro.ko} en={site.projects.intro.en} />
+
+    <div class="space-y-2">
+      {projects.map((p) => (
+        <div class="flex flex-col md:flex-row md:items-start gap-1 md:gap-4 py-3 px-2 -mx-2 rounded-md hover:bg-base-200/60 transition-colors border-b border-base-300/30">
+          <span class="shrink-0 type-body-sm text-base-content/70 whitespace-nowrap w-fit md:w-44">
+            {p.period}
+          </span>
+          <div class="flex-1 min-w-0">
+            <p class="type-body text-base-content leading-snug" style="font-weight:480;">
+              <span data-only="ko">{p.title.ko}</span>
+              <span data-only="en">{p.title.en}</span>
+            </p>
+            <p class="type-body-sm text-base-content/70 mt-0.5">
+              <span data-only="ko">{p.institute.ko}{' · '}{p.role.ko}{p.pi ? ` · PI: ${p.pi.ko}` : ''}</span>
+              <span data-only="en">{p.institute.en}{' · '}{p.role.en}{p.pi ? ` · PI: ${p.pi.en}` : ''}{p.budgetUsd ? ` · ${p.budgetUsd}` : ''}</span>
+            </p>
+            {p.contributions && (
+              <ul class="mt-2 space-y-1">
+                {p.contributions.map((c) => (
+                  <li class="type-body-sm text-base-content/70 flex gap-2 leading-snug">
+                    <span class="text-primary shrink-0">›</span>
+                    <span>{c}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+            {p.papers && (
+              <p class="type-body-sm mt-1.5 leading-snug">
+                <span class="font-semibold text-primary">{p.papers.includes(' · ') ? 'Papers' : 'Paper'}: </span>
+                <span class="text-base-content/65">{p.papers}</span>
+              </p>
+            )}
+            {p.patents && (
+              <p class="type-body-sm mt-1 leading-snug">
+                <span class="font-semibold text-primary">{p.patents.includes(' · ') ? 'Patents' : 'Patent'}: </span>
+                <span class="text-base-content/65">{p.patents}</span>
+              </p>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- ───────── PATENTS — compact list only (cards/certificates removed 2026-10-21) ───────── -->
+  <section id="patents" class="pb-20 border-t border-base-300 pt-14 scroll-mt-12">
+    <p class="type-eyebrow text-primary mb-3">{site.patents.eyebrow}</p>
+    <L tag="h2" class="type-display-lg mb-3" ko={`${site.patents.title.ko} (${patents.length})`} en={`${site.patents.title.en} (${patents.length})`} />
+    <L tag="p" class="type-body text-base-content/70 mb-8" ko={site.patents.intro.ko} en={site.patents.intro.en} />
+
+    <div>
+      {patents.map((pt) => <RowPatent patent={pt} />)}
+    </div>
+  </section>
+
+  <!-- ───────── CONTACT ───────── -->
+  <section id="contact" class="border-t border-base-300 pt-6 pb-10 scroll-mt-12">
+    <div class="color-block color-block-deep">
+      <p class="type-caption mb-3">{contact.eyebrow}</p>
+      <L tag="h2" class="type-display-lg mb-4" ko={contact.title.ko} en={contact.title.en} />
+      <L tag="p" class="type-body-lg mb-8 max-w-xl opacity-90" ko={contact.description.ko} en={contact.description.en} />
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <!-- Email -->
+        <a href={`mailto:${contact.email}`} class="group flex items-center gap-3 p-4 rounded-2xl bg-white/8 hover:bg-white/14 border border-white/15 hover:border-white/35 hover:-translate-y-px transition-all duration-300">
+          <div class="contact-icon-wrap shrink-0 w-10 h-10 rounded-xl bg-white/12 flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="19.8" height="19.8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+              <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+          </div>
+          <div class="min-w-0 flex-1">
+            <p class="type-caption mb-0.5">EMAIL</p>
+            <p class="type-body contact-text-primary" style="font-weight:550;">{contact.email}</p>
+          </div>
+        </a>
+
+        <!-- Google Scholar -->
+        {contact.scholarUrl && (
+          <a href={contact.scholarUrl} target="_blank" rel="noopener noreferrer" class="group flex items-center gap-3 p-4 rounded-2xl bg-white/8 hover:bg-white/14 border border-white/15 hover:border-white/35 hover:-translate-y-px transition-all duration-300">
+            <div class="contact-icon-wrap shrink-0 w-10 h-10 rounded-xl bg-white/12 flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22.5" height="22.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 14l-9-5.4L12 3l9 5.6L12 14zm0 1.1l-7-4.2v3.3c0 2.8 3.1 5.1 7 5.1s7-2.3 7-5.1v-3.3l-7 4.2z"/></svg>
+            </div>
+            <div class="min-w-0 flex-1">
+              <p class="type-caption mb-0.5">GOOGLE SCHOLAR</p>
+              <p class="type-body contact-text-primary" style="font-weight:550;">{site.hero.name.en}</p>
+            </div>
+          </a>
+        )}
+
+        <!-- ORCID -->
+        {contact.orcidUrl && (
+          <a href={contact.orcidUrl} target="_blank" rel="noopener noreferrer" class="group flex items-center gap-3 p-4 rounded-2xl bg-white/8 hover:bg-white/14 border border-white/15 hover:border-white/35 hover:-translate-y-px transition-all duration-300">
+            <div class="contact-icon-wrap shrink-0 w-10 h-10 rounded-xl bg-white/12 flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><mask id="orcid-id" maskUnits="userSpaceOnUse"><rect width="24" height="24" fill="#fff"/><g fill="#000" stroke="#000" stroke-width="0.43" stroke-linejoin="round"><path d="M7.369 4.378c.525 0 .947.431.947.947 0 .525-.422.947-.947.947-.525 0-.946-.422-.946-.947 0-.516.421-.947.946-.947z"/><path d="M6.647 7.416h1.444v10.041H6.647V7.416z"/><path d="M10.209 7.416h3.9c3.712 0 5.344 2.653 5.344 5.025 0 2.578-2.016 5.025-5.325 5.025h-3.919V7.416z"/></g><path d="M11.653 8.719v7.444h2.297c2.359 0 3.588-1.444 3.588-3.722 0-2.016-1.091-3.722-3.722-3.722h-2.163z" fill="#fff"/></mask><circle cx="12" cy="12" r="12" fill="currentColor" mask="url(#orcid-id)"/></svg>
+            </div>
+            <div class="min-w-0 flex-1">
+              <p class="type-caption mb-0.5">ORCID</p>
+              <p class="type-body contact-text-primary" style="font-weight:550;">{orcidId}</p>
+            </div>
+          </a>
+        )}
+
+        <!-- ResearchGate -->
+        {contact.researchGateUrl && (
+          <a href={contact.researchGateUrl} target="_blank" rel="noopener noreferrer" class="group flex items-center gap-3 p-4 rounded-2xl bg-white/8 hover:bg-white/14 border border-white/15 hover:border-white/35 hover:-translate-y-px transition-all duration-300">
+            <div class="contact-icon-wrap shrink-0 w-10 h-10 rounded-xl bg-white/12 flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M19.586 0c-.818 0-1.508.19-2.073.565-.563.377-.97.936-1.213 1.68a3.193 3.193 0 0 0-.112.437 8.365 8.365 0 0 0-.078.53 9 9 0 0 0-.05.727L16.04 4.5l.02 1.052.05.725a8.5 8.5 0 0 0 .078.531c.029.165.066.31.112.438.243.742.65 1.302 1.213 1.678.565.376 1.255.566 2.073.566.857 0 1.638-.213 2.342-.64a4.51 4.51 0 0 0 1.66-1.736l-1.92-1.104a2.39 2.39 0 0 1-.86.92 2.27 2.27 0 0 1-1.221.317 2.42 2.42 0 0 1-.785-.12 1.61 1.61 0 0 1-.6-.36 1.717 1.717 0 0 1-.39-.575 2.797 2.797 0 0 1-.205-.79 8.3 8.3 0 0 1-.07-.99 8.3 8.3 0 0 1 .07-.99c.044-.295.115-.553.205-.79a1.7 1.7 0 0 1 .39-.575c.165-.16.365-.282.6-.36.235-.078.495-.12.785-.12.466 0 .872.107 1.221.317.349.21.636.516.86.92l1.92-1.103A4.514 4.514 0 0 0 21.928.64C21.224.214 20.444 0 19.586 0zM7.99 4.853c-2.317 0-3.96 1.5-3.96 4.135 0 2.732 1.515 4.13 3.84 4.13.79 0 1.557-.21 1.937-.553h.05v.514c0 1.5-.717 2.353-2.234 2.353-1.075 0-1.694-.42-1.85-1.107H3.205c.198 1.71 1.704 2.97 4.486 2.97 3.022 0 4.764-1.485 4.764-4.612V4.985H10.18v.685h-.05c-.38-.456-1.247-.817-2.14-.817zm.198 1.71c1.354 0 2.234.954 2.234 2.495 0 1.522-.88 2.413-2.234 2.413-1.354 0-2.234-.94-2.234-2.413 0-1.541.88-2.495 2.234-2.495z"/></svg>
+            </div>
+            <div class="min-w-0 flex-1">
+              <p class="type-caption mb-0.5">RESEARCHGATE</p>
+              <p class="type-body contact-text-primary" style="font-weight:550;">researchgate.net</p>
+            </div>
+          </a>
+        )}
+
+        <!-- KakaoTalk -->
+        {contact.kakaoUrl && (
+          <a href={contact.kakaoUrl} target="_blank" rel="noopener noreferrer" class="group flex items-center gap-3 p-4 rounded-2xl bg-white/8 hover:bg-white/14 border border-white/15 hover:border-white/35 hover:-translate-y-px transition-all duration-300">
+            <div class="contact-icon-wrap shrink-0 w-10 h-10 rounded-xl bg-white/12 flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 2031.25 1874.45" fill="currentColor"><polygon points="800.78 707.68 742.26 873.94 859.31 873.94 859.31 873.94 800.78 707.68"/><path d="M1015.62,0h0C454.71,0,0,358.53,0,800.78c0,285.93,190.1,536.82,476.05,678.49-15.56,53.65-99.97,345.16-103.33,368.06,0,0-2.02,17.21,9.12,23.77,11.14,6.56,24.25,1.46,24.25,1.46,31.95-4.46,370.54-242.29,429.14-283.59,58.54,8.29,118.83,12.6,180.39,12.6,560.92,0,1015.62-358.52,1015.62-800.78S1576.54,0,1015.62,0ZM512.7,1024.37c0,30.86-26.28,55.96-58.59,55.96s-58.59-25.1-58.59-55.96v-348.1h-91.43c-31.71,0-57.5-25.74-57.5-57.37s25.8-57.37,57.5-57.37h300.04c31.71,0,57.5,25.74,57.5,57.37s-25.8,57.37-57.5,57.37h-91.43v348.1ZM1005.14,1071.48c-11.69,5.33-24.4,8.09-37.25,8.08h0c-24.43,0-43.12-9.92-48.76-25.88l-29.01-75.96h-178.67s-29.03,76-29.03,76c-5.62,15.93-24.3,25.84-48.73,25.84-12.85.01-25.56-2.74-37.25-8.09-16.15-7.45-31.68-27.94-13.89-83.2l140.16-368.91c9.87-28.06,39.86-56.96,78.03-57.83,38.27.86,68.26,29.78,78.15,57.89l140.1,368.74c17.83,55.39,2.3,75.89-13.85,83.32ZM1301.27,1071.78h-187.99c-30.97,0-56.15-24.1-56.15-53.71v-397.95c0-32.31,26.84-58.59,59.81-58.59s59.81,26.28,59.81,58.59v344.24h124.51c30.97,0,56.15,24.1,56.15,53.71s-25.19,53.71-56.15,53.71ZM1759.95,1027.66c-2.11,15.4-10.3,29.32-22.73,38.64-10.13,7.7-22.52,11.86-35.24,11.83-18.41.09-35.77-8.55-46.81-23.29l-137.41-182.07-20.33,20.33v127.84c-.04,32.36-26.26,58.58-58.61,58.62h0c-32.31,0-58.59-26.28-58.59-58.59v-400.85c0-32.31,26.28-58.59,58.59-58.59s58.59,26.28,58.59,58.59v125.94l163.48-163.48c8.41-8.41,19.96-13.04,32.5-13.04,14.63,0,29.32,6.31,40.32,17.3,10.26,10.25,16.39,23.45,17.23,37.15.85,13.82-3.75,26.48-12.93,35.67l-133.53,133.51,144.23,191.07c9.41,12.38,13.46,28.02,11.25,43.41Z"/></svg>
+            </div>
+            <div class="min-w-0 flex-1">
+              <p class="type-caption mb-0.5">KAKAOTALK</p>
+              <p class="type-body contact-text-primary" style="font-weight:550;"><span data-only="ko">1:1 채팅하기</span><span data-only="en">Chat with me</span></p>
+            </div>
+          </a>
+        )}
+
+        <!-- CV download — full CV (PDF) -->
+        <a href={contact.cvFullUrl} download class="group flex items-center gap-3 p-4 rounded-2xl bg-white/8 hover:bg-white/14 border border-white/15 hover:border-white/35 hover:-translate-y-px transition-all duration-300">
+          <div class="contact-icon-wrap shrink-0 w-10 h-10 rounded-xl bg-white/12 flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+          </div>
+          <div class="min-w-0 flex-1">
+            <p class="type-caption mb-1.5">CV</p>
+            <p class="type-body contact-text-primary" style="font-weight:550;"><span data-only="ko">CV 다운로드 (PDF)</span><span data-only="en">Download CV (PDF)</span></p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────── 카드 ⇄ 목록 보기 전환 (범용: .js-viewgroup) ───────── -->
+  <script is:inline>
+    (function () {
+      document.querySelectorAll('.js-viewgroup').forEach((grp) => {
+        const key = 'view-' + (grp.dataset.viewkey || 'x');
+        const toggleEl = grp.querySelector('.view-toggle');
+        const btns = grp.querySelectorAll('.view-toggle button');
+        if (!toggleEl || !btns.length) return;
+        function setView(v) {
+          grp.dataset.view = v;
+          btns.forEach((b) => {
+            const on = b.dataset.view === v;
+            b.classList.toggle('active', on);
+            b.setAttribute('aria-pressed', String(on));
+          });
+          try { localStorage.setItem(key, v); } catch (e) {}
+        }
+        // 모바일: 토글이 접기 헤더 안에 있어도 클릭이 접기로 전파되지 않게 차단
+        toggleEl.addEventListener('click', (e) => e.stopPropagation());
+        btns.forEach((b) => b.addEventListener('click', (e) => { e.stopPropagation(); setView(b.dataset.view); }));
+        try { const s = localStorage.getItem(key); if (s === 'list' || s === 'grid') setView(s); } catch (e) {}
+      });
+    })();
+  </script>
+
+  <!-- ───────── Figure carousel (shared; opened by paper covers with figures) ───────── -->
+  <FigureCarousel />
+
+  <!-- ───────── Cite modal (shared; populated by .cite-toggle buttons) ───────── -->
+  <div id="cite-modal" class="cite-modal" hidden>
+    <div class="cite-modal-backdrop" data-cite-close></div>
+    <div class="cite-modal-panel" role="dialog" aria-modal="true" aria-label="Citation">
+      <button type="button" class="cite-modal-x" data-cite-close aria-label="Close">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+
+      <div class="cite-block">
+        <div class="cite-head">
+          <span class="cite-label">APA</span>
+          <button type="button" class="cite-copy" data-cite-src="apa">
+            <span class="cite-copy-default">
+              <span data-only="ko">복사</span><span data-only="en">Copy</span>
+            </span>
+            <span class="cite-copy-done">
+              <span data-only="ko">복사됨 ✓</span><span data-only="en">Copied ✓</span>
+            </span>
+          </button>
+        </div>
+        <p id="cite-apa" class="cite-text"></p>
+      </div>
+    </div>
+  </div>
+
+  <script is:inline>
+    (function () {
+      const modal = document.getElementById('cite-modal');
+      if (!modal) return;
+      const apaEl = document.getElementById('cite-apa');
+
+      function openModal(apa) {
+        apaEl.textContent = apa || '';
+        modal.querySelectorAll('.cite-copy').forEach((b) => b.classList.remove('copied'));
+        modal.hidden = false;
+        document.body.style.overflow = 'hidden';
+      }
+      function closeModal() {
+        modal.hidden = true;
+        document.body.style.overflow = '';
+      }
+
+      // Open from any Cite button (event delegation)
+      document.addEventListener('click', (e) => {
+        const t = e.target.closest('.cite-toggle');
+        if (t) {
+          e.preventDefault();
+          openModal(t.getAttribute('data-apa'));
+        }
+      });
+
+      // Close on backdrop / X
+      modal.querySelectorAll('[data-cite-close]').forEach((el) => {
+        el.addEventListener('click', closeModal);
+      });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !modal.hidden) closeModal(); });
+
+      // Copy button
+      modal.querySelectorAll('.cite-copy').forEach((btn) => {
+        btn.addEventListener('click', async () => {
+          const text = apaEl.textContent || '';
+          try {
+            await navigator.clipboard.writeText(text);
+          } catch {
+            // Fallback for non-secure contexts
+            const ta = document.createElement('textarea');
+            ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+            document.body.appendChild(ta); ta.select();
+            try { document.execCommand('copy'); } catch {}
+            document.body.removeChild(ta);
+          }
+          btn.classList.add('copied');
+          setTimeout(() => btn.classList.remove('copied'), 1600);
+        });
+      });
+    })();
+  </script>
+
+  <!-- Mobile: collapsible sections (header tap toggles body). Desktop unaffected. -->
+  <script is:inline>
+    (function () {
+      const COLLAPSIBLE = ['about','education','publications','conferences','teaching','career','funding','projects','patents'];
+
+      function wrap() {
+        COLLAPSIBLE.forEach((id) => {
+          const sec = document.getElementById(id);
+          if (!sec || sec.dataset.collapsible) return;
+
+          const children = Array.from(sec.children);
+          // Header = leading eyebrow <p> + <h2> title(s); body = everything after.
+          let i = 0;
+          while (i < children.length) {
+            const el = children[i];
+            const tag = el.tagName.toLowerCase();
+            const cls = el.getAttribute('class') || '';
+            // Header = leading eyebrow <p> + <h2> title(s), including a row <div> that wraps the title.
+            if (tag === 'h2' || cls.indexOf('type-eyebrow') !== -1 || el.querySelector('h2')) { i++; continue; }
+            break;
+          }
+          if (i === 0 || i >= children.length) return;
+
+          const body = document.createElement('div');
+          body.className = 'section-body';
+          children.slice(i).forEach((c) => body.appendChild(c));
+
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'section-toggle';
+          btn.setAttribute('aria-expanded', 'true');
+          btn.setAttribute('aria-controls', id + '-body');
+          body.id = id + '-body';
+
+          const head = document.createElement('div');
+          head.className = 'section-head-inner';
+          children.slice(0, i).forEach((c) => head.appendChild(c));
+
+          const chev = document.createElement('span');
+          chev.className = 'section-chevron';
+          chev.setAttribute('aria-hidden', 'true');
+
+          btn.appendChild(head);
+          btn.appendChild(chev);
+          sec.appendChild(btn);
+          sec.appendChild(body);
+
+          btn.addEventListener('click', () => {
+            // Only act on mobile (button is non-interactive on desktop via CSS, but guard anyway)
+            if (window.matchMedia('(min-width: 1024px)').matches) return;
+            const collapsed = sec.classList.toggle('section-collapsed');
+            btn.setAttribute('aria-expanded', String(!collapsed));
+          });
+
+          sec.dataset.collapsible = '1';
+        });
+      }
+
+      // When navigating to a section via the menu, make sure it's expanded.
+      function expandTarget() {
+        const id = (location.hash || '').replace('#', '');
+        if (!id) return;
+        const sec = document.getElementById(id);
+        if (sec && sec.classList.contains('section-collapsed')) {
+          sec.classList.remove('section-collapsed');
+          const btn = sec.querySelector('.section-toggle');
+          if (btn) btn.setAttribute('aria-expanded', 'true');
+        }
+      }
+
+      function start() {
+        wrap();
+        window.addEventListener('hashchange', expandTarget);
+        // Expand on nav click even if hash doesn't change
+        document.querySelectorAll('.nav-item').forEach((l) => {
+          l.addEventListener('click', () => setTimeout(expandTarget, 0));
+        });
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', start);
+      } else {
+        start();
+      }
+    })();
+  </script>
+
+  <!-- Scroll-spy: highlight current section in sidebar -->
+  <script is:inline>
+    (function () {
+      function init() {
+        const allSections = Array.from(document.querySelectorAll('section[id]'));
+        const navLinks = document.querySelectorAll('.nav-item');
+        if (!allSections.length || !navLinks.length) return;
+
+        const linkById = new Map();
+        navLinks.forEach((l) => {
+          const href = l.getAttribute('href') || '';
+          // Handles "#id", "/#id", and "/en#id" — take everything after '#'
+          const hashIdx = href.indexOf('#');
+          const id = hashIdx >= 0 ? href.slice(hashIdx + 1) : null;
+          if (id) linkById.set(id, l);
+        });
+
+        const tracked = allSections.filter((s) => linkById.has(s.id));
+        if (!tracked.length) return;
+
+        function setActive(id) {
+          navLinks.forEach((l) => l.classList.remove('active-nav-item'));
+          const link = linkById.get(id);
+          if (link) link.classList.add('active-nav-item');
+        }
+
+        function update() {
+          const nearBottom = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 4;
+          if (nearBottom) {
+            setActive(tracked[tracked.length - 1].id);
+            return;
+          }
+
+          const trigger = window.scrollY + window.innerHeight * 0.30;
+          let current = tracked[0];
+          for (const s of tracked) {
+            const top = s.getBoundingClientRect().top + window.scrollY;
+            if (top <= trigger) {
+              current = s;
+            } else {
+              break;
+            }
+          }
+          if (current) setActive(current.id);
+        }
+
+        let ticking = false;
+        function onScroll() {
+          if (!ticking) {
+            requestAnimationFrame(() => { update(); ticking = false; });
+            ticking = true;
+          }
+        }
+
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', update);
+        update();
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    })();
+  </script>
+</BaseLayout>

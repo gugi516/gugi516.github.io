@@ -1,0 +1,33 @@
+---
+import site from "../data/site.json";
+// QR redirect page (English). Destination managed in site.json → qrTargets.en.
+const destination = site.qrTargets.en;
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Redirecting… — Gukhwa Jang</title>
+  <meta name="robots" content="noindex,nofollow" />
+  <meta http-equiv="refresh" content={`0; url=${destination}`} />
+  <link rel="canonical" href={destination} />
+  <script is:inline define:vars={{ destination }}>
+    window.location.replace(destination);
+  </script>
+  <style>
+    body {
+      font-family: "Pretendard Variable", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      background: #0c1420; color: #e2e6ec;
+      display: flex; align-items: center; justify-content: center;
+      min-height: 100vh; margin: 0; text-align: center;
+    }
+    a { color: #41a0e0; }
+  </style>
+</head>
+<body>
+  <div>
+    <p>Redirecting to the research portfolio…</p>
+    <p><a href={destination}>{destination}</a></p>
+  </div>
+</body>
+</html>

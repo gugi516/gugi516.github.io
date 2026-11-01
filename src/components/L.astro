@@ -1,0 +1,14 @@
+---
+// Bilingual text wrapper. Renders both languages — CSS hides the inactive one
+// based on <html lang="ko" | "en">. Both versions stay in the DOM so search
+// engines and screen readers see both content variants.
+interface Props {
+  ko: string | number | null | undefined;
+  en: string | number | null | undefined;
+  tag?: string;
+  class?: string;
+}
+const { ko, en, tag = 'span', class: cls = '' } = Astro.props as Props;
+const T = tag as any;
+---
+<T data-only="ko" class={cls}>{ko}</T><T data-only="en" class={cls}>{en}</T>

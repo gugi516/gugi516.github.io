@@ -1,0 +1,520 @@
+{
+  "_help": "이 파일 하나에 사이트의 모든 텍스트와 데이터가 들어 있습니다. 각 항목은 한국어(ko) / 영어(en) 필드로 분리되어 있으며, 사이트 헤더의 언어 토글이 두 필드를 전환합니다. 따옴표 안의 내용만 바꾸세요. 콤마(,), 중괄호({}), 대괄호([])는 건드리지 마세요. 마지막 항목 뒤에 콤마가 있으면 안 됩니다. 줄바꿈은 문자열 안에 \\n 으로 표시하세요.",
+  "meta": {
+    "_help": "웹·CV 공용 외부 집계 토큰. 데이터에서 파생 불가한 값만 여기 둔다(단일 출처).",
+    "onlineStudents": "0",
+    "invitedSessions": "6",
+    "invitedYears": "2024 — 2025"
+  },
+  "analytics": {
+    "_help": "Google Analytics 4 측정 ID(G-XXXXXXXXXX). 비어 있으면 태그를 렌더하지 않는다. 방문자 조회는 scripts/seo/seo_report.py --engine ga4.",
+    "gtagId": "G-V0TLFN64MG"
+  },
+
+  "site": {
+    "ko": {
+      "title": "장국화 (Gukhwa Jang) — 도시 미기후·쇠퇴도시 공학박사 · 서울대학교",
+      "description": "장국화(Gukhwa Jang) — 서울대학교(SNU) 공학박사. 도시 미기후·쇠퇴도시·기후 젠트리피케이션·기후 이동 연구. 경북대학교(KNU) 조경학 학사."
+    },
+    "en": {
+      "title": "Gukhwa Jang (장국화) — Urban Microclimate & Shrinking Cities Ph.D. · Seoul National University",
+      "description": "Gukhwa Jang (장국화) — Ph.D. in Engineering, Seoul National University (SNU). Urban microclimate, shrinking cities, climate gentrification and climate mobility. B.S., Kyungpook National University (KNU)."
+    }
+  },
+
+  "qrTargets": {
+    "_help": "QR 코드가 가리키는 리다이렉트 페이지의 최종 목적지. QR은 /go(한글)·/go-en(영문)을 가리키고, 실제 이동 주소는 여기서 관리합니다. 목적지를 바꿔도 인쇄된 QR은 그대로 유효합니다 (재인쇄 불필요). QR 이미지 재생성: npm run qr",
+    "kr": "https://gugi516.github.io/",
+    "en": "https://gugi516.github.io/en/"
+  },
+
+  "nav": {
+    "items": [
+      { "id": "about",         "ko": "프로필",     "en": "About" },
+      { "id": "education",     "ko": "학력",       "en": "Education" },
+      { "id": "career",        "ko": "경력",       "en": "Career" },
+      { "id": "publications",  "ko": "게재 논문",  "en": "Publications" },
+      { "id": "conferences",   "ko": "학회 발표",  "en": "Conferences" },
+      { "id": "teaching",      "ko": "교육 · 강의","en": "Teaching" },
+      { "id": "funding",       "ko": "펀딩",       "en": "Funding" },
+      { "id": "projects",      "ko": "연구 과제",  "en": "Projects" },
+      { "id": "patents",       "ko": "특허",       "en": "Patents" },
+      { "id": "contact",       "ko": "연락처",     "en": "Contact" }
+    ]
+  },
+
+  "hero": {
+    "name":        { "ko": "장국화",                                                 "en": "Gukhwa Jang" },
+    "nameSub":     { "ko": "",                                              "en": "" },
+    "tagline":     { "ko": "도시 미기후와 쇠퇴도시를 중심으로, 기후 위기가 도시 공간과 거주 선택에 남기는 불균등을 정량화합니다.", "en": "I quantify how the climate crisis unevenly reshapes urban space and residential choice, focusing on urban microclimate and shrinking cities." },
+    "focusLabel":  { "ko": "연구 분야", "en": "Research focus" },
+    "focus": [
+      { "ko": "도시미기후", "en": "Urban microclimate" },
+      { "ko": "도시설계", "en": "Urban design" },
+      { "ko": "쇠퇴도시", "en": "Shrinking cities" },
+      { "ko": "기후젠트리피케이션", "en": "Climate gentrification" },
+      { "ko": "기후이동", "en": "Climate mobility" },
+      { "ko": "기후고립", "en": "Climate-trapped populations" }
+    ],
+    "affiliation": {
+      "ko": "서울대학교 공학박사 · 스마트시티 글로벌 융합 BK21 연수연구원 · 강사",
+      "en": "Ph.D. in Engineering, Seoul National University · Postdoctoral Researcher (BK21 FOUR) · Lecturer"
+    },
+    "ctaPrimary":   { "ko": "게재 논문",  "en": "Published Articles" },
+    "ctaSecondary": { "ko": "Contact",   "en": "Contact" }
+  },
+
+  "about": {
+    "eyebrow": "01 — ABOUT",
+    "title": { "ko": "프로필", "en": "About" },
+    "paragraphs": {
+      "ko": [],
+      "en": []
+    },
+    "interestsLabel": { "ko": "연구 관심분야", "en": "Research interests" },
+    "interests": {
+      "ko": ["도시미기후", "도시설계", "쇠퇴도시", "기후젠트리피케이션", "기후이동", "기후고립"],
+      "en": ["Urban microclimate", "Urban design", "Shrinking cities", "Climate gentrification", "Climate mobility", "Climate-trapped populations"]
+    },
+    "stats": [
+      { "label": { "ko": "SCIE 논문", "en": "SCIE Papers" }, "value": "{pubSci}", "unit": { "ko": "편", "en": "papers" } },
+      { "label": { "ko": "KCI · SCOPUS 논문", "en": "KCI · Scopus Papers" }, "value": "{pubKci}", "unit": { "ko": "편", "en": "papers" } },
+      { "label": { "ko": "학회 발표 · 초청 강연", "en": "Conference talks · Invited talks" }, "value": "{conf}/{invitedTalks}", "unit": { "ko": "건", "en": "presentations" } },
+      { "label": { "ko": "연구 과제", "en": "Projects" }, "value": "{proj}", "unit": { "ko": "건 (책임 {projPi})", "en": "projects ({projPi} as PI)" } },
+      { "label": { "ko": "특허", "en": "Patents" }, "value": "{pat}", "unit": { "ko": "건", "en": "patents" } },
+      { "label": { "ko": "대학 정규 강의 · 특강", "en": "University & special lectures" }, "value": "{univ}/{special}", "unit": { "ko": "건", "en": "lectures" } }
+    ]
+  },
+
+  "education": {
+    "eyebrow": "02 — EDUCATION",
+    "title": { "ko": "학력", "en": "Education" },
+    "items": [
+      {
+        "period": "2019.09 — 2023.02",
+        "logo":        "/logos/education/snu.svg",
+        "degree":      {"ko": "공학박사", "en": "Ph.D. in engineering"},
+        "program":     {"ko": "협동과정 조경학 & 융합전공 스마트시티 글로벌", "en": "Interdisciplinary Program in Landscape Architecture (Landscape Architecture Major) · Integrated Major in Smart City Global Convergence"},
+        "institution": {"ko": "서울대학교", "en": "Graduate School of Environmental Studies, Seoul National University, Seoul, South Korea"},
+        "lab":         {"ko": "Urban Studies & Design Lab", "en": "Urban Studies & Design Lab"},
+        "advisor":     {"ko": "지도교수: 김세훈, 이제승", "en": "Advisor: Saehoon Kim & Jae Seung Lee"},
+        "thesis": "Healthy cities: urban transformation and its effects"
+      },
+      {
+        "period": "2015.09 — 2018.02",
+        "logo":        "/logos/education/snu.svg",
+        "degree":      {"ko": "조경학 석사", "en": "M.S."},
+        "program":     {"ko": "환경조경학과", "en": "Department of Landscape Architecture (Environmental Landscape Architecture Major)"},
+        "institution": {"ko": "서울대학교 환경대학원", "en": "Graduate School of Environmental Studies, Seoul National University, Seoul, South Korea"},
+        "lab":         {"ko": "Urban Studies & Design Lab", "en": "Urban Studies & Design Lab"},
+        "advisor":     {"ko": "지도교수: 김세훈", "en": "Advisor: Saehoon Kim"},
+        "thesis": "The study of cyclists’ gaze behavior in urban environment"
+      },
+      {
+        "period": "2011.03 — 2015.02",
+        "logo":        "/logos/education/knu.svg",
+        "degree":      {"ko": "농학사", "en": "B.S."},
+        "program":     {"ko": "조경학과", "en": "Landscape Architecture"},
+        "institution": {"ko": "경북대학교 농업생명과학대학", "en": "College of Agriculture and Life Sciences, Kyungpook National University, Daegu, South Korea"},
+        "lab":         null,
+        "advisor":     null
+      }
+    ]
+  },
+
+  "publications": {
+    "_help": "역할(role): 'first' = 1저자, 'co' = 공저자. 등재구분(index): 'SCIE' / 'ESCI' / 'KCI' — xlsx Publications 시트의 Index 열이 정본이며 _sync_site.py 가 채웁니다(직접 수정 금지). cover/pdf 필드는 public/papers/ 기준 절대 경로 (예: '/papers/covers/pub_07_xxx.jpg'). 파일 없으면 빈 문자열로 두세요.",
+    "eyebrow": "04 — PUBLICATIONS",
+    "title": { "ko": "게재 논문", "en": "Publications" },
+    "intro": { "ko": "Peer-reviewed 학술논문 목록. 최신 순으로 정렬.", "en": "Peer-reviewed publications, sorted by most recent." },
+    "groupSci": { "ko": "국제 학술지 · SCIE / ESCI", "en": "International journals · SCIE / ESCI" },
+    "groupKci": { "ko": "국내 학술지 · KCI", "en": "Domestic journals · KCI" },
+    "items": [
+      {
+        "id": 9,
+        "date": "",
+        "year": 2026,
+        "role": "first & corresponding",
+        "journal": "(Accepted, in press)",
+        "index": "",
+        "if": "",
+        "quartile": "",
+        "doi": "",
+        "cover": "",
+        "pdf":   "",
+        "authors": ["Jang, G."],
+        "journalKo": "게재 확정 (출판 예정)",
+        "authorsKo": ["장국화"],
+        "title": {
+          "ko": "한국의 기후 젠트리피케이션 발생 가능성에 대한 탐색적 연구: 거주지 선호, 부동산 가격 영향 인식, 이주의향을 중심으로",
+          "en": "An Exploratory Study on the Potential for Climate Gentrification in South Korea: Residential Preferences, Perceived Property-Price Impacts, and Migration Intentions"
+        }
+      },
+      {
+        "id": 8,
+        "date": "",
+        "year": 2026,
+        "role": "corresponding",
+        "journal": "(Accepted, in press)",
+        "index": "",
+        "if": "",
+        "quartile": "",
+        "doi": "",
+        "cover": "",
+        "pdf":   "",
+        "authors": ["Lee, S.", "Jang, G."],
+        "journalKo": "게재 확정 (출판 예정)",
+        "authorsKo": ["이승현", "장국화"],
+        "title": {
+          "ko": "국내 조경 분야 종사자의 생성형 AI 활용 실태 연구: 과업 단위 활용과 직무군에 따른 차이를 중심으로",
+          "en": "Generative AI Use among Landscape Architecture Professionals in South Korea: Task-Level Adoption and Differences across Job Groups"
+        }
+      },
+      {
+        "id": 10,
+        "date": "",
+        "year": 2026,
+        "role": "co",
+        "journal": "(Accepted, in press)",
+        "index": "",
+        "if": "",
+        "quartile": "",
+        "doi": "",
+        "cover": "",
+        "pdf":   "",
+        "authors": ["Choi, J.", "Jang, G.", "Kim, D."],
+        "journalKo": "게재 확정 (출판 예정)",
+        "title": {
+          "ko": "Exploring the Changes in the Street Environment under Climate Gentrification",
+          "en": "Exploring the Changes in the Street Environment under Climate Gentrification"
+        }
+      },
+      {
+        "id": 6,
+        "date": "2026/05/11",
+        "year": 2026,
+        "role": "first",
+        "journal": "Sustainable Cities and Society",
+        "index": "SCIE",
+        "if": "",
+        "quartile": "",
+        "doi": "10.1016/j.scs.2026.107502",
+        "cover": "/papers/covers/2026_SCS_What-health-risks.webp",
+        "pdf":   "",
+        "authors": ["Gukhwa Jang", "Youngmee Jeon", "Youngsoo You", "Hyung Rae Cho"],
+        "title": {
+          "ko": "What health risks arise in shrinking cities? A systematic review",
+          "en": "What health risks arise in shrinking cities? A systematic review"
+        }
+      },
+      {
+        "id": 7,
+        "date": "2026/04/30",
+        "year": 2026,
+        "role": "corresponding",
+        "journal": "Journal of the Korean Society of Environmental Restoration Technology",
+        "index": "KCI",
+        "if": "",
+        "quartile": "",
+        "doi": "10.13087/kosert.2026.29.2.41",
+        "cover": "/papers/covers/2026_KOSERT_Comparing-LST-Estimation.webp",
+        "pdf":   "/papers/pdfs/2026_KOSERT_Comparing-LST-Estimation.pdf",
+        "authors": ["Seunghyeon Lee", "Gukhwa Jang", "Youngkeun Song", "Sung-Ho Kil"],
+        "journalKo": "한국환경복원기술학회지",
+        "authorsKo": ["이승현", "장국화", "송영근", "길승호"],
+        "title": {
+          "ko": "동일 시공간 조건에서의 저층·고층 주거지 LST 산출 방법 비교 - 위성영상, 시뮬레이션, UAV를 중심으로 -",
+          "en": "Comparing LST Estimation Methods under Matched Spatiotemporal Conditions in Low- and High-Rise Residential Areas: Satellite, Simulation, and UAV Approaches"
+        }
+      },
+      {
+        "id": 5,
+        "date": "2025/12/31",
+        "year": 2025,
+        "role": "first",
+        "journal": "Journal of Korea Planning Association",
+        "index": "KCI",
+        "if": "",
+        "quartile": "",
+        "doi": "10.17208/jkpa.2025.12.60.7.80",
+        "cover": "/papers/covers/2025_JKPA_Climate-Gentrification.webp",
+        "pdf":   "/papers/pdfs/2025_JKPA_Climate-Gentrification.pdf",
+        "authors": ["Gukhwa Jang", "DaHyun Kim"],
+        "journalKo": "국토계획 (대한국토·도시계획학회지)",
+        "authorsKo": ["장국화", "김다현"],
+        "title": {
+          "ko": "기후 젠트리피케이션: 이론, 측정, 동인의 체계적 문헌고찰",
+          "en": "Climate Gentrification: A Systematic Review of Theory, Measurement, and Drivers"
+        }
+      },
+      {
+        "id": 4,
+        "date": "2025/07/18",
+        "year": 2025,
+        "role": "first",
+        "journal": "Nature Cities",
+        "index": "SCIE",
+        "if": "",
+        "quartile": "",
+        "doi": "10.1038/s44284-025-00278-y",
+        "cover": "/papers/covers/2025_NatCities_Association-between.webp",
+        "pdf":   "",
+        "authors": ["Gukhwa Jang", "Saehoon Kim", "Jae Seung Lee"],
+        "authorsKo": ["장국화", "김세훈", "이제승"],
+        "title": {
+          "ko": "Association between urban shrinkage and excess mortality during the COVID-19 pandemic",
+          "en": "Association between urban shrinkage and excess mortality during the COVID-19 pandemic"
+        }
+      },
+      {
+        "id": 3,
+        "date": "2022/08/22",
+        "year": 2022,
+        "role": "first",
+        "journal": "Building and Environment",
+        "index": "SCIE",
+        "if": "",
+        "quartile": "",
+        "doi": "10.1016/j.buildenv.2022.109517",
+        "cover": "/papers/covers/2022_BAE_Planning-scenarios.webp",
+        "pdf":   "",
+        "authors": ["Gukhwa Jang", "Saehoon Kim", "Jae Seung Lee"],
+        "authorsKo": ["장국화", "김세훈", "이제승"],
+        "title": {
+          "ko": "Planning scenarios and microclimatic effects: The case of high-density riverside residential districts in Seoul, South Korea",
+          "en": "Planning scenarios and microclimatic effects: The case of high-density riverside residential districts in Seoul, South Korea"
+        }
+      },
+      {
+        "id": 2,
+        "date": "2021/07/25",
+        "year": 2021,
+        "role": "first",
+        "journal": "Urban Climate",
+        "index": "SCIE",
+        "if": "",
+        "quartile": "",
+        "doi": "10.1016/j.uclim.2021.100924",
+        "cover": "/papers/covers/2021_UC_Are-decline-oriented.webp",
+        "pdf":   "",
+        "authors": ["Gukhwa Jang", "Saehoon Kim"],
+        "authorsKo": ["장국화", "김세훈"],
+        "title": {
+          "ko": "Are decline-oriented strategies thermally sustainable in shrinking cities?",
+          "en": "Are decline-oriented strategies thermally sustainable in shrinking cities?"
+        }
+      },
+      {
+        "id": 1,
+        "date": "2019/07/04",
+        "year": 2019,
+        "role": "first & corresponding",
+        "journal": "Journal of Architecture and Urbanism",
+        "index": "ESCI / Scopus",
+        "if": "",
+        "quartile": "",
+        "doi": "10.3846/jau.2019.3786",
+        "cover": "/papers/covers/2019_JAU_Investigating-the-effect.webp",
+        "pdf":   "/papers/pdfs/2019_JAU_Investigating-the-effect.pdf",
+        "authors": ["Gukhwa Jang", "Saehoon Kim"],
+        "authorsKo": ["장국화", "김세훈"],
+        "title": {
+          "ko": "Investigating the effect of a raised cycle track, physical separation, land use and number of pedestrian on cyclists’ gaze behavior",
+          "en": "Investigating the effect of a raised cycle track, physical separation, land use and number of pedestrian on cyclists’ gaze behavior"
+        }
+      }
+    ],
+    "underReview": {
+      "_help": "심사 중 원고. 카드가 아니라 학술대회처럼 리스트로 표시됨. role: 'first'=1저자, 'co'=공저. status는 심사 단계(이중언어). title은 영문 단일. status.en 에 'preparation' 이 포함되면 labelPrep(작성 중) 그룹으로, 그 밖의 status 는 전부 label(심사·수정 중) 그룹으로 자동 분리된다.",
+      "label": { "ko": "심사 · 수정 중인 논문", "en": "Under Review / In Revision" },
+      "labelPrep": { "ko": "작성 중인 논문", "en": "In Preparation" },
+      "note":  { "ko": "투고 · 심사 · 준비 중 ({underReview}편)", "en": "Submitted / under review / in preparation ({underReview})" },
+      "items": [
+        {"role": "co", "date": "", "journal": "", "status": {"ko": "In revision", "en": "In revision"}, "authors": ["Kang, S.", "Jang, G.", "Kim, D."], "title": "산업단지 열환경 분석을 위한 산업특화형 지역기후구역(ILCZ) 정의와 유형화"},
+        {"role": "co", "date": "", "journal": "", "status": {"ko": "In preparation", "en": "In preparation"}, "authors": ["Yoo, Y.", "Jeon, Y.", "Cho, H.", "Jang, G."], "title": "How Do Shrinking Cities Restructure? A Three-Zone Analysis of Spatial Differentiation in South Korea"},
+        {"role": "first", "date": "", "journal": "", "status": {"ko": "In preparation", "en": "In preparation"}, "authors": ["Jang, G.", "Ha, J.", "Cho, H."], "title": "Do superblocks ensure thermal comfort? Planning benefits and microclimatic trade-offs of a pedestrian-oriented urban form"},
+        {"role": "corresponding", "date": "", "journal": "", "status": {"ko": "In revision", "en": "In revision"}, "authors": ["Cho, H.", "Jang, G.", "Yoo, Y.", "Jeon, Y."], "title": "The morphological paradox of fine-grained urban form: Resilience in shrinking neighbourhoods"},
+        {"role": "co", "date": "", "journal": "", "status": {"ko": "Submitted to SCIE journal", "en": "Submitted to SCIE journal"}, "authors": ["Jeon, Y.", "Yoo, Y.", "Cho, H.", "Jang, G."], "title": "Spatiotemporal dynamics of population in South Korea’s medium-sized cities: Expanding the model of urban development stages from an urban shrinkage perspective"},
+        {"role": "corresponding", "date": "", "journal": "", "status": {"ko": "Submitted to SCIE journal", "en": "Submitted to SCIE journal"}, "authors": ["Lee, J.", "Jang, G.", "Kim, D."], "title": "Unequal Displacement in the Climate Crisis: Developing Climate Gentrification Risk Indicators Using Delphi and AHP"},
+        {"role": "corresponding", "date": "", "journal": "", "status": {"ko": "In preparation", "en": "In preparation"}, "authors": ["Hong, H.", "Jang, G.", "Kim, D."], "title": "Climate-trapped populations: What drives households to remain in high flood-risk housing in South Korea?"},
+        {"role": "corresponding", "date": "", "journal": "", "status": {"ko": "Submitted to SCIE journal", "en": "Submitted to SCIE journal"}, "authors": ["Oh, J.", "Jang, G.", "Kim, D."], "title": "Post-disaster gentrification in the wake of Hurricane Harvey: Flood exposure and neighborhood change in Harris County"},
+        {"role": "first & corresponding", "date": "", "journal": "", "status": {"ko": "In preparation", "en": "In preparation"}, "authors": ["Jang, G."], "title": "Beyond Aspiration and Capability: Necessity as a Gate to Climate (Im)mobility in South Korea"},
+      {"role": "co", "date": "", "journal": "", "status": {"ko": "In preparation", "en": "In preparation"}, "authors": ["Koo, S.", "Jang, G.", "Kim, D."], "title": "한국에서도 기후 젠트리피케이션이 성립하는가?: 침수·지진·폭염 노출이 지가와 거주자 구성에 미치는 영향에 관한 시군구 패널분석"}
+      ]
+    }
+  },
+
+  "conferences": {
+    "_help": "1저자 또는 발표자(presenter)인 학회 발표만 포함.",
+    "eyebrow": "05 — CONFERENCES",
+    "title": { "ko": "학회 발표 · 초청 강연", "en": "Conference Presentations & Invited Talks" },
+    "groupConf": { "ko": "학회 발표", "en": "Conference presentations" },
+    "intro": { "ko": "1저자 또는 발표자(presenter)인 국내·국제 학회 발표.", "en": "Domestic and international presentations where I am first author or presenter." },
+    "items": [
+      {"id": 16, "date": "2026/10/28", "year": 2026, "type": "poster", "scope": "international", "conference": {"ko": "The 62nd IFLA World Congress", "en": "The 62nd IFLA World Congress"}, "venue": {"ko": "홍콩", "en": "Hong Kong"}, "authors": [], "title": {"ko": "Climate-Trapped Populations in Seoul’s Flood-Prone Semi-Basement Housing", "en": "Climate-Trapped Populations in Seoul’s Flood-Prone Semi-Basement Housing"}},
+      {"id": 15, "date": "2026/06/30", "year": 2026, "type": "poster", "scope": "international", "conference": {"ko": "The World Planning Schools Congress (WPSC)", "en": "The World Planning Schools Congress (WPSC)"}, "venue": {"ko": "핀란드 헬싱키", "en": "Helsinki, Finland"}, "authors": [], "title": {"ko": "How Does Climate Risk Reshape Neighborhoods? Climate Gentrification", "en": "How Does Climate Risk Reshape Neighborhoods? Climate Gentrification"}},
+      {"id": 14, "date": "2025/12/15", "year": 2025, "type": "poster", "scope": "international", "conference": {"ko": "AGU 25", "en": "AGU 25"}, "venue": {"ko": "미국 뉴올리언스", "en": "New Orleans, USA"}, "authors": [], "title": {"ko": "A New Framework for Urban Heat Island Management: Assessing the Impact of Industrial Complex-Microclimate Zones (IC-MCZ) on Urban Heat Islands", "en": "A New Framework for Urban Heat Island Management: Assessing the Impact of Industrial Complex-Microclimate Zones (IC-MCZ) on Urban Heat Islands"}},
+      {"id": 13, "date": "2025/10/31", "year": 2025, "type": "oral", "scope": "domestic", "conference": {"ko": "국토학회 (서울대학교 기관 세션)", "en": "Korea Planning Association (KPA), SNU institutional session"}, "venue": {"ko": "충주 (한국교통대), 한국", "en": ""}, "authors": [], "title": {"ko": "도시쇠퇴가 코로나19 팬데믹 초과사망에 미친 영향 분석", "en": ""}},
+      {"id": 12, "date": "2025/10/16", "year": 2025, "type": "oral", "scope": "international", "conference": {"ko": "The International Making Cities Livable (IMCL)", "en": "The International Making Cities Livable (IMCL)"}, "venue": {"ko": "독일 포츠담", "en": "Potsdam, Germany"}, "authors": [], "title": {"ko": "Strategies for Managing Vacant Lots and Enhancing Thermal Comfort in Shrinking Cities", "en": "Strategies for Managing Vacant Lots and Enhancing Thermal Comfort in Shrinking Cities"}},
+      {"id": 11, "date": "2024/08/04", "year": 2024, "type": "poster", "scope": "international", "conference": {"ko": "Ecological Society of America (ESA)", "en": "Ecological Society of America (ESA)"}, "venue": {"ko": "미국 롱비치", "en": "Long Beach, USA"}, "authors": [], "title": {"ko": "Assessing the Applicability of UAV Thermal Drones for Urban Microclimate Evaluation", "en": "Assessing the Applicability of UAV Thermal Drones for Urban Microclimate Evaluation"}},
+      {"id": 10, "date": "2024/07/08", "year": 2024, "type": "poster", "scope": "international", "conference": {"ko": "AESOP", "en": "AESOP"}, "venue": {"ko": "프랑스 파리", "en": "Paris, France"}, "authors": [], "title": {"ko": "The health inequality in shrinking cities: the effects of urban shrinkage on excess deaths during the COVID-19 pandemic", "en": "The health inequality in shrinking cities: the effects of urban shrinkage on excess deaths during the COVID-19 pandemic"}},
+      {"id": 9, "date": "2024/05/09", "year": 2024, "type": "oral", "scope": "domestic", "conference": {"ko": "국토학회 (전문가세션_박사학위논문)", "en": "Korea Planning Association (KPA)"}, "venue": {"ko": "강남, 한국", "en": ""}, "authors": [], "title": {"ko": "Healthy cities: urban transformation and its effects", "en": "Healthy cities: urban transformation and its effects"}},
+      {"id": 8, "date": "2024/01/16", "year": 2024, "type": "oral", "scope": "international", "conference": {"ko": "NEOCITY EPOWERMENT FORUM 2024 (NEF)", "en": "NEOCITY EPOWERMENT FORUM 2024 (NEF)"}, "venue": {"ko": "미국 플로리다", "en": "Florida, USA"}, "authors": [], "title": {"ko": "Urban green infrastructure planning for urban microclimate", "en": "Urban green infrastructure planning for urban microclimate"}},
+      {"id": 7, "date": "2023/11/16", "year": 2023, "type": "oral", "scope": "domestic", "conference": {"ko": "도시설계학회 신진연구자", "en": "Urban Design Institute of Korea (UDIK), 신진연구자연구위원회 제2회 정기 세미나"}, "venue": {"ko": "온라인", "en": "Online"}, "authors": [], "title": {"ko": "쇠퇴도시의 지속가능성 - 팬데믹 기간 초과 사망 비교를 중심으로 -", "en": ""}},
+      {"id": 6, "date": "2023/10/07", "year": 2023, "type": "oral", "scope": "international", "conference": {"ko": "The 59th International Making Cities Livable (IMCL)", "en": "The 59th International Making Cities Livable (IMCL)"}, "venue": {"ko": "영국 도체스터", "en": "Dorchester, UK"}, "authors": [], "title": {"ko": "The Challenge of Shrinking Cities: A Cross-City Comparative Study", "en": "The Challenge of Shrinking Cities: A Cross-City Comparative Study"}},
+      {"id": 5, "date": "2023/01/31", "year": 2023, "type": "", "scope": "domestic", "conference": {"ko": "SNU ISD", "en": "SNU ISD"}, "venue": {"ko": "온라인", "en": "Online"}, "authors": [], "title": {"ko": "SNU Climate Change Workshop", "en": "SNU Climate Change Workshop"}},
+      {"id": 4, "date": "2022/09/06", "year": 2022, "type": "oral", "scope": "international", "conference": {"ko": "The 29th International Seminar on Urban Form (ISUF)", "en": "The 29th International Seminar on Urban Form (ISUF)"}, "venue": {"ko": "온라인", "en": "Online"}, "authors": [], "title": {"ko": "The evaluation of heat-mitigation strategies on outdoor heat stress in the waterfront public spaces", "en": "The evaluation of heat-mitigation strategies on outdoor heat stress in the waterfront public spaces"}},
+      {"id": 3, "date": "2021/07/01", "year": 2021, "type": "oral", "scope": "international", "conference": {"ko": "The 28th International Seminar on Urban Form (ISUF)", "en": "The 28th International Seminar on Urban Form (ISUF)"}, "venue": {"ko": "온라인", "en": "Online"}, "authors": [], "title": {"ko": "Investigating the effects of urban structures on urban heat stress in shrinking cities", "en": "Investigating the effects of urban structures on urban heat stress in shrinking cities"}},
+      {"id": 2, "date": "2020/12/07", "year": 2020, "type": "oral", "scope": "international", "conference": {"ko": "The 14th International Association for China Planning (IACP)", "en": "The 14th International Association for China Planning (IACP)"}, "venue": {"ko": "온라인", "en": "Online"}, "authors": [], "title": {"ko": "How do different planning approaches affect heat stress in shrinking cities?", "en": "How do different planning approaches affect heat stress in shrinking cities?"}},
+      {"id": 1, "date": "2017/02/17", "year": 2017, "type": "", "scope": "domestic", "conference": {"ko": "대한교통학회", "en": "Korean Society of Transportation 2017"}, "venue": {"ko": "분당, 한국", "en": "Bundang, South Korea"}, "authors": [], "title": {"ko": "A study of Gaze patterns for cyclist with Eye Tracker experiments", "en": "A study of Gaze patterns for cyclist with Eye Tracker experiments"}}
+    ]
+  },
+
+  "invitedTalks": {
+    "_help": "초청 강연 — 남의 과목·행사에 초청되어 1~2시간 안에 끝나는 강연·발표(내가 과정의 주강사가 아닌 자리). 교과목 초청강의 · 세미나 · 콜로퀴엄 · 기조 · 패널, 그리고 학회 초청 세션이 여기 들어간다. 내가 주강사인 교육 과정(반나절~수일, 수강생·시수 관리)은 teaching, 학회 프로그램 안의 일반 발표는 conferences. 정본은 cv/application_info.xlsx 의 'Invited Talks' 시트(웹 표시=Y).",
+    "label": { "ko": "초청 강연", "en": "Invited talks" },
+    "_typeLabels": {
+      "guest lecture": { "ko": "교과목 초청강의", "en": "Guest lecture" },
+      "conference":    { "ko": "학회 초청발표",   "en": "Invited talk" },
+      "seminar":       { "ko": "초청 세미나",     "en": "Invited seminar" },
+      "colloquium":    { "ko": "콜로퀴엄",        "en": "Colloquium" },
+      "keynote":       { "ko": "기조강연",        "en": "Keynote" },
+      "panel":         { "ko": "패널",            "en": "Panel" }
+    },
+    "items": [
+      {"date": "2025/11/18", "year": 2025, "type": "guest lecture", "scope": "domestic", "title": {"ko": "SCI 논문 작성법 (자원순환형 도시설계 연구 수업 특강)", "en": "Lecture in 자원순환형 도시설계 연구"}, "host": {"ko": "서울대학교", "en": "Seoul National University"}, "venue": {"ko": "서울", "en": "Seoul, Republic of Korea"}},
+      {"date": "2025/09/09", "year": 2025, "type": "guest lecture", "scope": "domestic", "title": {"ko": "고급 도시환경분석과 데이터 시각화 (수업 특강)", "en": "Advanced Urban Environment Analysis and Data Visualization"}, "host": {"ko": "서울대학교", "en": "Seoul National University"}, "venue": {"ko": "서울", "en": "Seoul, Republic of Korea"}},
+      {"date": "2024/08/29", "year": 2024, "type": "seminar", "scope": "domestic", "title": {"ko": "Microclimate Simulation (ENVI-met)", "en": "Microclimate Simulation (ENVI-met)"}, "host": {"ko": "경기연구원", "en": "Gyeonggi Research Institute"}, "venue": {"ko": "수원", "en": "Suwon, South Korea"}}
+    ]
+  },
+
+  "projects": {
+    "eyebrow": "08 — RESEARCH PROJECTS",
+    "title": { "ko": "참여 연구과제 · 역할", "en": "Participated Research Projects & Roles" },
+    "intro": { "ko": "참여한 국가 R&D · 지자체 연구과제.", "en": "National and municipal research projects." },
+    "items": [
+      {"id": 13, "period": "2025/06 — 2027/05", "role": {"ko": "연구 책임", "en": "Principal Investigator"}, "institute": {"ko": "서울대학교 산학협력단", "en": "Seoul National University"}, "pi": {"ko": "장국화", "en": "Gukhwa Jang"}, "title": {"ko": "기후 젠트리피케이션: 기후 불평등의 공간화를 통해 바라본 기후불평등과 인권 위기", "en": "Climate Gentrification: Climate Inequality and the Human Rights Crisis"}},
+      {"id": 12, "period": "2025/03 — 2025/11", "role": {"ko": "연구 보조", "en": "Research Assistant"}, "institute": {"ko": "", "en": "Gwangju Regional Office of Meteorology"}, "pi": {"ko": "임 저스틴 희준", "en": "임 저스틴 희준"}, "title": {"ko": "폭염 취약지역 지원을 위한 기상사회경제 융합 폭염정보 개발", "en": "폭염 취약지역 지원을 위한 기상사회경제 융합 폭염정보 개발"}},
+      {"id": 11, "period": "2024/09 — 2027/08", "role": {"ko": "연구 책임", "en": "Principal Investigator"}, "institute": {"ko": "서울대학교 산학협력단", "en": "Seoul National University"}, "pi": {"ko": "장국화", "en": "Gukhwa Jang"}, "title": {"ko": "노후 산업단지의 열적 쾌적성 개선을 위한 공간 모델 개발", "en": "Development of a Spatial Model for Improving Thermal Comfort in Aging Industrial Complexes"}},
+      {"id": 10, "period": "2023/09 — 2024/08", "role": {"ko": "연구 책임", "en": "Principal Investigator"}, "institute": {"ko": "서울대학교 산학협력단", "en": "Seoul National University"}, "pi": {"ko": "장국화", "en": "Gukhwa Jang"}, "title": {"ko": "쇠퇴도시 내 유휴공터를 활용한 기후 위기 대응형 공간 모델 개발", "en": "Development of climate change response spatial model utilizing vacant lots in shrinking cities"}},
+      {"id": 9, "period": "2021/04 — 2023/02", "role": {"ko": "연구 참여", "en": "Researcher"}, "institute": {"ko": "", "en": ""}, "title": {"ko": "디지털트윈 시뮬레이션 기술 기반 스마트시티 통합 설계 솔루션 개발", "en": "디지털트윈 시뮬레이션 기술 기반 스마트시티 통합 설계 솔루션 개발"}},
+      {"id": 8, "period": "2020/03 — 2023/02", "role": {"ko": "연구 참여", "en": "Researcher"}, "institute": {"ko": "", "en": ""}, "pi": {"ko": "김세훈", "en": "Saehoon Kim"}, "title": {"ko": "초고령·저출산사회 도시쇠퇴 지역의 완화적 계획 이론 정립과 스마트한 축소 모델 제안", "en": "Palliative planning and shrinking-smart model for declined areas associated with a super-aged, low fertility society"}},
+      {"id": 7, "period": "2020/03 — 2020/07", "role": {"ko": "연구 참여", "en": "Researcher"}, "institute": {"ko": "", "en": ""}, "pi": {"ko": "김세훈", "en": "Saehoon Kim"}, "title": {"ko": "Inception Report for Utilizing Korean Support and Partnerships for Green Growth in FCV", "en": "Inception Report for Utilizing Korean Support and Partnerships for Green Growth in FCV"}},
+      {"id": 6, "period": "2019/09 — 2023/02", "role": {"ko": "연구 참여", "en": "Researcher"}, "institute": {"ko": "", "en": ""}, "title": {"ko": "BK21 3단계, 4단계 플러스사업", "en": "BK21 3단계, 4단계 플러스사업"}},
+      {"id": 5, "period": "2018/05 — 2018/06", "role": {"ko": "연구 보조", "en": "Research Assistant"}, "institute": {"ko": "", "en": ""}, "title": {"ko": "노인의료복지시설 화재안전 실태조사 및 개선방안 연구", "en": "노인의료복지시설 화재안전 실태조사 및 개선방안 연구"}},
+      {"id": 4, "period": "2016/09 — 2016/12", "role": {"ko": "연구 책임", "en": "Principal Investigator"}, "institute": {"ko": "", "en": ""}, "pi": {"ko": "장국화", "en": "Gukhwa Jang"}, "title": {"ko": "지속가능한 따복공동체 마을공유공간 활성화 방안 연구", "en": "지속가능한 따복공동체 마을공유공간 활성화 방안 연구"}},
+      {"id": 3, "period": "2016/06 — 2016/12", "role": {"ko": "연구 보조", "en": "Research Assistant"}, "institute": {"ko": "", "en": ""}, "title": {"ko": "야외전시장 재배치 및 다목적 컨벤션센터 기본 개념 수립", "en": "야외전시장 재배치 및 다목적 컨벤션센터 기본 개념 수립"}},
+      {"id": 2, "period": "2015/09 — 2015/12", "role": {"ko": "연구 참여", "en": "Researcher"}, "institute": {"ko": "", "en": ""}, "title": {"ko": "안산시 고잔1동 오픈스페이스 개선 방안에 관한 연구", "en": "안산시 고잔1동 오픈스페이스 개선 방안에 관한 연구"}},
+      {"id": 1, "period": "2015/07 — 2017/06", "role": {"ko": "연구 보조", "en": "Research Assistant"}, "institute": {"ko": "", "en": ""}, "title": {"ko": "쇠퇴하는 저층주거 에너지 빈공층의 환경개선과 복합용도개발 유도 모델", "en": "쇠퇴하는 저층주거 에너지 빈공층의 환경개선과 복합용도개발 유도 모델"}}
+    ]
+  },
+
+  "patents": {
+    "_help": "특허는 목록(행)으로만 표시한다 — 카드·특허증 표기는 2026-10-21 제거 (certificate 필드는 사용 안 함, 빈 문자열 유지). pdf 필드는 public/patents/pdfs/ 기준 절대 경로의 등록특허공보(B1) 원문 — 값이 있는 항목에만 행에 '공보 / Gazette' 다운로드 버튼이 표시된다. 공보가 없는 항목은 버튼이 표시되지 않으며, 공식 자료는 KIPRIS에서 조회 가능.",
+    "eyebrow": "09 — PATENTS",
+    "title": { "ko": "특허", "en": "Patents" },
+    "intro": { "ko": "출원 · 등록 특허 (대한민국).", "en": "Applied and registered patents (Republic of Korea)." },
+    "items": [
+      {"id": 3, "applicationDate": "2023.09.14", "registrationDate": "2025.09.17", "status": "registered", "certificate": "","pdf": "/patents/pdfs/10-2862472_B1.pdf", "inventors": {"ko": ["이승현", "장국화"], "en": ["이승현", "장국화"]}, "owner": {"ko": "이승현, 장국화", "en": "이승현, 장국화"}, "title": {"ko": "수목 관리 플랫폼 제공 시스템과 방법 및 이를 위한 컴퓨터 프로그램", "en": "수목 관리 플랫폼 제공 시스템과 방법 및 이를 위한 컴퓨터 프로그램"}},
+      {"id": 2, "applicationDate": "2023.08.10", "registrationDate": "2024.11.26", "status": "registered", "certificate": "","pdf": "/patents/pdfs/10-2736050_B1.pdf", "inventors": {"ko": ["이승현", "장국화"], "en": ["이승현", "장국화"]}, "owner": {"ko": "이승현", "en": "이승현"}, "title": {"ko": "이미지 기반의 가로수 정보 관리 시스템과 방법 및 이를 위한 컴퓨터 프로그램", "en": "이미지 기반의 가로수 정보 관리 시스템과 방법 및 이를 위한 컴퓨터 프로그램"}},
+      {"id": 1, "applicationDate": "2020.10.26", "registrationDate": "2021.11.02", "status": "registered", "certificate": "", "pdf": "/patents/pdfs/30-1135512_S.pdf", "inventors": {"ko": ["권영상", "장국화", "박만호", "박승제", "김승찬", "최기창", "오성우"], "en": ["권영상", "장국화", "박만호", "박승제", "김승찬", "최기창", "오성우"]}, "owner": {"ko": "서울대학교산학협력단", "en": "서울대학교산학협력단"}, "title": {"ko": "안내표지판", "en": "History marker"}}
+    ]
+  },
+
+  "teaching": {
+    "eyebrow": "06 — TEACHING",
+    "title": { "ko": "교육 · 강의", "en": "Teaching" },
+    "intro": { "ko": "대학 정규수업·강의 조교·특강·워크숍.", "en": "University courses, teaching assistantships, special lectures, and workshops." },
+    "_typeLabels": {
+      "special":  { "ko": "특강",        "en": "Special lecture" },
+      "univ":     { "ko": "대학 강의",   "en": "University lecture" },
+      "online":   { "ko": "온라인 강의", "en": "Online class" }
+    },
+    "items": [
+      {"date": "2026/03/01", "dateEnd": "2026/08/31", "type": "univ", "students": 0, "url": "", "host": {"ko": "성균관대학교", "en": "Sungkyunkwan University"}, "dept": {"ko": "조경학과", "en": ""}, "credits": 3, "title": {"ko": "도시조경연구방법론 (공동강의)", "en": "Research Methods in Urban Landscape Architecture"}},
+      {"date": "2025/03/01", "dateEnd": "2025/08/31", "type": "univ", "students": 0, "url": "", "host": {"ko": "서울대학교", "en": "Seoul National University"}, "dept": {"ko": "공과대학", "en": ""}, "credits": 3, "title": {"ko": "스마트시티 산업기술세미나 (기후변화 대응형 스마트 도시계획)", "en": "Smart City Seminar on Industrial Technology (Smart Urban Planning in Response to Climate Change)"}, "desc": {"ko": "QGIS 및 ENVI-met을 활용한 도시 미기후 연구 분석", "en": ""}},
+      {"date": "2025/12/01", "dateEnd": "", "type": "special", "students": 0, "url": "", "host": {"ko": "부산대학교", "en": "Pusan National University"}, "title": {"ko": "Microclimate Simulation (ENVI-met)", "en": "Microclimate Simulation (ENVI-met)"}},
+      {"date": "2025/06/09", "dateEnd": "", "type": "special", "students": 0, "url": "", "host": {"ko": "부산대학교", "en": "Pusan National University"}, "title": {"ko": "Microclimate Simulation (ENVI-met)", "en": "Microclimate Simulation (ENVI-met)"}},
+      {"date": "2024/08/19", "dateEnd": "", "type": "workshop", "students": 0, "url": "", "host": {"ko": "서울대학교", "en": "Seoul National University"}, "title": {"ko": "SNU WISE:UP Workshop 2 (ENVI-met)", "en": "SNU WISE:UP Workshop 2 (ENVI-met)"}},
+      {"date": "2024/04/02", "dateEnd": "2024/04/16", "type": "special", "students": 0, "url": "", "host": {"ko": "고려대학교", "en": "Korea University"}, "title": {"ko": "Microclimate Simulation (ENVI-met) day 1–3 (4/2, 4/9, 4/16)", "en": "Microclimate Simulation (ENVI-met) day 1–3"}},
+      {"date": "2024/02/19", "dateEnd": "2024/02/21", "type": "workshop", "students": 0, "url": "", "host": {"ko": "서울대학교", "en": "Seoul National University"}, "title": {"ko": "SNU WISE:UP Workshop 1 (QGIS) day 1–2 (2/19, 2/21)", "en": "SNU WISE:UP Workshop 1 (QGIS)"}},
+      {"date": "2024/01/22", "dateEnd": "", "type": "workshop", "students": 0, "url": "", "host": {"ko": "인천대학교", "en": "Incheon National University"}, "title": {"ko": "Software Workshop (QGIS)", "en": "Software Workshop (QGIS)"}},
+      {"date": "2023/09/01", "dateEnd": "2024/02/29", "type": "univ", "students": 0, "url": "", "host": {"ko": "인천대학교", "en": "Incheon National University"}, "dept": {"ko": "도시건축학부", "en": ""}, "credits": 3, "title": {"ko": "공간정보의 이해와 활용", "en": "Understanding and Application of Spatial Information"}, "desc": {"ko": "QGIS를 활용한 도시 공간 데이터 분석 실습 및 연구", "en": ""}},
+      {"date": "2023/09/01", "dateEnd": "2024/02/29", "type": "univ", "students": 0, "url": "", "host": {"ko": "수원대학교", "en": "The University of Suwon"}, "dept": {"ko": "도시부동산학과", "en": ""}, "credits": 3, "title": {"ko": "사회조사분석론 2", "en": "Survey and Data Analysis for Social Science 2"}, "desc": {"ko": "T-test, ANOVA, 회귀분석 등 통계 이론 및 R 실습", "en": ""}},
+      {"date": "2023/03/01", "dateEnd": "2023/08/31", "type": "univ", "students": 0, "url": "", "host": {"ko": "수원대학교", "en": "The University of Suwon"}, "dept": {"ko": "도시부동산학과", "en": ""}, "credits": 3, "title": {"ko": "사회조사분석론 1", "en": "Survey and Data Analysis for Social Science 1"}, "desc": {"ko": "도시 공간 정보 분석 방법론 기초 및 R 실습", "en": ""}},
+      {"date": "2023/03/01", "dateEnd": "2023/08/31", "type": "univ", "students": 0, "url": "", "host": {"ko": "수원대학교", "en": "The University of Suwon"}, "dept": {"ko": "도시부동산학과", "en": ""}, "credits": 3, "title": {"ko": "통계이야기", "en": "Statistics"}, "desc": {"ko": "기초 통계 이론 입문, 학부 1학년", "en": ""}},
+      {"date": "2021/09/01", "dateEnd": "2022/02/28", "type": "TA", "students": 0, "url": "", "host": {"ko": "서울대학교", "en": "Seoul National University"}, "dept": {"ko": "환경대학원 환경조경학과", "en": ""}, "credits": 3, "title": {"ko": "정량적 도시환경 연구 방법론", "en": "Quantitative Research Methods in the Urban Environment"}, "desc": {"ko": "통계 모형 활용 정량적 연구 분석, STATA", "en": ""}},
+      {"date": "2021/03/01", "dateEnd": "2021/08/31", "type": "TA", "students": 0, "url": "", "host": {"ko": "서울대학교", "en": "Seoul National University"}, "dept": {"ko": "환경대학원 환경조경학과", "en": ""}, "credits": 2, "title": {"ko": "도시환경 연구설계의 이해", "en": "Environmental Research Design"}, "desc": {"ko": "사회과학연구 기초 연구설계방법 이해 및 실습", "en": ""}}
+    ]
+  },
+
+  "career": {
+    "_help": "logo 필드는 public/logos/career/ 기준 절대 경로 (예: '/logos/career/virginia-tech.svg'). SVG 권장 (다크모드 호환). 없으면 빈 문자열로 두세요 — 자동으로 placeholder 이니셜 표시.",
+    "eyebrow": "03 — CAREER",
+    "title": { "ko": "경력 · 인턴십", "en": "Work & Internships" },
+    "items": [
+      {"id": 6, "period": "2026/03 — Present", "logo": "/logos/career/skku.svg", "type": {"ko": "강사", "en": "Lecturer"}, "company": {"ko": "성균관대학교 건설환경공학부", "en": "Sungkyunkwan University"}, "country": {"ko": "대한민국", "en": "Republic of Korea"}, "url": ""},
+      {"id": 5, "period": "2025/03 — Present", "logo": "/logos/career/snu.svg", "type": {"ko": "강사", "en": "Lecturer"}, "company": {"ko": "서울대학교 공과대학", "en": "Seoul National University"}, "country": {"ko": "대한민국", "en": "Republic of Korea"}, "url": "", "desc": "College of Engineering"},
+      {"id": 4, "period": "2023/09 — 2024/02", "logo": "/logos/career/inu.svg", "type": {"ko": "강사", "en": "Lecturer"}, "company": {"ko": "인천대학교 도시건축학부", "en": "Incheon National University"}, "country": {"ko": "대한민국", "en": "Republic of Korea"}, "url": "", "desc": "Division of Architecture & Urban Design"},
+      {"id": 3, "period": "2023/08 — Present", "logo": "/logos/career/snu.svg", "type": {"ko": "연수연구원", "en": "Postdoctoral Researcher"}, "company": {"ko": "서울대학교 스마트시티 융합 글로벌 혁신인재양성 교육연구단", "en": "Seoul National University"}, "country": {"ko": "대한민국", "en": "Republic of Korea"}, "url": "", "desc": "Innovative Human Resource Development Education and Research Group for Smart City Global Convergence (BK21 FOUR)"},
+      {"id": 2, "period": "2023/04 — 2023/07", "logo": "/logos/career/snu.svg", "type": {"ko": "객원연구원", "en": "Visiting Researcher"}, "company": {"ko": "서울대학교 환경계획연구소", "en": "Seoul National University"}, "country": {"ko": "대한민국", "en": "Republic of Korea"}, "url": "", "desc": "Environmental Planning Institute"},
+      {"id": 1, "period": "2023/03 — 2024/02", "logo": "/logos/career/usw.png", "type": {"ko": "객원교수", "en": "Visiting Professor"}, "company": {"ko": "수원대학교 도시부동산학과", "en": "University of Suwon"}, "country": {"ko": "대한민국", "en": "Republic of Korea"}, "url": "", "desc": "Division of Architecture for Urban Planning & Real Estate Development, College of Engineering"}
+    ]
+  },
+
+  "honors": {
+    "eyebrow": "09 — HONORS",
+    "title": { "ko": "장학 · 자격 · 저서", "en": "Honors, Certifications & Books" },
+    "scholarships": {
+      "_help": "logo 필드는 public/logos/scholarships/ 기준 절대 경로 (예: '/logos/scholarships/cmk-foundation.svg'). 없으면 빈 문자열로 두세요.",
+      "label": { "ko": "장학금", "en": "Scholarships" },
+      "items": [
+        {"period": "2025/06 — 2027/05", "kind": "grant", "logo": "/logos/scholarships/nrf.svg", "foundation": {"ko": "한국연구재단", "en": "National Research Foundation of Korea (NRF)"}, "name": {"ko": "기후 젠트리피케이션: 기후 불평등의 공간화를 통해 바라본 기후불평등과 인권 위기", "en": "기후 젠트리피케이션: 기후 불평등의 공간화를 통해 바라본 기후불평등과 인권 위기"}, "support": {"ko": "교육부 신진연구자지원사업(인문사회) (연구 책임) · 총 49,875천원 (1차 18,703 / 2차 24,938 / 3차 6,234천원)", "en": "교육부 신진연구자지원사업(인문사회) (연구 책임) · 총 49,875천원 (1차 18,703 / 2차 24,938 / 3차 6,234천원)"}},
+        {"period": "2024/09 — 2027/08", "kind": "grant", "logo": "/logos/scholarships/nrf.svg", "foundation": {"ko": "한국연구재단", "en": "National Research Foundation of Korea (NRF)"}, "name": {"ko": "노후 산업단지의 열적 쾌적성 개선을 위한 공간 모델 개발", "en": "노후 산업단지의 열적 쾌적성 개선을 위한 공간 모델 개발"}, "support": {"ko": "교육부 이공학학술연구기반구축(R&D) (연구 책임) · 총 6억원 (1년차 1.5억 / 2년차 1.5억 / 3년차 2억 / 4년차 1억원)", "en": "교육부 이공학학술연구기반구축(R&D) (연구 책임) · 총 6억원 (1년차 1.5억 / 2년차 1.5억 / 3년차 2억 / 4년차 1억원)"}},
+        {"period": "2023/09 — 2024/08", "kind": "grant", "logo": "/logos/scholarships/nrf.svg", "foundation": {"ko": "한국연구재단", "en": "National Research Foundation of Korea (NRF)"}, "name": {"ko": "쇠퇴도시 내 유휴공터를 활용한 기후 위기 대응형 공간 모델 개발", "en": "쇠퇴도시 내 유휴공터를 활용한 기후 위기 대응형 공간 모델 개발"}, "support": {"ko": "교육부 이공학학술연구기반구축(R&D) (박사후국내연수) (연구 책임) · 총 6,000만원 (1년차 3,000 / 2년차 3,000만원)", "en": "교육부 이공학학술연구기반구축(R&D) (박사후국내연수) (연구 책임) · 총 6,000만원 (1년차 3,000 / 2년차 3,000만원)"}},
+        {"period": "2024/07 — 2024/08", "kind": "grant", "logo": "/logos/scholarships/wiset.svg", "foundation": {"ko": "한국여성과학기술인육성재단 (WISET)", "en": "Korea Foundation for Women In Science, Engineering and Technology (WISET)"}, "name": {"ko": "Fund for Short-term visiting scholar", "en": "Fund for Short-term visiting scholar"}, "support": {"ko": "", "en": ""}},
+        {"period": "2020/03 — 2023/02", "kind": "scholarship", "logo": "/logos/scholarships/bk.png", "foundation": {"ko": "BK21", "en": "BK21"}, "name": {"ko": "Scholarship, Brain Korea 21 (BK21) FOUR", "en": "Scholarship, Brain Korea 21 (BK21) FOUR"}, "support": {"ko": "", "en": ""}},
+        {"period": "2019/09 — 2020/02", "kind": "scholarship", "logo": "/logos/scholarships/bk.png", "foundation": {"ko": "BK21", "en": "BK21"}, "name": {"ko": "Scholarship, 3rd Brain Korea 21 (BK21)", "en": "Scholarship, 3rd Brain Korea 21 (BK21)"}, "support": {"ko": "", "en": ""}},
+        {"period": "2016", "kind": "scholarship", "logo": "/logos/scholarships/snu.svg", "foundation": {"ko": "SNU GSES", "en": "SNU GSES"}, "name": {"ko": "Scholarship for academic excellence", "en": "Scholarship for academic excellence"}, "support": {"ko": "", "en": ""}},
+        {"period": "2016", "kind": "scholarship", "logo": "/logos/scholarships/snu.svg", "foundation": {"ko": "Seoul National University", "en": "Seoul National University"}, "name": {"ko": "University Scholarship for Academic Excellence and Achievement", "en": "University Scholarship for Academic Excellence and Achievement"}, "support": {"ko": "", "en": ""}},
+        {"period": "2011", "kind": "scholarship", "logo": "/logos/scholarships/knu.svg", "foundation": {"ko": "Kyungpook National University", "en": "Kyungpook National University"}, "name": {"ko": "University Scholarship for Academic Excellence and Achievement", "en": "University Scholarship for Academic Excellence and Achievement"}, "support": {"ko": "", "en": ""}}
+      ]
+    },
+    "certifications": {
+      "label": { "ko": "자격증", "en": "Certifications" },
+      "items": [
+        {"date": "2015", "name": {"ko": "조경기사", "en": "Licensed Engineer in Landscape Architecture"}}
+      ]
+    },
+    "books": {
+      "_help": "cover 필드는 public/books/covers/ 기준 절대 경로 (예: '/books/covers/book_01_new_normal_city.jpg'). url 필드는 구매·소개 페이지 외부 링크 (예: yes24, 교보문고, 출판사 페이지). 둘 다 없으면 빈 문자열.",
+      "label": { "ko": "저서", "en": "Books" },
+      "items": [
+        {"date": "2021", "cover": "", "url": "", "publisher": {"ko": "Seoul National University Press", "en": "Seoul National University Press"}, "isbn": "9788952130976", "authors": {"ko": "김세훈, 장국화, 문지훈, 원세형, 김영은, 김하영, 최경인, 이소영", "en": "김세훈, 장국화, 문지훈, 원세형, 김영은, 김하영, 최경인, 이소영"}, "title": {"ko": "Smart Land Management and Planning Interventions: Learning from South Korea’s Half-century Experiences", "en": "Smart Land Management and Planning Interventions: Learning from South Korea’s Half-century Experiences"}},
+        {"date": "2021/02/06", "cover": "/books/covers/2021_NewNormalCity.jpg", "url": "", "publisher": {"ko": "어반이슈", "en": "Urban Issue"}, "isbn": "9791197343100", "authors": {"ko": "요즘도시, 장국화, 이승현, 김지환, 강유진, 이성인", "en": "요즘도시, 장국화, 이승현, 김지환, 강유진, 이성인"}, "title": {"ko": "뉴노멀도시", "en": "New Normal City"}}
+      ]
+    }
+  },
+
+  "contact": {
+    "eyebrow": "10 — CONTACT",
+    "title": {
+      "ko": "언제든 편하게 연락주세요.",
+      "en": "Get in touch."
+    },
+    "description": {
+      "ko": "연구 협업, 데이터·분석 문의, 새로운 도전에 관한 연락을 환영합니다.",
+      "en": "Open to research collaborations, data and analysis inquiries, and new challenges."
+    },
+    "email":          "rnrghk6811@snu.ac.kr",
+    "phone":          { "ko": "", "en": "" },
+    "phoneTelLink":   "",
+    "_socialHelp": "아래 프로필 URL을 채우면 사이드바 아이콘 + Contact 카드 + 검색엔진용 구조화데이터(JSON-LD)에 자동 연결됩니다. 빈 문자열이면 해당 항목은 자동으로 숨겨집니다.",
+    "scholarUrl":     "https://scholar.google.com/citations?user=dghWqqcAAAAJ&hl=ko",
+    "orcidUrl":       "https://orcid.org/0000-0001-6653-9285",
+    "researchGateUrl":"",
+    "kakaoUrl":       "",
+    "githubUrl":      "",
+    "cvFullUrl":       "/cv/Jang_Gukhwa_CV.pdf"
+  }
+}
