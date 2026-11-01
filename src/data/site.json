@@ -253,7 +253,7 @@
         "year": 2025,
         "role": "first",
         "journal": "Nature Cities",
-        "index": "SCIE",
+        "index": "ESCI",
         "if": "",
         "quartile": "",
         "doi": "10.1038/s44284-025-00278-y",
@@ -453,7 +453,7 @@
     "eyebrow": "03 — CAREER",
     "title": { "ko": "경력 · 인턴십", "en": "Work & Internships" },
     "items": [
-      {"id": 6, "period": "2026/03 — Present", "logo": "/logos/career/skku.svg", "type": {"ko": "강사", "en": "Lecturer"}, "company": {"ko": "성균관대학교 건설환경공학부", "en": "Sungkyunkwan University"}, "country": {"ko": "대한민국", "en": "Republic of Korea"}, "url": ""},
+      {"id": 6, "period": "2026/03 — 2026/08", "logo": "/logos/career/skku.svg", "type": {"ko": "강사", "en": "Lecturer"}, "company": {"ko": "성균관대학교 건설환경공학부", "en": "Sungkyunkwan University"}, "country": {"ko": "대한민국", "en": "Republic of Korea"}, "url": ""},
       {"id": 5, "period": "2025/03 — Present", "logo": "/logos/career/snu.svg", "type": {"ko": "강사", "en": "Lecturer"}, "company": {"ko": "서울대학교 공과대학", "en": "Seoul National University"}, "country": {"ko": "대한민국", "en": "Republic of Korea"}, "url": "", "desc": "College of Engineering"},
       {"id": 4, "period": "2023/09 — 2024/02", "logo": "/logos/career/inu.svg", "type": {"ko": "강사", "en": "Lecturer"}, "company": {"ko": "인천대학교 도시건축학부", "en": "Incheon National University"}, "country": {"ko": "대한민국", "en": "Republic of Korea"}, "url": "", "desc": "Division of Architecture & Urban Design"},
       {"id": 3, "period": "2023/08 — Present", "logo": "/logos/career/snu.svg", "type": {"ko": "연수연구원", "en": "Postdoctoral Researcher"}, "company": {"ko": "서울대학교 스마트시티 융합 글로벌 혁신인재양성 교육연구단", "en": "Seoul National University"}, "country": {"ko": "대한민국", "en": "Republic of Korea"}, "url": "", "desc": "Innovative Human Resource Development Education and Research Group for Smart City Global Convergence (BK21 FOUR)"},
