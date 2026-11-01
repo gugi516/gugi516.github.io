@@ -34,12 +34,10 @@ const sortedPublications = [...publications].sort((a, b) => {
   if (sa !== sb) return sa ? -1 : 1;                 // 국제 그룹 먼저
   return pubDateKey(b).localeCompare(pubDateKey(a)); // newest first within group
 });
-// 게재 확정(accepted, in press) — 등재구분(index)·IF·quartile 이 아직 없어 국제/KCI 어느
-// 쪽으로도 분류할 수 없는 논문. 추정 라벨을 붙이지 않고, 그룹 머리글 없이 맨 앞에 둔다.
-const isAccepted = (p: typeof publications[number]) => !p.index && !p.quartile && !p.if;
-const acceptedPubs = sortedPublications.filter(isAccepted);
-const sciPubs = sortedPublications.filter((p) => isIntl(p) && !isAccepted(p));
-const kciPubs = sortedPublications.filter((p) => !isIntl(p) && !isAccepted(p));
+// 게재 확정(accepted, in press) 논문은 등재구분(index)이 아직 비어 있지만 전부 KCI 저널
+// 게재 확정 건이라 KCI 그룹에 함께 둔다 (2026-11-02 사용자 지시). index 가 채워지면 그 값을 따른다.
+const sciPubs = sortedPublications.filter(isIntl);
+const kciPubs = sortedPublications.filter((p) => !isIntl(p));
 
 // Manuscripts under review — status 로 두 그룹 분리.
 //   status.en 에 'preparation' 이 들어가면 '작성 중', 그 밖의 status 는 전부 '심사·수정 중'.
@@ -344,12 +342,7 @@ const invitedTypeLabels =
     <div class="js-viewgroup" data-view="grid" data-viewkey="pub">
       <ViewToggle />
       <div class="view-grid">
-        {acceptedPubs.length > 0 && (
-          <div class="grid grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-4">
-            {acceptedPubs.map((p) => <CardPaper paper={p} />)}
-          </div>
-        )}
-        <p class:list={["type-caption font-semibold text-base-content/60 tracking-wide mb-3", acceptedPubs.length > 0 && "mt-8 pt-6 border-t border-base-300"]}>
+        <p class="type-caption font-semibold text-base-content/60 tracking-wide mb-3">
           <span data-only="ko">{site.publications.groupSci.ko}</span>
           <span data-only="en">{site.publications.groupSci.en}</span>
         </p>
@@ -369,8 +362,7 @@ const invitedTypeLabels =
         )}
       </div>
       <div class="view-list">
-        {acceptedPubs.map((p) => <RowPaper paper={p} />)}
-        <p class:list={["type-caption font-semibold text-base-content/60 tracking-wide mb-2", acceptedPubs.length > 0 && "mt-6 pt-5 border-t border-base-300"]}>
+        <p class="type-caption font-semibold text-base-content/60 tracking-wide mb-2">
           <span data-only="ko">{site.publications.groupSci.ko}</span>
           <span data-only="en">{site.publications.groupSci.en}</span>
         </p>
