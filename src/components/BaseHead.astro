@@ -87,9 +87,10 @@ const seoKeywords = "장국화, Gukhwa Jang, Jang Gukhwa, 공학박사, PhD, doc
 <!-- Theme detection (runs before paint to avoid flash). Language is fixed per route. -->
 <script is:inline>
   (function () {
+    // 기본은 항상 라이트 — OS/브라우저 다크 모드를 따라가지 않는다 (2026-11-02 사용자 지시).
+    // 다크는 사이트 안 토글로 선택한 방문자에게만 적용된다(localStorage 저장).
     const savedTheme = localStorage.getItem('gugi516-theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const theme = savedTheme || (prefersDark ? 'shlee-dark' : 'shlee-light');
+    const theme = savedTheme || 'shlee-light';
     document.documentElement.setAttribute('data-theme', theme);
   })();
 </script>
