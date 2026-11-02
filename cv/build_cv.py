@@ -91,14 +91,12 @@ def _period_years(v):
 
 
 def _work(kind):
-    """Work & Internships 에서 CV 구분으로 골라 (직위, 소속, 기간, 서술, 시작일) 튜플로.
-    마지막 '시작일' 은 표기에 쓰지 않고 연표(Position)의 시작월 산출에만 쓴다."""
+    """Work & Internships 에서 CV 구분으로 골라 (직위, 소속, 기간, 서술) 튜플로."""
     out = []
     for r in sheet("Work & Internships", where=lambda r: r["CV 구분"] == kind,
                    order=lambda r: _desc(r["Start Date"])):
         out.append((_txt(r["CV 직위(EN)"]), _txt(r["CV 소속(EN)"]),
-                    _year_range(r["Start Date"], r["End Date"]), _txt(r["CV 서술(EN)"]),
-                    _txt(r["Start Date"])))
+                    _year_range(r["Start Date"], r["End Date"]), _txt(r["CV 서술(EN)"])))
     return out
 
 
@@ -158,35 +156,6 @@ def _txt(v):
     """빈 셀(None)을 빈 문자열로. xlsx 가 아직 비어 있는 컬럼은 '빈 채로' 인쇄한다 —
     str(None) 이 'None' 으로 찍히는 것만 막고, 값을 지어내거나 행을 건너뛰지 않는다."""
     return "" if v is None else str(v).strip()
-
-# ---------------------------------------------------------------- timeline collector
-# 맨 아래 'Timeline (2023 — Present)' 섹션의 재료. 각 섹션의 '렌더 루프 안에서' _tl() 을
-# 부르므로 연표 항목은 본문 항목과 1:1 로 대응한다 (xlsx 를 새 필터로 다시 읽지 않는다).
-TL_FROM = 2023          # 수록 기준: 2023-01 이후에 '일어난' 확정 실적
-TIMELINE = []
-
-
-def _ym2(v):
-    """날짜 셀 -> (year, month). xlsx 에 섞여 있는 표기를 모두 받는다.
-      '2026/10/28' · '2025.09.17' · '2025.03' · '2025/06 — 2027/05' · datetime
-    월을 읽을 수 없으면 month=0 (연표에서 '월 미상'으로 그 해 끝에 둔다)."""
-    if hasattr(v, "year") and hasattr(v, "month"):
-        return v.year, v.month
-    s = str(v or "")
-    m = re.match(r"\s*(\d{4})\s*[/.\-]\s*(\d{1,2})\b", s)
-    if m:
-        return int(m.group(1)), int(m.group(2))
-    m = re.match(r"\s*(\d{4})", s)
-    return (int(m.group(1)), 0) if m else (0, 0)
-
-
-def _tl(year, month, cat, main, meta=""):
-    """연표에 한 줄 추가. TL_FROM 이전 항목과 연도 미상 항목은 조용히 빠진다."""
-    y = int(year) if str(year).strip().isdigit() else 0
-    if y < TL_FROM or not str(main).strip():
-        return
-    TIMELINE.append({"y": y, "m": int(month or 0), "cat": cat,
-                     "main": str(main).strip().rstrip(". "), "meta": str(meta or "").strip()})
 
 # ---------------------------------------------------------------- palette
 INK    = RGBColor(0x1a, 0x1a, 0x1a)
@@ -416,10 +385,8 @@ for lead, date, sub, bl in edu:
 # ---------------------------------------------------------------- Research Experience
 section("Research Experience")
 exp = _work("research")
-for lead, rest, date, sub, _start in exp:
+for lead, rest, date, sub in exp:
     entry(lead, right=date, sub=sub, left_rest=rest)
-    _y, _m = _ym2(_start)
-    _tl(_y, _m, "Position", lead, rest)
 
 # ---------------------------------------------------------------- Publications
 section("Peer-Reviewed Publications")
@@ -535,8 +502,6 @@ for raw in _bib_entries(os.path.join(HERE, "citations", "publications.bib")):
                 "journal": _it.get("journalKo")} if _it else None),
         "apa": [_apa_author(a.strip()) for a in _bf(raw, "author").split(" and ")],
         "year": _bf(raw, "year"),
-        # 연표의 월. bib 에 month 가 없는 게재확정(in press) 건은 0 -> 그 해 끝에 월 없이 놓인다.
-        "mon": _monthnum(raw),
         "title": re.sub(r"\s*-\s*$", "", _bf(raw, "title")).replace(" - ", ": ").rstrip(". "),
         "journal": _bf(raw, "journal").replace("\\&", "&"),
         "vol": _bf(raw, "volume"), "num": _bf(raw, "number"),
@@ -604,10 +569,6 @@ for n, d in enumerate(_pubs, 1):
         iv = iff.split("(")[0].strip()
         tag = "  · " + ", ".join(x for x in [f"IF {iv}" if iv else "", q] if x)
         _set_run(p.add_run(tag), 8.5, color=ACCENT)
-    # 연표 — 본문과 같은 언어 선택(KCI 는 국문)을 그대로 따른다
-    _tl(d["year"], d["mon"], "Publication",
-        _ko["title"] if _use_ko else title,
-        (_ko["journal"] or journal) if _use_ko else journal)
 
 # ---------------------------------------------------------------- Manuscripts under review
 section("Manuscripts Under Review")
@@ -668,25 +629,19 @@ for _n, _b in enumerate(sheet("Books", order=lambda r: r["No."]), 1):
     _pub_b, _isbn_b = _txt(_b["Publisher(EN)"]), _txt(_b["ISBN"])
     _set_run(p.add_run(". " + (f'{_pub_b}. ' if _pub_b else "")
                        + (f'ISBN {_isbn_b}.' if _isbn_b else "")), 9)
-    # 단행본에는 월 정보가 없다 -> 월 미상(0)
-    _tl(_yr_b, 0, "Book", _txt(_b["Title(EN)"]), _pub_b)
 
 # ---------------------------------------------------------------- Fellowships & Funding
 section("Fellowships & Funding")
 p = doc.add_paragraph()
 r = p.add_run("Competitive fellowships / scholarships (amounts converted at ₩1,400 = $1).")
 _set_run(r, 8.5, italic=True, color=LIGHT); p.paragraph_format.space_after = Pt(3)
-funding = [(_txt(r["CV 표기(EN)"]), years_only(r["Period"]), _txt(r["Amount(USD)"]),
-            _txt(r["Period"]))
+funding = [(_txt(r["CV 표기(EN)"]), years_only(r["Period"]), _txt(r["Amount(USD)"]))
            for r in sheet("Funding", order=lambda r: r["No."])]
-for name, period, amount, _raw_period in funding:
+for name, period, amount in funding:
     p = doc.add_paragraph(); add_right_tab(p); p.paragraph_format.space_before = Pt(4)
     _set_run(p.add_run(name), 9)
     _set_run(p.add_run(f"  ({amount})" if amount else ""), 9, color=ACCENT)
     _set_run(p.add_run("\t" + period), 9, color=GREY)
-    # 연표는 수여/개시 시점 — 기간 문자열의 앞쪽(시작 연월)을 쓴다
-    _y, _m = _ym2(_raw_period)
-    _tl(_y, _m, "Funding", name)
 
 # ---------------------------------------------------------------- Invited talks
 section("Invited Talks")
@@ -714,9 +669,9 @@ def _invited_tail(r):
 
 
 invited = [(_dot(r["Title(EN)"]) if _txt(r["Title(EN)"]) else "",
-            _invited_tail(r), _txt(r["Year"]), _txt(r["Date"]))
+            _invited_tail(r), _txt(r["Year"]))
            for r in sheet("Invited Talks", order=_invited_order)]
-for title, venue, yr, _dt in invited:
+for title, venue, yr in invited:
     p = doc.add_paragraph(); p.paragraph_format.space_before = Pt(4)
     p.paragraph_format.left_indent = Inches(0.28); p.paragraph_format.first_line_indent = Inches(-0.28)
     b = p.add_run("• "); _set_run(b, 9, color=ACCENT)
@@ -724,8 +679,6 @@ for title, venue, yr, _dt in invited:
     r = p.add_run(f" ({yr}). " if yr else " "); _set_run(r, 9)
     r = p.add_run(title + " " if title else ""); _set_run(r, 9)
     r = p.add_run(venue + "." if venue else ""); _set_run(r, 9, italic=True, color=GREY)
-    _y, _m = _ym2(_dt)
-    _tl(_y or yr, _m, "Invited Talk", title or venue, venue if title else "")
 
 # ---------------------------------------------------------------- Conferences
 section("Conference Presentations (International)")
@@ -740,12 +693,11 @@ confs = [([a for a in (x.strip() for x in _txt(r["Authors"]).split(",")) if a],
           _txt(r["Year"]),
           _txt(r["Type"]).capitalize() + (", team" if r["팀 발표"] == "Y" else ""),
           _dot(sentence_case(r["Title(EN)"])) if _txt(r["Title(EN)"]) else "",
-          ", ".join(x for x in (_txt(r["CV 학회(EN)"]), _txt(r["Venue(EN)"])) if x),
-          _txt(r["Date"]))
+          ", ".join(x for x in (_txt(r["CV 학회(EN)"]), _txt(r["Venue(EN)"])) if x))
          for r in sheet("Conferences",
                         where=lambda r: r["Scope"] == "international",
                         order=lambda r: _desc(r["Date"]))]
-for auth, yr, kind, title, venue, _dt in confs:
+for auth, yr, kind, title, venue in confs:
     p = doc.add_paragraph(); p.paragraph_format.space_before = Pt(4)
     p.paragraph_format.left_indent = Inches(0.28)
     p.paragraph_format.first_line_indent = Inches(-0.28)
@@ -755,8 +707,6 @@ for auth, yr, kind, title, venue, _dt in confs:
     t = p.add_run(title + " " if title else ""); _set_run(t, 9)
     v = p.add_run(((f"[{kind}] " if kind else "") + (venue + "." if venue else "")))
     _set_run(v, 9, italic=True, color=GREY)
-    _y, _m = _ym2(_dt)
-    _tl(_y or yr, _m, "Conference", title or venue, venue if title else "")
 
 # ---------------------------------------------------------------- Grants / Projects
 section("Research Projects")
@@ -771,9 +721,9 @@ projects = [(_txt(r["CV 과제명(EN)"]), _txt(r["Institute(EN)"]),
              _period_years(r["기간"]), _txt(r["Role(EN)"]), _txt(r["PI(EN)"]),
              _txt(r["예산(USD)"]),
              str(r["CV 기여(EN)"]).splitlines() if r["CV 기여(EN)"] else None,
-             r["CV 성과(EN)"], _txt(r["기간"]))
+             r["CV 성과(EN)"])
             for r in sheet("Projects", order=lambda r: r["No."])]
-for title, funder, period, role, pi, budget, bullets, outputs, _raw_per in projects:
+for title, funder, period, role, pi, budget, bullets, outputs in projects:
     # 제목이 매우 길어 우측탭 기간이 잘리던 문제 → 제목은 전체 폭, 기간은 상세줄 맨 앞으로 이동
     p = doc.add_paragraph(); p.paragraph_format.space_before = Pt(4)
     _set_run(p.add_run(title), 9.5, bold=True)
@@ -799,10 +749,6 @@ for title, funder, period, role, pi, budget, bullets, outputs, _raw_per in proje
         po.paragraph_format.space_before = Pt(1)
         _set_run(po.add_run("→ Related outputs:  "), 8.5, bold=True, color=ACCENT)
         _set_run(po.add_run(outputs), 8.5, italic=True, color=GREY)
-    # 연표는 과제 '시작' 시점. 본인 책임과제는 (PI) 를 붙인다 (Role(EN) 기준).
-    _y, _m = _ym2(_raw_per)
-    _tl(_y, _m, "Project",
-        title + (" (PI)" if role == "Principal Investigator" else ""), funder)
 
 # ---------------------------------------------------------------- Patents
 section("Patents (Republic of Korea)")
@@ -847,9 +793,6 @@ def _patents(status, datecol, fmt):
         out.append((_pt,
                     " · ".join(x for x in (" ".join(y for y in (fmt, when) if y),
                                            _po) if x)))
-        # 연표 날짜 = 등록건은 등록일, 출원중은 출원일 (datecol 이 그 구분을 담고 있다)
-        _y, _m = _ym2(raw)
-        _tl(_y, _m, "Patent", _pt, " · ".join(x for x in (fmt, _po) if x))
     return out
 
 
@@ -879,11 +822,8 @@ def _award_line(r):
 
 
 _subhead("Awards")
-_awards = sheet("Awards", order=lambda r: _desc(r["Year"]))
-_tabbed([(_award_line(r), _txt(r["Year"])) for r in _awards])
-for _a in _awards:
-    # 수상은 연도만 기록돼 있다 -> 월 미상(0)
-    _tl(_yr(_a["Year"]), 0, "Award", _award_line(_a))
+_tabbed([(_award_line(r), _txt(r["Year"]))
+         for r in sheet("Awards", order=lambda r: _desc(r["Year"]))])
 
 # Service & Membership 섹션은 2026-10-21 사용자 지시로 제거 (데이터도 해당 유형 없음)
 
@@ -935,72 +875,22 @@ for _u in _teach("univ"):
         _set_run(p.add_run(_line), 9, color=GREY)
         if _i == len(_lines) - 1:
             _set_run(p.add_run("	" + _txt(_u["CV 기간(EN)"])), 9, color=GREY)
-    # 연표는 강의 한 과목을 1건으로, 학기 시작월(Start) 에 놓는다
-    _y, _m = _ym2(_u["Start"])
-    _tl(_y, _m, "Teaching", _txt(_u["CV 표기(EN)"]), _txt(_u["CV 기간(EN)"]))
 
 _t_sub(f"Invited Lectures & Workshops  ({_sessions} sessions, {_years})")
 for _v in _teach("special"):
     _t_item(_txt(_v["CV 표기(EN)"]), _txt(_v["CV 기간(EN)"]))
-    _y, _m = _ym2(_v["Start"])
-    _tl(_y, _m, "Teaching", _txt(_v["CV 표기(EN)"]))
 
 # ---------------------------------------------------------------- Professional Experience
 section("Professional Experience")
 prof = _work("professional")
-for lead, rest, date, sub, _start in prof:
+for lead, rest, date, sub in prof:
     entry(lead, right=date, sub=sub, left_rest=rest)
-    _y, _m = _ym2(_start)
-    _tl(_y, _m, "Position", lead, rest)
 
 # ---------------------------------------------------------------- References
 section("References")
 # 공개 CV에는 추천인 연락처를 노출하지 않음(사생활). 실제 3인 연락처는 비공개 레퍼런스 시트로 제출.
 p = doc.add_paragraph(); p.paragraph_format.space_before = Pt(4)
 _set_run(p.add_run("Available upon request."), 9, italic=True, color=GREY)
-
-# ---------------------------------------------------------------- Timeline (CV 맨 아래)
-# 위 섹션들이 렌더되는 동안 _tl() 로 모인 TIMELINE 을 하나의 연표로 인쇄한다.
-# 항목을 여기서 새로 수집하지 않으므로 본문과 어긋날 수 없다.
-section(f"Timeline ({TL_FROM} — Present)")
-p = doc.add_paragraph()
-_set_run(p.add_run(f"All confirmed activity since January {TL_FROM} in a single chronology "
-                   "(newest first). Manuscripts under review are not included."),
-         8.5, italic=True, color=LIGHT)
-p.paragraph_format.space_after = Pt(3)
-
-_TL_LAB = Inches(0.34)    # 월 다음, 카테고리 라벨이 시작하는 자리
-_TL_TXT = Inches(1.40)    # 서술이 시작하는 자리 = 줄바꿈 시 유지되는 들여쓰기
-# 같은 달에 여러 건이 있을 때의 표시 순서 (본문 섹션 순서에 맞춘다)
-_TL_CATS = ["Publication", "Book", "Conference", "Invited Talk", "Teaching",
-            "Project", "Funding", "Award", "Patent", "Position"]
-_TL_ORDER = {c: i for i, c in enumerate(_TL_CATS)}
-
-for _ty in sorted({_i["y"] for _i in TIMELINE}, reverse=True):
-    ph = doc.add_paragraph(); ph.paragraph_format.space_before = Pt(8)
-    _set_run(ph.add_run(str(_ty)), 9.5, bold=True, color=ACCENT)
-    # 월 내림차순. 월 미상(0)은 -(0 or -99) = 99 가 되어 그 연도 그룹의 끝으로 간다.
-    for _i in sorted((x for x in TIMELINE if x["y"] == _ty),
-                     key=lambda x: (-(x["m"] or -99), _TL_ORDER.get(x["cat"], 99), x["main"])):
-        p = doc.add_paragraph(); p.paragraph_format.space_before = Pt(2)
-        p.paragraph_format.left_indent = _TL_TXT
-        p.paragraph_format.first_line_indent = Inches(-1.40)
-        for _tab in (_TL_LAB, _TL_TXT):
-            p.paragraph_format.tab_stops.add_tab_stop(_tab, WD_TAB_ALIGNMENT.LEFT)
-        _set_run(p.add_run(_MONTHS.get(_i["m"], "")), 9, bold=True, color=GREY)
-        _set_run(p.add_run("\t" + _i["cat"]), 8, color=LIGHT, caps=True, spacing=10)
-        _set_run(p.add_run("\t" + _i["main"]), 9)
-        if _i["meta"]:
-            _set_run(p.add_run("  · " + _i["meta"]), 8.5, italic=True, color=GREY)
-
-print("timeline items:", len(TIMELINE))
-for _c in _TL_CATS:
-    _n = sum(1 for _i in TIMELINE if _i["cat"] == _c)
-    if _n:
-        print(f"  {_c:<13} {_n}")
-for _ty in sorted({_i['y'] for _i in TIMELINE}, reverse=True):
-    print(f"  {_ty}: {sum(1 for _i in TIMELINE if _i['y'] == _ty)}"
-          f"  (month unknown: {sum(1 for _i in TIMELINE if _i['y'] == _ty and not _i['m'])})")
 
 # (Technical Skills section intentionally omitted)
 
