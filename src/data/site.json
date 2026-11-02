@@ -46,7 +46,7 @@
   "hero": {
     "name":        { "ko": "장국화",                                                 "en": "Gukhwa Jang" },
     "nameSub":     { "ko": "",                                              "en": "" },
-    "tagline":     { "ko": "도시 미기후와 쇠퇴도시를 중심으로, 기후 위기가 도시 공간과 거주 선택에 남기는 불균등을 정량화합니다.", "en": "I quantify how the climate crisis unevenly reshapes urban space and residential choice, focusing on urban microclimate and shrinking cities." },
+    "tagline":     { "ko": "", "en": "" },
     "focusLabel":  { "ko": "연구 분야", "en": "Research focus" },
     "focus": [
       { "ko": "도시미기후", "en": "Urban microclimate" },

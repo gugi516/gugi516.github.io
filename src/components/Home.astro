@@ -118,7 +118,9 @@ const invitedTypeLabels =
           </span>
         </h1>
 
-        <L tag="p" class="type-headline text-base-content/85 mb-5 max-w-2xl" ko={hero.tagline.ko} en={hero.tagline.en} />
+        {(hero.tagline.ko || hero.tagline.en) && (
+          <L tag="p" class="type-headline text-base-content/85 mb-5 max-w-2xl" ko={hero.tagline.ko} en={hero.tagline.en} />
+        )}
 
         <!-- Research focus — 정체성·연구를 목록(칩)으로 노출 -->
         <p class="type-caption text-primary mb-2">
