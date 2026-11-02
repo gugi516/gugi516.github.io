@@ -141,7 +141,7 @@ for (const w of career) {
 
 // 같은 달에 여러 건이 있을 때의 표시 순서 = 웹 페이지의 섹션 순서
 // (경력 03 → 논문·저서 04 → 초청강연·학회발표 05 → 강의 06 → 펀딩 07 → 과제 08 → 특허 09)
-const CAT_ORDER: TimelineCat[] = [
+export const CAT_ORDER: TimelineCat[] = [
   'position', 'publication', 'book', 'invitedTalk', 'conference',
   'teaching', 'funding', 'project', 'patent',
 ];
