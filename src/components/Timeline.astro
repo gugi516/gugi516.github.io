@@ -1,0 +1,83 @@
+---
+// 연표 본문 — 연도 역순 레일. 항목은 src/data/timeline.ts 가 site.json 에서 파생한다
+// (여기서 데이터를 새로 만들지 않는다). 레일·연도 헤더 모양은 Conferences·Teaching
+// 섹션과 같은 패턴을 쓴다.
+import site from "../data";
+import { timelineByYear, monthLabel, type TimelineCat } from "../data/timeline";
+
+// 카테고리 라벨의 정본은 site.json timeline._catLabels (invitedTalks._typeLabels 와 같은 방식)
+const catLabels =
+  site.timeline._catLabels as unknown as Record<TimelineCat, { ko: string; en: string }>;
+
+// 파란 테마의 기존 pill 변종을 카테고리마다 하나씩 배정한다 (새 색을 만들지 않는다).
+const catPill: Record<TimelineCat, string> = {
+  position:    "pill-domestic",
+  publication: "pill-first",
+  book:        "pill-q1",
+  invitedTalk: "pill-app",
+  conference:  "pill-intl",
+  teaching:    "pill-co",
+  funding:     "pill-reg",
+  project:     "pill-corr",
+  patent:      "pill-idx",
+};
+---
+
+<div class="space-y-8 pl-4 border-l-2 border-base-300/40">
+  {timelineByYear.map(({ year, items }) => (
+    <div class="relative">
+      <div class="absolute -left-[1.45rem] top-1.5">
+        <span class="block w-3 h-3 rounded-full bg-primary ring-4 ring-base-100"></span>
+      </div>
+      <h3 class="year-head mb-3">
+        {year}
+        <span class="type-caption text-base-content/50 ml-2" style="font-weight:400;">
+          <span data-only="ko">{items.length}건</span>
+          <span data-only="en">{items.length}</span>
+        </span>
+      </h3>
+      <div class="space-y-1">
+        {items.map((it) => {
+          const mon = monthLabel(it.month);
+          const cat = catLabels[it.cat] || { ko: it.cat, en: it.cat };
+          return (
+            <div class="tl-row group flex flex-col md:flex-row md:items-baseline gap-1 md:gap-3 py-2 px-2 -mx-2 rounded-md hover:bg-base-200/60 transition-colors">
+              <div class="flex flex-wrap items-center gap-2 md:contents">
+                <span class="shrink-0 type-body-sm text-base-content/70 whitespace-nowrap w-fit md:w-14 md:text-right">
+                  <span data-only="ko">{mon.ko}</span>
+                  <span data-only="en">{mon.en}</span>
+                </span>
+                <span class={`shrink-0 pill ${catPill[it.cat]} md:w-[6.5rem] md:justify-center`}>
+                  <span data-only="ko">{cat.ko}</span>
+                  <span data-only="en">{cat.en}</span>
+                </span>
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="type-body text-base-content leading-snug" style="font-weight:480;">
+                  <span data-only="ko">{it.main.ko}</span>
+                  <span data-only="en">{it.main.en}</span>
+                </p>
+                {(it.meta.ko || it.meta.en) && (
+                  <p class="type-body-sm text-base-content/70 mt-0.5">
+                    <span data-only="ko">{it.meta.ko}</span>
+                    <span data-only="en">{it.meta.en}</span>
+                  </p>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  ))}
+</div>
+
+<style>
+  /* 월이 비어 있는 행(월 미상)에서도 카테고리 열이 같은 자리에서 시작하도록
+     데스크톱에서는 월 칸의 폭을 고정한다 — md:w-14 가 그 역할을 한다.
+     pill 은 flex 자식이라 가운데 정렬을 위해 inline-flex 를 유지한다. */
+  .tl-row .pill {
+    display: inline-flex;
+    align-items: center;
+  }
+</style>
