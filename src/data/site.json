@@ -383,6 +383,7 @@
       "panel":         { "ko": "패널",            "en": "Panel" }
     },
     "items": [
+      {"date": "2026/11/04", "year": 2026, "type": "seminar", "scope": "domestic", "title": {"ko": "도시설계와 도시미기후", "en": "Urban Design and Urban Microclimate"}, "host": {"ko": "서울대학교", "en": "Seoul National University"}, "venue": {"ko": "서울", "en": "Seoul, Republic of Korea"}},
       {"date": "2025/11/18", "year": 2025, "type": "guest lecture", "scope": "domestic", "title": {"ko": "SCI 논문 작성법 (자원순환형 도시설계 연구 수업 특강)", "en": "Lecture in 자원순환형 도시설계 연구"}, "host": {"ko": "서울대학교", "en": "Seoul National University"}, "venue": {"ko": "서울", "en": "Seoul, Republic of Korea"}},
       {"date": "2025/09/09", "year": 2025, "type": "guest lecture", "scope": "domestic", "title": {"ko": "고급 도시환경분석과 데이터 시각화 (수업 특강)", "en": "Advanced Urban Environment Analysis and Data Visualization"}, "host": {"ko": "서울대학교", "en": "Seoul National University"}, "venue": {"ko": "서울", "en": "Seoul, Republic of Korea"}},
       {"date": "2024/08/29", "year": 2024, "type": "seminar", "scope": "domestic", "title": {"ko": "Microclimate Simulation (ENVI-met)", "en": "Microclimate Simulation (ENVI-met)"}, "host": {"ko": "경기연구원", "en": "Gyeonggi Research Institute"}, "venue": {"ko": "수원", "en": "Suwon, South Korea"}}
