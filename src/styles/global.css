@@ -241,23 +241,7 @@ body, .drawer-content, .drawer-side, aside, .navbar, .btn, .badge {
   transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
-/* Stat box — used in About section (6 metric tiles) */
-.stat-box {
-  transition: transform 0.25s ease, border-color 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease;
-}
-.stat-box:hover {
-  transform: translateY(-2px);
-  border-color: rgba(65, 160, 224, 0.55);
-  background-color: hsl(var(--b2) / 0.85);
-  box-shadow: 0 6px 18px rgba(65, 160, 224, 0.10);
-}
-[data-theme="shlee-dark"] .stat-box:hover {
-  box-shadow: 0 6px 18px rgba(65, 160, 224, 0.16);
-}
-
-/* About stat 숫자 색상 강조 (박스 없이 색으로만) */
-.stat-num { color: #1b578a; }                          /* 라이트: 선명한 포레스트 그린 */
-[data-theme="shlee-dark"] .stat-num { color: #86b5e6; } /* 다크: 밝은 하늘색 — primary보다 밝아 은은히 강조 */
+/* .stat-box / .stat-num 규칙은 About 섹션(stats 타일 6개)과 함께 제거 — 2026-11-02 */
 
 /* Certification chip — small inline chip */
 .cert-chip {

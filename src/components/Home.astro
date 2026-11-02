@@ -20,7 +20,6 @@ import site, {
 const { lang = "ko" } = Astro.props as { lang?: "ko" | "en" };
 
 const hero    = site.hero;
-const about   = site.about;
 const contact = site.contact;
 // ORCID 표시 문자열은 site.json 의 orcidUrl 에서 ID 만 떼어 쓴다(하드코딩 금지).
 const orcidId = (contact.orcidUrl || "").replace(/^https?:\/\/(www\.)?orcid\.org\//, "").replace(/\/$/, "");
@@ -103,7 +102,7 @@ const invitedTypeLabels =
   site.invitedTalks._typeLabels as unknown as Record<string, { ko: string; en: string }>;
 ---
 
-<BaseLayout lang={lang} sideBarActiveItemID="about">
+<BaseLayout lang={lang} sideBarActiveItemID="education">
   <!-- ───────── HERO ───────── -->
   <section id="top" class="pb-16 pt-8 scroll-mt-12 animate-fade-up">
     <div>
@@ -162,42 +161,9 @@ const invitedTypeLabels =
     </div>
   </section>
 
-  <!-- ───────── ABOUT ───────── -->
-  <section id="about" class="pb-20 border-t border-base-300 pt-14 scroll-mt-12">
-    <p class="type-eyebrow text-primary mb-3">{about.eyebrow}</p>
-    <L tag="h2" class="type-display-lg mb-8" ko={about.title.ko} en={about.title.en} />
-
-    <div class="space-y-4 mb-10 max-w-2xl">
-      {about.paragraphs.ko.map((p, i) => (
-        <p class="type-body-lg text-base-content/85" data-only="ko">{p}</p>
-      ))}
-      {about.paragraphs.en.map((p, i) => (
-        <p class="type-body-lg text-base-content/85" data-only="en">{p}</p>
-      ))}
-    </div>
-
-    {/* Research interests 블록은 히어로의 '연구 분야' 칩과 완전 중복이라 표시하지 않는다.
-        데이터(about.interests)는 xlsx sync 대상이라 site.json 에 남겨 둔다. */}
-
-    <!-- Stats grid -->
-    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
-      {about.stats.map((stat) => (
-        <div class="stat-box p-4 rounded-2xl bg-base-200/60 border border-base-300/60">
-          <p class="type-caption text-base-content/70 mb-1">
-            <span data-only="ko">{stat.label.ko}</span>
-            <span data-only="en">{stat.label.en}</span>
-          </p>
-          <p class="text-primary" style="font-size:26px;font-weight:600;line-height:1;">
-            <span class="stat-num">{fillTokens(stat.value)}</span>
-            <span class="text-xs font-normal text-base-content/70 ml-1">
-              <span data-only="ko">{fillTokens(stat.unit.ko)}</span>
-              <span data-only="en">{fillTokens(stat.unit.en)}</span>
-            </span>
-          </p>
-        </div>
-      ))}
-    </div>
-  </section>
+  {/* ABOUT(프로필) 섹션은 2026-11-02 제거 — 히어로가 같은 역할을 하고 본문 문단이 비어 있었다.
+      stats 타일 6개도 함께 사라졌다(사용자 지시). 데이터(site.json 의 about: interests·stats)는
+      xlsx sync 대상이라 site.json 에 남겨 두고 렌더만 없앴다. */}
 
   <!-- ───────── EDUCATION ───────── -->
   <section id="education" class="pb-20 border-t border-base-300 pt-14 scroll-mt-12">
@@ -595,7 +561,7 @@ const invitedTypeLabels =
 
   <!-- ───────── FUNDING (scholarships / fellowships; was Honors) ───────── -->
   <section id="funding" class="pb-20 border-t border-base-300 pt-14 scroll-mt-12">
-    <p class="type-eyebrow text-primary mb-3">07 — FUNDING</p>
+    <p class="type-eyebrow text-primary mb-3">06 — FUNDING</p>
     <L tag="h2" class="type-display-lg mb-8" ko={`펀딩 (${scholarships.length})`} en={`Funding & Fellowships (${scholarships.length})`} />
     <div class="space-y-3">
       {scholarships.map((s) => (
@@ -903,7 +869,7 @@ const invitedTypeLabels =
   <!-- Mobile: collapsible sections (header tap toggles body). Desktop unaffected. -->
   <script is:inline>
     (function () {
-      const COLLAPSIBLE = ['about','education','publications','conferences','teaching','career','funding','projects','patents','timeline'];
+      const COLLAPSIBLE = ['education','publications','conferences','teaching','career','funding','projects','patents','timeline'];
 
       function wrap() {
         COLLAPSIBLE.forEach((id) => {

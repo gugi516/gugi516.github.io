@@ -30,7 +30,6 @@
 
   "nav": {
     "items": [
-      { "id": "about",         "ko": "프로필",     "en": "About" },
       { "id": "education",     "ko": "학력",       "en": "Education" },
       { "id": "career",        "ko": "경력",       "en": "Career" },
       { "id": "publications",  "ko": "게재 논문",  "en": "Publications" },
@@ -88,7 +87,7 @@
   },
 
   "education": {
-    "eyebrow": "02 — EDUCATION",
+    "eyebrow": "01 — EDUCATION",
     "title": { "ko": "학력", "en": "Education" },
     "items": [
       {
@@ -125,7 +124,7 @@
 
   "publications": {
     "_help": "역할(role): 'first' = 1저자, 'co' = 공저자. 등재구분(index): 'SCIE' / 'ESCI' / 'KCI' — xlsx Publications 시트의 Index 열이 정본이며 _sync_site.py 가 채웁니다(직접 수정 금지). cover/pdf 필드는 public/papers/ 기준 절대 경로 (예: '/papers/covers/pub_07_xxx.jpg'). 파일 없으면 빈 문자열로 두세요.",
-    "eyebrow": "04 — PUBLICATIONS",
+    "eyebrow": "03 — PUBLICATIONS",
     "title": { "ko": "게재 논문", "en": "Publications" },
     "intro": { "ko": "Peer-reviewed 학술논문 목록. 최신 순으로 정렬.", "en": "Peer-reviewed publications, sorted by most recent." },
     "groupSci": { "ko": "국제 학술지 · SCIE / ESCI", "en": "International journals · SCIE / ESCI" },
@@ -347,7 +346,7 @@
 
   "conferences": {
     "_help": "1저자 또는 발표자(presenter)인 학회 발표만 포함.",
-    "eyebrow": "05 — CONFERENCES",
+    "eyebrow": "04 — CONFERENCES",
     "title": { "ko": "학회 발표 · 초청 강연", "en": "Conference Presentations & Invited Talks" },
     "groupConf": { "ko": "학회 발표", "en": "Conference presentations" },
     "intro": { "ko": "1저자 또는 발표자(presenter)인 국내·국제 학회 발표.", "en": "Domestic and international presentations where I am first author or presenter." },
@@ -391,7 +390,7 @@
   },
 
   "projects": {
-    "eyebrow": "08 — RESEARCH PROJECTS",
+    "eyebrow": "07 — RESEARCH PROJECTS",
     "title": { "ko": "참여 연구과제 · 역할", "en": "Participated Research Projects & Roles" },
     "intro": { "ko": "참여한 국가 R&D · 지자체 연구과제.", "en": "National and municipal research projects." },
     "items": [
@@ -413,7 +412,7 @@
 
   "patents": {
     "_help": "특허는 목록(행)으로만 표시한다 — 카드·특허증 표기는 2026-10-21 제거 (certificate 필드는 사용 안 함, 빈 문자열 유지). pdf 필드는 public/patents/pdfs/ 기준 절대 경로의 등록특허공보(B1) 원문 — 값이 있는 항목에만 행에 '공보 / Gazette' 다운로드 버튼이 표시된다. 공보가 없는 항목은 버튼이 표시되지 않으며, 공식 자료는 KIPRIS에서 조회 가능.",
-    "eyebrow": "09 — PATENTS",
+    "eyebrow": "08 — PATENTS",
     "title": { "ko": "특허", "en": "Patents" },
     "intro": { "ko": "출원 · 등록 특허 (대한민국).", "en": "Applied and registered patents (Republic of Korea)." },
     "items": [
@@ -424,7 +423,7 @@
   },
 
   "teaching": {
-    "eyebrow": "06 — TEACHING",
+    "eyebrow": "05 — TEACHING",
     "title": { "ko": "교육 · 강의", "en": "Teaching" },
     "intro": { "ko": "대학 정규수업·강의 조교·특강·워크숍.", "en": "University courses, teaching assistantships, special lectures, and workshops." },
     "_typeLabels": {
@@ -452,7 +451,7 @@
 
   "career": {
     "_help": "logo 필드는 public/logos/career/ 기준 절대 경로 (예: '/logos/career/virginia-tech.svg'). SVG 권장 (다크모드 호환). 없으면 빈 문자열로 두세요 — 자동으로 placeholder 이니셜 표시.",
-    "eyebrow": "03 — CAREER",
+    "eyebrow": "02 — CAREER",
     "title": { "ko": "경력 · 인턴십", "en": "Work & Internships" },
     "items": [
       {"id": 6, "period": "2026/03 — 2026/08", "logo": "/logos/career/skku.svg", "type": {"ko": "강사", "en": "Lecturer"}, "company": {"ko": "성균관대학교 건설환경공학부", "en": "Sungkyunkwan University"}, "country": {"ko": "대한민국", "en": "Republic of Korea"}, "url": ""},
@@ -499,7 +498,7 @@
   },
 
   "contact": {
-    "eyebrow": "10 — CONTACT",
+    "eyebrow": "09 — CONTACT",
     "title": {
       "ko": "언제든 편하게 연락주세요.",
       "en": "Get in touch."
@@ -522,7 +521,7 @@
 
   "timeline": {
     "_help": "페이지 맨 아래 연표의 표시 문구만 여기 둔다. 연표 항목 자체는 입력하지 않는다 — src/data/timeline.ts 가 위 섹션들(publications·conferences·invitedTalks·teaching·honors.scholarships·projects·patents·career·honors.books)에서 파생한다. 항목을 고치려면 그 섹션(정본은 xlsx)을 고친다.",
-    "eyebrow": "11 — TIMELINE",
+    "eyebrow": "10 — TIMELINE",
     "title": { "ko": "연표 (2023 — 현재)", "en": "Timeline (2023 — Present)" },
     "intro": {
       "ko": "2023년 1월 이후의 확정된 활동을 한 연표로 모았습니다 (최신순). 위 섹션들의 데이터에서 자동으로 만들어지며, 심사 중 원고는 포함하지 않습니다.",
