@@ -7,8 +7,6 @@ import ViewToggle from "./ViewToggle.astro";
 import FigureCarousel from "./FigureCarousel.astro";
 import RowPatent from "./RowPatent.astro";
 import CardBook from "./CardBook.astro";
-import Timeline from "./Timeline.astro";
-import { timeline } from "../data/timeline";
 import site, {
   publications, underReview, conferences, invitedTalks, projects, patents,
   teaching, career, education,
@@ -750,16 +748,6 @@ const invitedTypeLabels =
     </div>
   </section>
 
-  <!-- ───────── TIMELINE (페이지 맨 아래) ─────────
-       항목을 새로 입력하지 않는다 — src/data/timeline.ts 가 위 섹션들의 site.json
-       데이터에서 2023-01 이후 확정 실적만 파생한다 (PDF CV 판과 같은 수집 규칙). -->
-  <section id="timeline" class="pb-20 border-t border-base-300 pt-14 scroll-mt-12">
-    <p class="type-eyebrow text-primary mb-3">{site.timeline.eyebrow}</p>
-    <L tag="h2" class="type-display-lg mb-3" ko={`${site.timeline.title.ko} · ${timeline.length}건`} en={`${site.timeline.title.en} · ${timeline.length} entries`} />
-    <L tag="p" class="type-body text-base-content/70 mb-8" ko={site.timeline.intro.ko} en={site.timeline.intro.en} />
-    <Timeline lang={lang} />
-  </section>
-
   <!-- ───────── 카드 ⇄ 목록 보기 전환 (범용: .js-viewgroup) ───────── -->
   <script is:inline>
     (function () {
@@ -869,7 +857,7 @@ const invitedTypeLabels =
   <!-- Mobile: collapsible sections (header tap toggles body). Desktop unaffected. -->
   <script is:inline>
     (function () {
-      const COLLAPSIBLE = ['education','publications','conferences','teaching','career','funding','projects','patents','timeline'];
+      const COLLAPSIBLE = ['education','publications','conferences','teaching','career','funding','projects','patents'];
 
       function wrap() {
         COLLAPSIBLE.forEach((id) => {

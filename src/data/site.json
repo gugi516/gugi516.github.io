@@ -38,8 +38,7 @@
       { "id": "funding",       "ko": "펀딩",       "en": "Funding" },
       { "id": "projects",      "ko": "연구 과제",  "en": "Projects" },
       { "id": "patents",       "ko": "특허",       "en": "Patents" },
-      { "id": "contact",       "ko": "연락처",     "en": "Contact" },
-      { "id": "timeline",      "ko": "연표",       "en": "Timeline" }
+      { "id": "contact",       "ko": "연락처",     "en": "Contact" }
     ]
   },
 
@@ -517,26 +516,5 @@
     "kakaoUrl":       "",
     "githubUrl":      "",
     "cvFullUrl":       "/cv/Jang_Gukhwa_CV.pdf"
-  },
-
-  "timeline": {
-    "_help": "페이지 맨 아래 연표의 표시 문구만 여기 둔다. 연표 항목 자체는 입력하지 않는다 — src/data/timeline.ts 가 위 섹션들(publications·conferences·invitedTalks·teaching·honors.scholarships·projects·patents·career·honors.books)에서 파생한다. 항목을 고치려면 그 섹션(정본은 xlsx)을 고친다.",
-    "eyebrow": "10 — TIMELINE",
-    "title": { "ko": "연표 (2023 — 현재)", "en": "Timeline (2023 — Present)" },
-    "intro": {
-      "ko": "2023년 1월 이후의 확정된 활동을 한 연표로 모았습니다 (최신순). 위 섹션들의 데이터에서 자동으로 만들어지며, 심사 중 원고는 포함하지 않습니다.",
-      "en": "All confirmed activity since January 2023 in a single chronology (newest first). Built automatically from the sections above; manuscripts under review are not included."
-    },
-    "_catLabels": {
-      "position":    { "ko": "직위",      "en": "Position" },
-      "publication": { "ko": "논문",      "en": "Publication" },
-      "book":        { "ko": "저서",      "en": "Book" },
-      "invitedTalk": { "ko": "초청 강연", "en": "Invited talk" },
-      "conference":  { "ko": "학회 발표", "en": "Conference" },
-      "teaching":    { "ko": "강의",      "en": "Teaching" },
-      "funding":     { "ko": "펀딩",      "en": "Funding" },
-      "project":     { "ko": "연구 과제", "en": "Project" },
-      "patent":      { "ko": "특허",      "en": "Patent" }
-    }
   }
 }
