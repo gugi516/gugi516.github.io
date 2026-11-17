@@ -131,22 +131,22 @@
     "items": [
       {
         "id": 9,
-        "date": "",
+        "date": "2026/11/30",
         "year": 2026,
         "role": "first & corresponding",
-        "journal": "(Accepted, in press)",
-        "index": "",
+        "journal": "Journal of Korea Planning Association",
+        "index": "KCI",
         "if": "",
         "quartile": "",
-        "doi": "",
-        "cover": "",
-        "pdf":   "",
-        "authors": ["Jang, G."],
-        "journalKo": "게재 확정 (출판 예정)",
+        "doi": "10.17208/jkpa.2026.11.61.6.143",
+        "cover": "/papers/covers/2026_JKPA_An-Exploratory-Study.webp",
+        "pdf":   "/papers/pdfs/2026_JKPA_An-Exploratory-Study.pdf",
+        "authors": ["Gukhwa Jang"],
+        "journalKo": "국토계획 (대한국토·도시계획학회지)",
         "authorsKo": ["장국화"],
         "title": {
           "ko": "한국의 기후 젠트리피케이션 발생 가능성에 대한 탐색적 연구: 거주지 선호, 부동산 가격 영향 인식, 이주의향을 중심으로",
-          "en": "An Exploratory Study on the Potential for Climate Gentrification in South Korea: Residential Preferences, Perceived Property-Price Impacts, and Migration Intentions"
+          "en": "An Exploratory Study on The Potential for Climate Gentrification in Korea: Focusing on Residential Preference, Perceived Housing Price Impacts, and Migration Intention"
         }
       },
       {

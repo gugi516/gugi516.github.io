@@ -26,5 +26,9 @@
   "10.1016/j.scs.2026.107502": {
     "apa": "Jang, G., Jeon, Y., You, Y., & Cho, H. R. (2026). What health risks arise in shrinking cities? A systematic review. Sustainable Cities and Society, 146, 107502. https://doi.org/10.1016/j.scs.2026.107502",
     "bibtex": "@article{jang2026_scs,\n  author  = {Jang, Gukhwa and Jeon, Youngmee and You, Youngsoo and Cho, Hyung Rae},\n  title   = {What health risks arise in shrinking cities? A systematic review},\n  journal = {Sustainable Cities and Society},\n  volume  = {146},\n  pages   = {107502},\n  year    = {2026},\n  month   = {aug},\n  doi     = {10.1016/j.scs.2026.107502}\n}"
+  },
+  "10.17208/jkpa.2026.11.61.6.143": {
+    "apa": "Jang, G. (2026). An Exploratory Study on The Potential for Climate Gentrification in Korea: Focusing on Residential Preference, Perceived Housing Price Impacts, and Migration Intention. Journal of Korea Planning Association, 61(6), 143–154. https://doi.org/10.17208/jkpa.2026.11.61.6.143",
+    "bibtex": "@article{jang2026_kgent,\n  author  = {Jang, Gukhwa},\n  title   = {An Exploratory Study on The Potential for Climate Gentrification in Korea: Focusing on Residential Preference, Perceived Housing Price Impacts, and Migration Intention},\n  journal = {Journal of Korea Planning Association},\n  volume  = {61},\n  number  = {6},\n  pages   = {143–154},\n  year    = {2026},\n  month   = {nov},\n  doi     = {10.17208/jkpa.2026.11.61.6.143}\n}"
   }
 }
