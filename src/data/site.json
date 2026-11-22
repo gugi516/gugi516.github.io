@@ -189,6 +189,25 @@
         }
       },
       {
+        "id": 11,
+        "date": "",
+        "year": 2026,
+        "role": "co",
+        "journal": "(Accepted, in press)",
+        "index": "",
+        "if": "",
+        "quartile": "",
+        "doi": "",
+        "cover": "",
+        "pdf":   "",
+        "authors": ["Kang, S.", "Jang, G.", "Kim, D."],
+        "journalKo": "게재 확정 (출판 예정)",
+        "title": {
+          "ko": "산업단지 열환경 분석을 위한 산업특화형 지역기후구역(ILCZ) 정의와 유형화",
+          "en": "산업단지 열환경 분석을 위한 산업특화형 지역기후구역(ILCZ) 정의와 유형화"
+        }
+      },
+      {
         "id": 6,
         "date": "2026/05/11",
         "year": 2026,
@@ -329,7 +348,6 @@
       "labelPrep": { "ko": "작성 중인 논문", "en": "In Preparation" },
       "note":  { "ko": "투고 · 심사 · 준비 중 ({underReview}편)", "en": "Submitted / under review / in preparation ({underReview})" },
       "items": [
-        {"role": "co", "date": "", "journal": "", "status": {"ko": "In press", "en": "In press"}, "authors": ["Kang, S.", "Jang, G.", "Kim, D."], "title": "산업단지 열환경 분석을 위한 산업특화형 지역기후구역(ILCZ) 정의와 유형화"},
         {"role": "co", "date": "", "journal": "", "status": {"ko": "In preparation", "en": "In preparation"}, "authors": ["Yoo, Y.", "Jeon, Y.", "Cho, H.", "Jang, G."], "title": "How Do Shrinking Cities Restructure? A Three-Zone Analysis of Spatial Differentiation in South Korea"},
         {"role": "corresponding", "date": "", "journal": "", "status": {"ko": "In revision", "en": "In revision"}, "authors": ["Cho, H.", "Jang, G.", "Yoo, Y.", "Jeon, Y."], "title": "The morphological paradox of fine-grained urban form: Resilience in shrinking neighbourhoods"},
         {"role": "co", "date": "", "journal": "", "status": {"ko": "Submitted to SCIE journal", "en": "Submitted to SCIE journal"}, "authors": ["Jeon, Y.", "Yoo, Y.", "Cho, H.", "Jang, G."], "title": "Spatiotemporal dynamics of population in South Korea’s medium-sized cities: Expanding the model of urban development stages from an urban shrinkage perspective"},
